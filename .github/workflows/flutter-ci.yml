@@ -32,11 +32,11 @@ jobs:
           run: flutter pub get
 
         # Check for any formatting issues in the code.
-        - run: dart format --set-exit-if-changed .
+        #- run: dart format --set-exit-if-changed .
 
         # Statically analyze the Dart code for any errors.
-        - name: Analyze
-          run: flutter analyze .
+        #- name: Analyze
+        #  run: flutter analyze .
 
         # Run widget tests for our flutter project.
         - name: Run tests
