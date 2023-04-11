@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  // return static home screen with navigation functionality
+  // return static home screen with navigation functionality //
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
