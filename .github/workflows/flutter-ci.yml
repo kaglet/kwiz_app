@@ -35,11 +35,11 @@ jobs:
         - run: dart format --set-exit-if-changed .
 
         # Statically analyze the Dart code for any errors.
-        #- name: Analyze
+        - name: Analyze
           run: flutter analyze .
 
         # Run widget tests for our flutter project.
-        # - name: Run tests
+        - name: Run tests
           run: flutter test --coverage
 
         #- name: Upload coverage reports to Codecov

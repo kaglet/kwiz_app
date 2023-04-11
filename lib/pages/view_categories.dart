@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/pages/view_quizzes.dart';
 // import 'view_quizzes.dart';
 import '../services/database.dart';
 
@@ -157,13 +158,13 @@ class ViewCategoriesState extends State<ViewCategories> {
                               //This methpd allows us to move to the next page depending on which tile (category) the user picks
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => ViewQuizzes(
-                                  //           chosenCategory:
-                                  //               _displayedItems?[index])),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ViewQuizzes(
+                                            chosenCategory:
+                                                _displayedItems?[index])),
+                                  );
                                 },
                                 child: Container(
                                     alignment: Alignment.center,
