@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 // import 'add_quiz_about.dart';
 // import 'view_categories.dart';
@@ -150,11 +151,11 @@ class _HomeState extends State<Home> {
                               height: 150.0,
                               child: GestureDetector(
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => AddQuiz()),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddQuiz()),
+                                  );
                                 },
                                 child: Card(
                                   shape: RoundedRectangleBorder(

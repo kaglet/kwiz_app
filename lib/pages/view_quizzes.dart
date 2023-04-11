@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
 // import 'start_quiz.dart';
@@ -278,15 +279,15 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => StartQuiz(
-                                        //         chosenQuiz: filteredQuizzes!
-                                        //             .elementAt(index)
-                                        //             .quizID),
-                                        //   ),
-                                        // );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => StartQuiz(
+                                                chosenQuiz: filteredQuizzes!
+                                                    .elementAt(index)
+                                                    .quizID),
+                                          ),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
