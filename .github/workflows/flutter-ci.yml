@@ -46,14 +46,14 @@ jobs:
         #  uses: codecov/codecov-action@v3
           
         # Build apk
-        - name: Build apk
-          run: flutter build apk --debug
+        #- name: Build apk
+        #  run: flutter build apk --debug
 
         # Upload apk as artifact
-        - name: Upload APK as artifact
-          uses: actions/upload-artifact@v1
-          with:
+        #- name: Upload APK as artifact
+        #  uses: actions/upload-artifact@v1
+        #  with:
             # Name of the command/step.
-            name: release-apk
+        #    name: release-apk
             # Path to the release apk.
-            path: build/app/outputs/apk/release/app-release.apk
+        #    path: build/app/outputs/apk/release/app-release.apk
