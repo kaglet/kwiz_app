@@ -56,4 +56,4 @@ jobs:
             # Name of the command/step.
             name: release-apk
             # Path to the release apk.
-            path: build/app/outputs/apk/release/app-release.apk
+            path: build/app/outputs/flutter-apk/app-release.apk
