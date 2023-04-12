@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/pages/quiz_score.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 
@@ -298,14 +299,19 @@ class QuizScreenState extends State<QuizScreen> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text('Quiz Complete'),
-                                          content: Text(
-                                              'Your score: $score / ${questions.length}'),
+                                          content: const Text(
+                                              'Are you sure you are ready to submit?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context).pop();
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          QuizScore(chosenQuiz: quiz!.quizID, score: score, userAnswers: userAnswers)),
+                                                );
                                               },
-                                              child: const Text('OK'),
+                                              child: const Text('Submit'),
                                             ),
                                           ],
                                         );
