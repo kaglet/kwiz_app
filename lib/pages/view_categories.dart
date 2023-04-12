@@ -45,7 +45,7 @@ class ViewCategoriesState extends State<ViewCategories> {
     super.dispose();
   }
 
-//This method is used o control the search bar
+//This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
       _displayedItems = categories!
@@ -83,7 +83,7 @@ class ViewCategoriesState extends State<ViewCategories> {
               ),
             ),
       resizeToAvoidBottomInset: false,
-      //This condition diplays a circular progress indiactor that will appear untill all categories are displayed
+      //This condition diplays a circular progress indicator that will appear untill all categories are displayed
       body: _displayedItems == null
           ? const Center(
               child: CircularProgressIndicator(),
