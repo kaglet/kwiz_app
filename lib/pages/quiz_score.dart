@@ -19,6 +19,7 @@ class QuizScoreState extends State<QuizScore> {
   late List userAnswers = widget.userAnswers;
   late String title;
   late int quizMaxScore;
+  late List<String> answers = [];
   bool _isLoading = true;
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
@@ -26,10 +27,12 @@ class QuizScoreState extends State<QuizScore> {
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
     Quiz? details;
-    details = await service.getQuizInformationOnly(quizID: quizID);
+    details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     quizMaxScore = userAnswers.length;
-    popList(details);
+    for (int i = 0; i < quizMaxScore; i++) {
+      answers.add(details.quizQuestions.elementAt(i).questionAnswer);
+    }
   }
 
 //This ensures that the quiz information and category image/gif have loaded
@@ -42,14 +45,6 @@ class QuizScoreState extends State<QuizScore> {
     });
   }
 
-  void popList(Quiz q) {
-    for (int i = 0; i < quizMaxScore; i++) {
-      answers.add(q.quizQuestions.elementAt(i).questionAnswer);
-    }
-  }
-
-  List<String> answers = [];
-
 //Used to control the Circular Progress indicator
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -57,8 +52,6 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = false;
     });
   }
-
- 
 
   @override
   Widget build(BuildContext context) {

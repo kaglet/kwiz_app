@@ -299,8 +299,8 @@ class QuizScreenState extends State<QuizScreen> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text('Quiz Complete'),
-                                          content: Text(
-                                              'Your score: $score / ${questions.length}'),
+                                          content: const Text(
+                                              'Are you sure you are ready to submit?'),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
