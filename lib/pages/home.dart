@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
+import 'package:kwiz_v2/pages/profile.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 // import 'add_quiz_about.dart';
 // import 'view_categories.dart';
@@ -58,7 +59,12 @@ class _HomeState extends State<Home> {
                           color: Colors.white,
                           size: 40.0,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Profile()),
+                          );
+                        },
                       ),
                     ]),
                 const SizedBox(
