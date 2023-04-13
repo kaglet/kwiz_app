@@ -16,9 +16,9 @@ class PastAttempt {
     required this.pastAttemptQuizName,
     required this.pastAttemptQuizCategory,
     required this.pastAttemptQuizDescription,
+    required this.pastAttemptQuizDateCreated,
     required this.pastAttemptQuizMark,
     required this.pastAttemptQuizMarks,
-    required this.pastAttemptQuizDatesTaken,
     required this.pastAttemptQuizDatesAttempted
   });
 }

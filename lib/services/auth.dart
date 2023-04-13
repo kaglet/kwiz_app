@@ -1,32 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:test/models/user.dart';
-import 'package:test/services/database.dart';
+import '../services/database.dart';
+import '../models/user.dart';
+
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //creat ourUser based on User
-  ourUser? _userFromUser(User? user) {
+  ourUser? _userFromFirebaseUser(User? user) {
     return user != null ? ourUser(uid: user.uid) : null;
   }
 
   //auth change user stream
   Stream<ourUser?> get user {
-    return _auth.authStateChanges().map(_userFromUser);
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
     //.map((User? user) => _userFromUser(user)); (the same as above)
   }
 
-  //sign in anom
-  Future signInAnon() async {
-    try {
-      UserCredential result = await _auth.signInAnonymously();
-      User? user = result.user;
-      return _userFromUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+  // //sign in anom
+  // Future signInAnon() async {
+  //   try {
+  //     UserCredential result = await _auth.signInAnonymously();
+  //     User? user = result.user;
+  //     return _userFromUser(user);
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
 
   //sign in with email and pass
   Future SignInWithEandP(String email, String password) async {
@@ -35,7 +36,7 @@ class AuthService {
           email: email, password: password);
       User? user = result.user;
 
-      return _userFromUser(user);
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;
@@ -48,9 +49,9 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      await DatabaseService(uid: user!.uid)
-          .updateUserData('0', 'new memeber', 100);
-      return _userFromUser(user);
+      // await DatabaseService(uid: user!.uid)
+      //     .updateUserData('0', 'new memeber', 100);
+      return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
       return null;

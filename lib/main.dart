@@ -4,6 +4,9 @@ import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/pages/wrapper.dart';
 import 'package:kwiz_v2/pages/profile.dart';
 import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/services/auth.dart';
 
 
 
@@ -13,7 +16,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MaterialApp(
+  runApp(StreamProvider<ourUser?>.value(
+    initialData: null,
+    value: AuthService().user,
+    child: MaterialApp(
     theme: ThemeData(
       appBarTheme: const AppBarTheme(
         color: Color.fromARGB(255, 27, 57, 82),
@@ -31,5 +37,6 @@ Future<void> main() async {
       ),
     ),
     home: Wrapper(),
+  ),
   ));
 }
