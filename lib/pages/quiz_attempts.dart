@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import '../services/database.dart';
 
-class QuizAttempts extends StatefulWidget{
+class QuizAttempts extends StatefulWidget {
   const QuizAttempts({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _QuizAttemptsState createState() => _QuizAttemptsState();
 }
 
-class _QuizAttemptsState extends State<QuizAttempts>{
+class _QuizAttemptsState extends State<QuizAttempts> {
   DatabaseService service = DatabaseService();
   List? distinctQuizzes;
-   int catLength = 0;
+  int catLength = 0;
   List? _displayedItems = [];
   List? categories;
   int fillLength = 0;
   final TextEditingController _searchController = TextEditingController();
 
-   Future<void> loaddata() async {
+  Future<void> loaddata() async {
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
@@ -34,12 +34,11 @@ class _QuizAttemptsState extends State<QuizAttempts>{
     });
   }
 
- @override
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
-
 
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
@@ -52,25 +51,25 @@ class _QuizAttemptsState extends State<QuizAttempts>{
   }
 
   @override
-  Widget build(BuildContext contetx){
+  Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-                'Quiz Attempts',
-                style: TextStyle(
-                    fontFamily: 'TitanOne',
-                    fontSize: 30,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+          'Quiz Attempts',
+          style: TextStyle(
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
+        ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -109,9 +108,7 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                     icon: const Icon(Icons.search),
                     color: const Color.fromRGBO(192, 192, 192,
                         1), // set the search icon color to a light grey
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -184,10 +181,10 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                                     ),
                                   ),
                                   textColor: Colors.white,
-                                  subtitle: const SingleChildScrollView(
+                                  subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: [
+                                      children: const [
                                         Text(
                                           'Author: (TBA)',
                                           style: TextStyle(
@@ -211,7 +208,7 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                                           /*filteredQuizzes!
                                               .elementAt(index)
                                               .quizDateCreated*/
-                                              ,
+                                          ,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -237,7 +234,7 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                                     child: ElevatedButton(
                                       onPressed: () {
                                         //Perhaps load the report feedback page
-                                       /* Navigator.push(
+                                        /* Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => StartQuiz(

@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:test/models/user.dart';
+/*import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kwiz_v2/models/user.dart'
 import 'package:test/services/database.dart';
 
 class AuthService {
@@ -66,4 +66,4 @@ class AuthService {
       return null;
     }
   }
-}
+}*/

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import '../services/database.dart';
 
-class QuizHistory extends StatefulWidget{
+class QuizHistory extends StatefulWidget {
   const QuizHistory({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _QuizHistoryState createState() => _QuizHistoryState();
 }
 
-class _QuizHistoryState extends State<QuizHistory>{
+class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? distinctQuizzes;
   List? categories;
-   int catLength = 0;
+  int catLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
   final TextEditingController _searchController = TextEditingController();
-    Future<void> loaddata() async {
+  Future<void> loaddata() async {
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
@@ -33,7 +33,7 @@ class _QuizHistoryState extends State<QuizHistory>{
     });
   }
 
- @override
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -50,25 +50,25 @@ class _QuizHistoryState extends State<QuizHistory>{
   }
 
   @override
-  Widget build(BuildContext contetx){
+  Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-                'History',
-                style: TextStyle(
-                    fontFamily: 'TitanOne',
-                    fontSize: 30,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+          'History',
+          style: TextStyle(
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
+        ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -107,9 +107,7 @@ class _QuizHistoryState extends State<QuizHistory>{
                     icon: const Icon(Icons.search),
                     color: const Color.fromRGBO(192, 192, 192,
                         1), // set the search icon color to a light grey
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -182,10 +180,10 @@ class _QuizHistoryState extends State<QuizHistory>{
                                     ),
                                   ),
                                   textColor: Colors.white,
-                                  subtitle: const SingleChildScrollView(
+                                  subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: [
+                                      children: const [
                                         Text(
                                           'Author: (TBA)',
                                           style: TextStyle(
@@ -209,7 +207,7 @@ class _QuizHistoryState extends State<QuizHistory>{
                                           /*filteredQuizzes!
                                               .elementAt(index)
                                               .quizDateCreated*/
-                                              ,
+                                          ,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
