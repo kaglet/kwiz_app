@@ -20,13 +20,9 @@ class _RegisterState extends State<Register> {
   String email = '';
   String password = '';
   String error = '';
-  UserData user = UserData(
-      uID: null,
-      firstName: 'John',
-      userName: 'John',
-      lastName: 'Doe',
-      bookmarkedQuizzes: [],
-      pastAttemptQuizzes: []);
+  String firstNameInput = '';
+  String lastNameInput = '';
+  String userNameInput = '';
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +56,36 @@ class _RegisterState extends State<Register> {
                       children: <Widget>[
                         SizedBox(height: 20.0),
                         TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'First Name'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a first name' : null,
+                          onChanged: (val) {
+                            firstNameInput = val;
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Last Name'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a last name' : null,
+                          onChanged: (val) {
+                            lastNameInput = val;
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Username'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a username' : null,
+                          onChanged: (val) {
+                            userNameInput = val;
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
                           decoration:
                               textInputDecoration.copyWith(hintText: 'Email'),
                           validator: (val) =>
@@ -87,6 +113,14 @@ class _RegisterState extends State<Register> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
+                            UserData user = UserData(
+                                uID: null,
+                                firstName: firstNameInput,
+                                userName: userNameInput,
+                                lastName: lastNameInput,
+                                bookmarkedQuizzes: [],
+                                pastAttemptQuizzes: []);
+
                             if (_formkey.currentState!.validate()) {
                               setState(() {
                                 loading = true;
