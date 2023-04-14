@@ -8,7 +8,7 @@ class ourUser {
 }
 
 class UserData {
-  final String? uid;
+  final String? uID;
   final String? userName;
   final String? firstName;
   final String? lastName;
@@ -16,9 +16,9 @@ class UserData {
   late final List<PastAttempt> pastAttemptQuizzes;
 
   UserData(
-      {required this.uid,
-      required this.firstName,
+      {required this.uID,
       required this.userName,
+      required this.firstName,
       required this.lastName,
       required this.bookmarkedQuizzes,
       required this.pastAttemptQuizzes});
