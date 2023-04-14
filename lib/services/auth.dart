@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../services/database.dart';
 import '../models/user.dart';
 
-
-// class AuthService {
-//   final FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //creat ourUser based on User
   ourUser? _userFromFirebaseUser(User? user) {
@@ -17,24 +16,24 @@ import '../models/user.dart';
     //.map((User? user) => _userFromUser(user)); (the same as above)
   }
 
-  // //sign in anom
-  // Future signInAnon() async {
-  //   try {
-  //     UserCredential result = await _auth.signInAnonymously();
-  //     User? user = result.user;
-  //     return _userFromUser(user);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return null;
-  //   }
-  // }
+  //sign in anom
+  Future signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      User? user = result.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
-//   //sign in with email and pass
-//   Future SignInWithEandP(String email, String password) async {
-//     try {
-//       UserCredential result = await _auth.signInWithEmailAndPassword(
-//           email: email, password: password);
-//       User? user = result.user;
+  //sign in with email and pass
+  Future SignInWithEandP(String email, String password) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
 
       return _userFromFirebaseUser(user);
     } catch (e) {
@@ -58,13 +57,13 @@ import '../models/user.dart';
     }
   }
 
-//   //sign out
-//   Future signOut() async {
-//     try {
-//       return await _auth.signOut();
-//     } catch (e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }
-// }
+  //sign out
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+}
