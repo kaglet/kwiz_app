@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
               backgroundColor: Colors.blue[700],
               elevation: 0.0,
               title: Text('Register with Kwiz'),
-              /*actions: <Widget>[
+              actions: <Widget>[
                 ElevatedButton.icon(
                   onPressed: () {
                     widget.toggleView!();
@@ -46,7 +46,7 @@ class _RegisterState extends State<Register> {
                         MaterialStateProperty.all(Colors.brown[350]),
                   ),
                 )
-              ],*/
+              ],
             ),
             body: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -54,6 +54,13 @@ class _RegisterState extends State<Register> {
                     key: _formkey,
                     child: Column(
                       children: <Widget>[
+                        const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
@@ -109,7 +116,7 @@ class _RegisterState extends State<Register> {
                         SizedBox(height: 20.0),
                         ElevatedButton(
                           child: Text(
-                            'Register',
+                            'Sign Up',
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
@@ -138,18 +145,6 @@ class _RegisterState extends State<Register> {
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.pink[400]),
-                          ),
-                        ),
-                        SizedBox(height: 20.0),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            widget.toggleView!();
-                          },
-                          icon: Icon(Icons.person),
-                          label: Text('Sign In'),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.brown[350]),
                           ),
                         ),
                         SizedBox(height: 20.0),
