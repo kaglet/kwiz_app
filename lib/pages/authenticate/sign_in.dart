@@ -31,7 +31,20 @@ class _SignInState extends State<SignIn> {
             appBar: AppBar(
               backgroundColor: Colors.brown[400],
               elevation: 0.0,
-              title: Text('Sign into Kwiz'),
+              title: Text('Sign in to Kwiz'),
+              actions: <Widget>[
+                ElevatedButton.icon(
+                  onPressed: () {
+                    widget.toggleView!();
+                  },
+                  icon: Icon(Icons.person),
+                  label: Text('Register'),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.brown[350]),
+                  ),
+                )
+              ],
             ),
             body: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),

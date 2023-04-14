@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/auth.dart';
 import 'package:kwiz_v2/shared/const.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -16,12 +17,16 @@ class _RegisterState extends State<Register> {
   final _formkey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
   bool loading = false;
-  String firstName = '';
-  String lastName = '';
-  String userName = '';
   String email = '';
   String password = '';
   String error = '';
+  UserData user = UserData(
+      uID: null,
+      firstName: 'John',
+      userName: 'John',
+      lastName: 'Doe',
+      bookmarkedQuizzes: [],
+      pastAttemptQuizzes: []);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,19 @@ class _RegisterState extends State<Register> {
               backgroundColor: Colors.brown[400],
               elevation: 0.0,
               title: Text('Register to test'),
+              actions: <Widget>[
+                ElevatedButton.icon(
+                  onPressed: () {
+                    widget.toggleView!();
+                  },
+                  icon: Icon(Icons.person),
+                  label: Text('Sign In'),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.brown[350]),
+                  ),
+                )
+              ],
             ),
             body: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -40,36 +58,6 @@ class _RegisterState extends State<Register> {
                     key: _formkey,
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'First Name'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter a first name' : null,
-                          onChanged: (val) {
-                            firstName = val;
-                          },
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Last Name'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter a last name' : null,
-                          onChanged: (val) {
-                            lastName = val;
-                          },
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Username'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter a  Username' : null,
-                          onChanged: (val) {
-                            userName = val;
-                          },
-                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           decoration:
@@ -104,7 +92,7 @@ class _RegisterState extends State<Register> {
                                 loading = true;
                               });
                               dynamic result = await _auth.RegisterWithEandP(
-                                  email, password);
+                                  email, password, user);
                               if (this.mounted && result == null) {
                                 setState(() {
                                   loading = false;
@@ -122,7 +110,7 @@ class _RegisterState extends State<Register> {
                         Text(
                           error,
                           style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        ),
+                        )
                       ],
                     ))),
           );

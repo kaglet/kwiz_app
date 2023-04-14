@@ -8,13 +8,13 @@ import 'package:kwiz_v2/pages/authenticate/start_screen.dart';
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<ourUser?>(context);
+    final user = Provider.of<OurUser?>(context);
     print(user);
     // return either the Home or Authenticate widget
     if (user == null) {
-      return StartScreen();
+      return Authenticate();
     } else {
-      return const Home();
+      return Home();
     }
   }
 }

@@ -15,7 +15,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(StreamProvider<ourUser?>.value(
+  runApp(StreamProvider<OurUser?>.value(
     initialData: null,
     value: AuthService().user,
     child: MaterialApp(

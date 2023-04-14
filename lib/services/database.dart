@@ -256,8 +256,13 @@ class DatabaseService {
   //streams
   //get quiz stream
 
-  Stream<QuerySnapshot> get getQuizzes {
-    return quizCollection.snapshots();
+  Future<void> addUser(UserData userInstance, OurUser ourUserInstance) async {
+    //the var result returns the quiz object that has just been added to the database
+    var result = await userCollection.doc(ourUserInstance.uid).set({
+      'FirstName': userInstance.firstName,
+      'LastName': userInstance.lastName,
+      'Username': userInstance.userName,
+    });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 }

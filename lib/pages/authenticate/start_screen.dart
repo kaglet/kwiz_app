@@ -41,7 +41,7 @@ class StartScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => SignIn(
-                            toggleView: null,
+                            toggleView: (null),
                           )),
                 );
               },
