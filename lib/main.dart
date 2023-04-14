@@ -35,7 +35,8 @@ Future<void> main() async {
           titleLarge: TextStyle(color: Colors.white),
         ),
       ),
-      home: Wrapper(),
+      //Testing rebase issues, Hi Kago
+      home: Home(),
     ),
   ));
 }

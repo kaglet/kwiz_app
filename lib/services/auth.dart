@@ -17,17 +17,17 @@ class AuthService {
     //.map((User? user) => _userFromUser(user)); (the same as above)
   }
 
-  // //sign in anom
-  // Future signInAnon() async {
-  //   try {
-  //     UserCredential result = await _auth.signInAnonymously();
-  //     User? user = result.user;
-  //     return _userFromUser(user);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return null;
-  //   }
-  // }
+  //sign in anom
+  Future signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      User? user = result.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
 //   //sign in with email and pass
   Future SignInWithEandP(String email, String password) async {
@@ -59,7 +59,7 @@ class AuthService {
     }
   }
 
-//   //sign out
+  //sign out
   Future signOut() async {
     try {
       return await _auth.signOut();
@@ -68,5 +68,4 @@ class AuthService {
       return null;
     }
   }
-// }
 }
