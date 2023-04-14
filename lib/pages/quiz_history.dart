@@ -11,23 +11,24 @@ class QuizHistory extends StatefulWidget {
 class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? distinctQuizzes;
-  List? categories;
+  List? pastAttempts;
   int catLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
   final TextEditingController _searchController = TextEditingController();
   Future<void> loaddata() async {
-    categories = await service.getCategories();
-    categories!.insert(0, 'All');
-    catLength = categories!.length;
-    _displayedItems = categories;
+    pastAttempts =
+        await service.getCategories(); // change to service.getPastAttempts()
+    pastAttempts!.insert(0, 'All');
+    catLength = pastAttempts!.length;
+    _displayedItems = pastAttempts;
     fillLength = _displayedItems!.length;
   }
 
   @override
   void initState() {
     super.initState();
-    _displayedItems = categories;
+    _displayedItems = pastAttempts;
     loaddata().then((value) {
       setState(() {});
     });

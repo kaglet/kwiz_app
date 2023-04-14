@@ -17,8 +17,8 @@ class UserData {
 
   UserData(
       {required this.uid,
-      required this.userName,
       required this.firstName,
+      required this.userName,
       required this.lastName,
       required this.bookmarkedQuizzes,
       required this.pastAttemptQuizzes});
