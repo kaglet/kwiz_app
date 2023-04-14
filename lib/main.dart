@@ -35,7 +35,7 @@ Future<void> main() async {
           titleLarge: TextStyle(color: Colors.white),
         ),
       ),
-      home: StartScreen(),
+      home: Wrapper(),
     ),
   ));
 }
