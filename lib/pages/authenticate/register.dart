@@ -29,12 +29,12 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
+            backgroundColor: Colors.blue[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Colors.blue[700],
               elevation: 0.0,
-              title: Text('Register to test'),
-              actions: <Widget>[
+              title: Text('Register with Kwiz'),
+              /*actions: <Widget>[
                 ElevatedButton.icon(
                   onPressed: () {
                     widget.toggleView!();
@@ -46,7 +46,7 @@ class _RegisterState extends State<Register> {
                         MaterialStateProperty.all(Colors.brown[350]),
                   ),
                 )
-              ],
+              ],*/
             ),
             body: Container(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -138,6 +138,18 @@ class _RegisterState extends State<Register> {
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.pink[400]),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            widget.toggleView!();
+                          },
+                          icon: Icon(Icons.person),
+                          label: Text('Sign In'),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.brown[350]),
                           ),
                         ),
                         SizedBox(height: 20.0),
