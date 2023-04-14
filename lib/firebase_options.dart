@@ -67,8 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1023203529666',
     projectId: 'kwiz-4ab1f',
     storageBucket: 'kwiz-4ab1f.appspot.com',
-    iosClientId:
-        '1023203529666-3vurghs0ser6ighqokpfdh1e5d91eqgo.apps.googleusercontent.com',
+    iosClientId: '1023203529666-3vurghs0ser6ighqokpfdh1e5d91eqgo.apps.googleusercontent.com',
     iosBundleId: 'com.example.kwizV2',
   );
 
@@ -78,8 +77,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1023203529666',
     projectId: 'kwiz-4ab1f',
     storageBucket: 'kwiz-4ab1f.appspot.com',
-    iosClientId:
-        '1023203529666-3vurghs0ser6ighqokpfdh1e5d91eqgo.apps.googleusercontent.com',
+    iosClientId: '1023203529666-3vurghs0ser6ighqokpfdh1e5d91eqgo.apps.googleusercontent.com',
     iosBundleId: 'com.example.kwizV2',
   );
 }

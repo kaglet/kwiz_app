@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/profile.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
+import '../services/auth.dart';
 // import 'add_quiz_about.dart';
 // import 'view_categories.dart';
 
@@ -15,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   // return static home screen with navigation functionality //
+  final AuthService _auth = AuthService();
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -53,6 +55,16 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       const Spacer(),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.audiotrack,
+                          color: Colors.white,
+                          size: 40.0,
+                        ),
+                        onPressed: () async {
+                          await _auth.signOut();
+                        },
+                      ),
                       IconButton(
                         icon: const Icon(
                           Icons.person,
