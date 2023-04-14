@@ -5,8 +5,6 @@ import 'package:kwiz_v2/pages/wrapper.dart';
 import 'package:kwiz_v2/pages/profile.dart';
 import 'firebase_options.dart';
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -30,6 +28,6 @@ Future<void> main() async {
         titleLarge: TextStyle(color: Colors.white),
       ),
     ),
-    home: Wrapper(),
+    home: Home(),
   ));
 }

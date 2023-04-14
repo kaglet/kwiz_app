@@ -1,5 +1,5 @@
 import '../models/bookmarks.dart';
-import '../models/pastAttempts.dart';
+import '../models/pastAttempt.dart';
 
 class ourUser {
   final String? uid;
@@ -17,8 +17,8 @@ class UserData {
 
   UserData(
       {required this.uid,
-      required this.name,
       required this.firstName,
+      required this.userName,
       required this.lastName,
       required this.bookmarkedQuizzes,
       required this.pastAttemptQuizzes});

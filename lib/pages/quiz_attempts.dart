@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import '../services/database.dart';
 
-class QuizAttempts extends StatefulWidget{
+class QuizAttempts extends StatefulWidget {
   const QuizAttempts({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _QuizAttemptsState createState() => _QuizAttemptsState();
 }
 
-class _QuizAttemptsState extends State<QuizAttempts>{
+class _QuizAttemptsState extends State<QuizAttempts> {
   DatabaseService service = DatabaseService();
   List? distinctQuizzes;
-   int catLength = 0;
+  int catLength = 0;
   List? _displayedItems = [];
   List? categories;
   int fillLength = 0;
   final TextEditingController _searchController = TextEditingController();
 
-   Future<void> loaddata() async {
+  Future<void> loaddata() async {
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
@@ -34,12 +34,11 @@ class _QuizAttemptsState extends State<QuizAttempts>{
     });
   }
 
- @override
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
-
 
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
@@ -52,25 +51,25 @@ class _QuizAttemptsState extends State<QuizAttempts>{
   }
 
   @override
-  Widget build(BuildContext contetx){
+  Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-                'Quiz Attempts',
-                style: TextStyle(
-                    fontFamily: 'TitanOne',
-                    fontSize: 30,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+          'Quiz Attempts',
+          style: TextStyle(
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
+        ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -109,9 +108,7 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                     icon: const Icon(Icons.search),
                     color: const Color.fromRGBO(192, 192, 192,
                         1), // set the search icon color to a light grey
-                    onPressed: () {
-
-                    },
+                    onPressed: () {},
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -152,120 +149,26 @@ class _QuizAttemptsState extends State<QuizAttempts>{
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
 
-                            return Container(
-                              margin: const EdgeInsets.symmetric(
-                                vertical: 8.0,
-                                horizontal: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: color1,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 3.0,
-                                    spreadRadius: 2.0,
-                                    offset: const Offset(0, 2),
+                            return Card(
+                              margin: EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Color.fromARGB(255, 45, 64, 96),
+                                      Color.fromARGB(255, 45, 64, 96),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: Card(
-                                color: const Color.fromARGB(240, 45, 64, 96),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: ListTile(
-                                  title: Text(
-                                    _displayedItems?[index],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white,
-                                      fontFamily: 'Nunito',
-                                    ),
-                                  ),
-                                  textColor: Colors.white,
-                                  subtitle: const SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'Author: (TBA)',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Category: ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Date Created: '
-                                          /*filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizDateCreated*/
-                                              ,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  trailing: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          color1,
-                                          const Color.fromARGB(
-                                              255, 59, 98, 172),
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                    ),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        //Perhaps load the report feedback page
-                                       /* Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => StartQuiz(
-                                                chosenQuiz: filteredQuizzes!
-                                                    .elementAt(index)
-                                                    .quizID),
-                                          ),
-                                        ); */
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors
-                                            .transparent, // remove button background color
-                                        elevation: 0, // remove button shadow
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Select Quiz',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.white,
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(children: <Widget>[
+                                    Text('Attempt Number '),
+                                    Text('Score: '),
+                                    Text('Date Taken: ')
+                                  ]),
                                 ),
                               ),
                             );
