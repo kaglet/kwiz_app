@@ -184,7 +184,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: [
+                                      children: const [
                                         Text(
                                           'Author: (TBA)',
                                           style: TextStyle(
