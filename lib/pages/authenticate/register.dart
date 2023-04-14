@@ -21,7 +21,7 @@ class _RegisterState extends State<Register> {
   String password = '';
   String error = '';
   UserData user = UserData(
-      uid: null,
+      uID: null,
       firstName: 'John',
       userName: 'John',
       lastName: 'Doe',
