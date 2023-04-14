@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
 
@@ -11,6 +12,9 @@ class DatabaseService {
   //Category Colection Name
   final CollectionReference categoryCollection =
       FirebaseFirestore.instance.collection('Categories');
+
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('Users');
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //add quiz
@@ -202,8 +206,13 @@ class DatabaseService {
   //streams
   //get quiz stream
 
-  Stream<QuerySnapshot> get getQuizzes {
-    return quizCollection.snapshots();
+  Future<void> addUser(UserData userInstance, OurUser ourUserInstance) async {
+    //the var result returns the quiz object that has just been added to the database
+    var result = await userCollection.doc(ourUserInstance.uid).set({
+      'FirstName': userInstance.firstName,
+      'LastName': userInstance.lastName,
+      'Username': userInstance.userName,
+    });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 }

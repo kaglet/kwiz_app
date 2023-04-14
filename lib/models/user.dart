@@ -1,10 +1,10 @@
 import '../models/bookmarks.dart';
 import '../models/pastAttempt.dart';
 
-class ourUser {
+class OurUser {
   final String? uid;
 
-  ourUser({this.uid});
+  OurUser({this.uid});
 }
 
 class UserData {

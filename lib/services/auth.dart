@@ -1,17 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/database.dart';
 import '../models/user.dart';
+import '../services/database.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //creat ourUser based on User
-  ourUser? _userFromFirebaseUser(User? user) {
-    return user != null ? ourUser(uid: user.uid) : null;
+  OurUser? _userFromFirebaseUser(User? user) {
+    return user != null ? OurUser(uid: user.uid) : null;
   }
 
   //auth change user stream
-  Stream<ourUser?> get user {
+  Stream<OurUser?> get user {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
     //.map((User? user) => _userFromUser(user)); (the same as above)
   }
@@ -43,13 +44,14 @@ class AuthService {
   }
 
   //register with email and pass
-  Future RegisterWithEandP(String email, String password) async {
+  Future RegisterWithEandP(
+      String email, String password, UserData userData) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      // await DatabaseService(uid: user!.uid)
-      //     .updateUserData('0', 'new memeber', 100);
+      OurUser? ourUser = _userFromFirebaseUser(user);
+      await DatabaseService().addUser(userData, ourUser!);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -58,13 +60,13 @@ class AuthService {
   }
 
 //   //sign out
-//   Future signOut() async {
-//     try {
-//       return await _auth.signOut();
-//     } catch (e) {
-//       print(e.toString());
-//       return null;
-//     }
-//   }
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 // }
 }
