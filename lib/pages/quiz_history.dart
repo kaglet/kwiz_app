@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import '../services/database.dart';
 
 class QuizHistory extends StatefulWidget {
@@ -12,15 +13,16 @@ class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? distinctQuizzes;
   List? pastAttempts;
-  int catLength = 0;
+  int pastAttemptsLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
+  UserData? userData;
   final TextEditingController _searchController = TextEditingController();
   Future<void> loaddata() async {
-    pastAttempts =
-        await service.getCategories(); // change to service.getPastAttempts()
-    pastAttempts!.insert(0, 'All');
-    catLength = pastAttempts!.length;
+    userData = await service.getUserAndPastAttempts(userID: 'om1DwkvlNZ6AV0p1F9io'); // change to service.getPastAttempts()
+    pastAttempts = userData!.pastAttemptQuizzes;
+    print(pastAttempts);
+    pastAttemptsLength = pastAttempts!.length;
     _displayedItems = pastAttempts;
     fillLength = _displayedItems!.length;
   }
@@ -43,7 +45,7 @@ class _QuizHistoryState extends State<QuizHistory> {
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
-      _displayedItems = distinctQuizzes!
+      _displayedItems = pastAttempts!
           .where((item) => item.toLowerCase().contains(text.toLowerCase()))
           .toList();
       fillLength = _displayedItems!.length;
