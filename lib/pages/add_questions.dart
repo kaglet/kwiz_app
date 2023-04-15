@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import '../classes/qa_obj.dart';
 import '../classes/qa_container.dart';
 import '../models/questions.dart';
@@ -11,12 +12,14 @@ class AddQuestions extends StatefulWidget {
   final String category;
   final String title;
   final String aboutQuiz;
+  final OurUser user;
 
   const AddQuestions(
       {super.key,
       required this.aboutQuiz,
       required this.title,
-      required this.category});
+      required this.category,
+      required this.user});
 
   @override
   State<AddQuestions> createState() => _AddQuestionsState();
@@ -73,7 +76,10 @@ class _AddQuestionsState extends State<AddQuestions> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(
+                          builder: (context) => Home(
+                                user: widget.user,
+                              )),
                     );
                   },
                 ),

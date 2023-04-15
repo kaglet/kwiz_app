@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
@@ -6,8 +7,10 @@ import 'home.dart';
 import '../services/database.dart';
 
 class ViewQuizzes extends StatefulWidget {
+  final OurUser user;
   final String chosenCategory;
-  const ViewQuizzes({super.key, required this.chosenCategory});
+  const ViewQuizzes(
+      {super.key, required this.chosenCategory, required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -107,7 +110,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(
+                    builder: (context) => Home(user: widget.user)),
               );
             },
           ),
@@ -250,7 +254,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          filteredQuizzes!.elementAt(index).quizCategory,
+                                          filteredQuizzes!
+                                              .elementAt(index)
+                                              .quizCategory,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -259,7 +265,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                          filteredQuizzes!.elementAt(index).quizDateCreated,
+                                          filteredQuizzes!
+                                              .elementAt(index)
+                                              .quizDateCreated,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -275,7 +283,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                       gradient: LinearGradient(
                                         colors: [
                                           color1,
-                                          const Color.fromARGB(255, 59, 98, 172),
+                                          const Color.fromARGB(
+                                              255, 59, 98, 172),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -287,7 +296,10 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => StartQuiz(
-                                              chosenQuiz: filteredQuizzes!.elementAt(index).quizID,
+                                              user: widget.user,
+                                              chosenQuiz: filteredQuizzes!
+                                                  .elementAt(index)
+                                                  .quizID,
                                             ),
                                           ),
                                         );
@@ -296,7 +308,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                         backgroundColor: Colors.transparent,
                                         elevation: 0,
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
                                       ),
                                       child: const Text(
@@ -311,7 +324,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   ),
                                 ),
                               ),
-
                             );
                           },
                         ),

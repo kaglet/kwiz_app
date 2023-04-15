@@ -3,9 +3,11 @@ import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 import '../services/database.dart';
+import 'package:kwiz_v2/models/user.dart';
 
 class Profile extends StatefulWidget {
-  const Profile({super.key});
+  final OurUser user;
+  const Profile({super.key, required this.user});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -182,7 +184,9 @@ class _ProfileState extends State<Profile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AddQuiz()),
+                                        builder: (context) => AddQuiz(
+                                              user: widget.user,
+                                            )),
                                   );
                                 },
                                 child: Card(

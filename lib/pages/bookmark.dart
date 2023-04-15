@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
@@ -6,8 +7,9 @@ import 'home.dart';
 import '../services/database.dart';
 
 class Bookmark extends StatefulWidget {
+  final OurUser user;
   final String chosenCategory;
-  const Bookmark({super.key, required this.chosenCategory});
+  const Bookmark({super.key, required this.chosenCategory, required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -105,7 +107,8 @@ class _BookmarkState extends State<Bookmark> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(
+                    builder: (context) => Home(user: widget.user)),
               );
             },
           ),
@@ -281,6 +284,7 @@ class _BookmarkState extends State<Bookmark> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => StartQuiz(
+                                                user: widget.user,
                                                 chosenQuiz: filteredQuizzes!
                                                     .elementAt(index)
                                                     .quizID),
