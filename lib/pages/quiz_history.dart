@@ -21,7 +21,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   Future<void> loaddata() async {
     userData = await service.getUserAndPastAttempts(
         userID: 'om1DwkvlNZ6AV0p1F9io'); // change to service.getPastAttempts()
-    pastAttempts = userData!.pastAttemptQuizzes;
+    pastAttempts = userData?.pastAttemptQuizzes;
     print('Hello');
     print(pastAttempts);
     pastAttemptsLength = pastAttempts!.length;

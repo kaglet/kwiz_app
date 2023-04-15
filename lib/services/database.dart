@@ -225,6 +225,10 @@ class DatabaseService {
           await userCollection.doc(userID).collection('Past Attempts').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
+        List<String> pastAttemptQuizDatesAttempted =
+            List<String>.from(docSnapshot['pastAttemptQuizDatesAttempted']);
+        List<int> pastAttemptQuizMarks =
+            List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
@@ -234,9 +238,8 @@ class DatabaseService {
             pastAttemptQuizDateCreated:
                 docSnapshot['pastAttemptQuizDateCreated'],
             pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-            pastAttemptQuizMarks: docSnapshot['pastAttemptQuizMarks'],
-            pastAttemptQuizDatesAttempted:
-                docSnapshot[' pastAttemptQuizDatesAttempted']);
+            pastAttemptQuizMarks: pastAttemptQuizMarks,
+            pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
 
         pastAttempts.add(pastAttempt);
       }
