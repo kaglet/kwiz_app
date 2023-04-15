@@ -20,24 +20,20 @@ class _RegisterState extends State<Register> {
   String email = '';
   String password = '';
   String error = '';
-  UserData user = UserData(
-      uID: null,
-      firstName: 'John',
-      userName: 'John',
-      lastName: 'Doe',
-      bookmarkedQuizzes: [],
-      pastAttemptQuizzes: []);
+  String firstNameInput = '';
+  String lastNameInput = '';
+  String userNameInput = '';
 
   @override
   Widget build(BuildContext context) {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
+            backgroundColor: Colors.blue[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Colors.blue[700],
               elevation: 0.0,
-              title: Text('Register to test'),
+              title: Text('Register with Kwiz'),
               actions: <Widget>[
                 ElevatedButton.icon(
                   onPressed: () {
@@ -58,6 +54,43 @@ class _RegisterState extends State<Register> {
                     key: _formkey,
                     child: Column(
                       children: <Widget>[
+                        const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'First Name'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a first name' : null,
+                          onChanged: (val) {
+                            firstNameInput = val;
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Last Name'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a last name' : null,
+                          onChanged: (val) {
+                            lastNameInput = val;
+                          },
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Username'),
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a username' : null,
+                          onChanged: (val) {
+                            userNameInput = val;
+                          },
+                        ),
                         SizedBox(height: 20.0),
                         TextFormField(
                           decoration:
@@ -83,10 +116,18 @@ class _RegisterState extends State<Register> {
                         SizedBox(height: 20.0),
                         ElevatedButton(
                           child: Text(
-                            'Register',
+                            'Sign Up',
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () async {
+                            UserData user = UserData(
+                                uID: null,
+                                firstName: firstNameInput,
+                                userName: userNameInput,
+                                lastName: lastNameInput,
+                                bookmarkedQuizzes: [],
+                                pastAttemptQuizzes: []);
+
                             if (_formkey.currentState!.validate()) {
                               setState(() {
                                 loading = true;
