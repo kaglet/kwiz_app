@@ -42,7 +42,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     } else {
       categoryQuiz = await service.getQuizByCategory(category: categoryName);
     }
-
+    print('Hello');
     catLength = categoryQuiz!.length;
     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
     filLength = filteredQuizzes!.length;
