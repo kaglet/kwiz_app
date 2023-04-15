@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:kwiz_v2/models/bookmarks.dart';
+import 'package:kwiz_v2/models/pastAttempt.dart';
+import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
 
@@ -11,6 +14,10 @@ class DatabaseService {
   //Category Colection Name
   final CollectionReference categoryCollection =
       FirebaseFirestore.instance.collection('Categories');
+
+  //User Colection Name
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('Users');
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //add quiz
@@ -196,14 +203,66 @@ class DatabaseService {
 
     return quiz;
   }
-  //---------------------------------
 
+  //---------------------------------
+  Future<UserData?> getUserAndPastAttempts({String? userID}) async {
+    //Past aatempt cpuld change to user
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+
+    try {
+      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['userName'],
+          firstName: docSnapshot['firstName'],
+          lastName: docSnapshot['lastName'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+
+      QuerySnapshot collectionSnapshot =
+          await userCollection.doc(userID).collection('Past Attempts').get();
+      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+        var docSnapshot = collectionSnapshot.docs[i];
+        PastAttempt pastAttempt = PastAttempt(
+            quizID: docSnapshot['quizID'],
+            pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
+            pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
+            pastAttemptQuizDescription:
+                docSnapshot['pastAttemptQuizDescription'],
+            pastAttemptQuizDateCreated:
+                docSnapshot['pastAttemptQuizDateCreated'],
+            pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
+            pastAttemptQuizMarks: docSnapshot['pastAttemptQuizMarks'],
+            pastAttemptQuizDatesAttempted:
+                docSnapshot[' pastAttemptQuizDatesAttempted']);
+
+        pastAttempts.add(pastAttempt);
+      }
+
+      // user.pastAttemptQuizzes
+      //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
+
+      return user;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error!!!!! - $e");
+      }
+    }
+    return null;
+  }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //streams
   //get quiz stream
 
-  Stream<QuerySnapshot> get getQuizzes {
-    return quizCollection.snapshots();
+  Future<void> addUser(UserData userInstance, OurUser ourUserInstance) async {
+    //the var result returns the quiz object that has just been added to the database
+    var result = await userCollection.doc(ourUserInstance.uid).set({
+      'FirstName': userInstance.firstName,
+      'LastName': userInstance.lastName,
+      'Username': userInstance.userName,
+    });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 }
