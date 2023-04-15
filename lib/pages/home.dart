@@ -2,18 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/profile.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
+import 'package:kwiz_v2/pages/take_quiz.dart';
+import '../models/quizzes.dart';
 import '../services/auth.dart';
+import '../services/database.dart';
+import 'dart:math';
 // import 'add_quiz_about.dart';
-// import 'view_categories.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
+  int allQuizzesLength = 0;
+  int randNum = 0;
+  Random random = Random();
+  DatabaseService service = DatabaseService();
+  List<Quiz>? quizzes;
+
+  @override
+  void initState() {
+    super.initState();
+    loadData().then((value) {
+      setState(() {});
+    });
+  }
+
+  // loads data from DB
+  Future<void> loadData() async {
+    quizzes = await service.getAllQuizzes();
+    allQuizzesLength = quizzes!.length;
+    randNum = random.nextInt(allQuizzesLength + 1);
+  }
+
   @override
   // return static home screen with navigation functionality //
   final AuthService _auth = AuthService();
@@ -93,7 +117,7 @@ class _HomeState extends State<Home> {
                         alignment: Alignment.center,
                         child: const Center(
                           child: Text(
-                            'What would you like to do?',
+                            'Surprise me!',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -110,10 +134,151 @@ class _HomeState extends State<Home> {
                       ),
                       Row(
                         children: [
+                          quizzes == null
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Expanded(
+                                  child: IntrinsicHeight(
+                                    child: SizedBox(
+                                      height:
+                                          200, // set a fixed height for the container
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(15),
+                                          color: const Color.fromARGB(
+                                              255, 45, 64, 96),
+                                        ),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 10, 15, 0),
+                                        child: SizedBox(
+                                          height:
+                                              200, // set a fixed height for the SingleChildScrollView
+                                          child: SingleChildScrollView(
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  quizzes!
+                                                      .elementAt(randNum)
+                                                      .quizName,
+                                                  style: const TextStyle(
+                                                      fontFamily: 'Nunito',
+                                                      fontSize: 25,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.white,
+                                                      decoration: TextDecoration
+                                                          .underline),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 5, 0, 0),
+                                                  //This widget displays the quiz's information
+                                                  child: RichText(
+                                                    textAlign: TextAlign.left,
+                                                    text: TextSpan(
+                                                      text: quizzes!
+                                                          .elementAt(randNum)
+                                                          .quizDescription,
+                                                      style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: double.infinity,
+                                                  height: 30,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      gradient:
+                                                          const LinearGradient(
+                                                        begin: Alignment.topLeft,
+                                                        end:
+                                                            Alignment.bottomRight,
+                                                        colors: [
+                                                          Colors.orange,
+                                                          Colors.deepOrange
+                                                        ],
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                    ),
+                                                    child: ElevatedButton(
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        elevation: 0,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50)),
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                color:
+                                                                    Colors.white,
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontStyle:
+                                                                    FontStyle
+                                                                        .normal),
+                                                      ),
+                                                      //This event takes us to the take_quiz screen
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                QuizScreen(quizzes!
+                                                                    .elementAt(
+                                                                        randNum)
+                                                                    .quizID),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: const Text(
+                                                        'Start',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily: 'Nunito',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        children: [
                           Expanded(
                             flex: 1,
                             child: SizedBox(
-                              height: 150.0,
+                              height: 120.0,
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -166,7 +331,7 @@ class _HomeState extends State<Home> {
                           Expanded(
                             flex: 1,
                             child: SizedBox(
-                              height: 150.0,
+                              height: 120.0,
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
