@@ -161,7 +161,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: 3,
+                          itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
