@@ -257,7 +257,14 @@ class _QuizHistoryState extends State<QuizHistory> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  pastAttempts![index],
+                                                  QuizAttempts(
+                                                      /*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
+                                                                          chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
+                                                                          chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
+                                                                          chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
+                                                      chosenQuiz:
+                                                          pastAttemptsList?[
+                                                              index]),
                                             ));
                                       },
                                       style: ElevatedButton.styleFrom(

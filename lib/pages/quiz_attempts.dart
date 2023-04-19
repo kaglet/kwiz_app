@@ -5,9 +5,18 @@ import '../services/database.dart';
 import '../pages/quiz_history.dart';
 
 class QuizAttempts extends StatefulWidget {
-  final PastAttempt pastAttempt;
-
-  const QuizAttempts({super.key, required this.pastAttempt});
+  /*final String chosenQuizID;
+  final List? chosenQuizMarks;
+  final List? chosenQuizDatesCreated;
+  final String chosenQuizName; */
+  final PastAttempt chosenQuiz;
+  const QuizAttempts(
+      {super.key,
+      /*required this.chosenQuizID,
+                                required this.chosenQuizName,
+                                required this.chosenQuizMarks,
+                                required this.chosenQuizDatesCreated,*/
+      required this.chosenQuiz});
   @override
   // ignore: library_private_types_in_public_api
   _QuizAttemptsState createState() => _QuizAttemptsState();
@@ -19,7 +28,6 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   late List? quizMarks;
   late List? quizDatesCreated;
   late String quizName;
-  late UserData pastAttemptQuizObject;
   late PastAttempt pastAttempt;
   List? distinctQuizzes;
   int catLength = 0;
@@ -39,7 +47,11 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   @override
   void initState() {
     super.initState();
-    pastAttempt = widget.pastAttempt;
+    // quizID = widget.chosenQuizID;
+    // quizMarks = widget.chosenQuizMarks;
+    // quizDatesCreated = widget.chosenQuizDatesCreated;
+    // quizName = widget.chosenQuizName;
+    pastAttempt = widget.chosenQuiz;
 
     _displayedItems = categories;
     loaddata().then((value) {
@@ -68,7 +80,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          quizName + ' Attempts',
+          pastAttempt.pastAttemptQuizName + ' Attempts',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -178,10 +190,13 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(children: <Widget>[
-                                    Text('Attempt Number ' + index.toString()),
-                                    Text('Score: ' + quizMarks?[index]),
+                                    Text('Attempt Number ${index + 1}'),
+                                    Text(
+                                        'Score: ${pastAttempt.pastAttemptQuizMarks[index]}'),
                                     Text('Date Taken: ' +
-                                        quizDatesCreated?[index])
+                                        pastAttempt
+                                                .pastAttemptQuizDatesAttempted[
+                                            index])
                                   ]),
                                 ),
                               ),
