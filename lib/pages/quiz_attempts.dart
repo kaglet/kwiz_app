@@ -10,11 +10,13 @@ class QuizAttempts extends StatefulWidget {
   final List? chosenQuizDatesCreated;
   final String chosenQuizName; */
   final PastAttempt chosenQuiz;
-  const QuizAttempts({super.key, /*required this.chosenQuizID,
+  const QuizAttempts(
+      {super.key,
+      /*required this.chosenQuizID,
                                 required this.chosenQuizName,
                                 required this.chosenQuizMarks,
                                 required this.chosenQuizDatesCreated,*/
-                                required this.chosenQuiz});
+      required this.chosenQuiz});
   @override
   // ignore: library_private_types_in_public_api
   _QuizAttemptsState createState() => _QuizAttemptsState();
@@ -50,8 +52,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
     // quizDatesCreated = widget.chosenQuizDatesCreated;
     // quizName = widget.chosenQuizName;
     pastAttempt = widget.chosenQuiz;
-    
-    
+
     _displayedItems = categories;
     loaddata().then((value) {
       setState(() {});
@@ -78,8 +79,8 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
-           pastAttempt.pastAttemptQuizName +' Attempts' ,
+        title: Text(
+          pastAttempt.pastAttemptQuizName + ' Attempts',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -161,7 +162,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: 3,
+                          itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
@@ -189,9 +190,13 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(children: <Widget>[
-                                    Text('Attempt Number ${index+1}'),
-                                    Text('Score: ${pastAttempt.pastAttemptQuizMarks[index]}' ),
-                                    Text('Date Taken: ' + pastAttempt.pastAttemptQuizDatesAttempted[index])
+                                    Text('Attempt Number ${index + 1}'),
+                                    Text(
+                                        'Score: ${pastAttempt.pastAttemptQuizMarks[index]}'),
+                                    Text('Date Taken: ' +
+                                        pastAttempt
+                                                .pastAttemptQuizDatesAttempted[
+                                            index])
                                   ]),
                                 ),
                               ),

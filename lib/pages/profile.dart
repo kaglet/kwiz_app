@@ -133,7 +133,7 @@ class _ProfileState extends State<Profile> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const QuizHistory()),
+                                            QuizHistory(user: widget.user)),
                                   );
                                 },
                                 child: Card(
