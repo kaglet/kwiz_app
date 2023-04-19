@@ -58,7 +58,7 @@ class _RegisterState extends State<Register> {
                     ],
                   ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                 child: Form(
                     key: _formkey,
                     child: Column(
@@ -236,102 +236,117 @@ class _RegisterState extends State<Register> {
                           },
                         ),
                         SizedBox(height: 20.0),
-                        SizedBox(
-                          width: 150,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [Colors.orange, Colors.deepOrange],
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    backgroundColor: Colors.transparent,
-                                    padding: const EdgeInsets.all(16.0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          12), // <-- Radius
+                        Expanded(
+                          flex: 1,
+                          child: SizedBox(
+                            width: 150,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.orange,
+                                        Colors.deepOrange
+                                      ],
                                     ),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Text(
-                                    'Register',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onPressed: () async {
-                                    UserData user = UserData(
-                                        uID: null,
-                                        firstName: firstNameInput,
-                                        userName: userNameInput,
-                                        lastName: lastNameInput,
-                                        bookmarkedQuizzes: [],
-                                        pastAttemptQuizzes: []);
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: Colors.transparent,
+                                      padding: const EdgeInsets.all(16.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            12), // <-- Radius
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Register',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      UserData user = UserData(
+                                          uID: null,
+                                          firstName: firstNameInput,
+                                          userName: userNameInput,
+                                          lastName: lastNameInput,
+                                          bookmarkedQuizzes: [],
+                                          pastAttemptQuizzes: []);
 
-                                    if (_formkey.currentState!.validate()) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      dynamic result =
-                                          await _auth.RegisterWithEandP(
-                                              email, password, user);
-
-                                      if (this.mounted && result == null) {
+                                      if (_formkey.currentState!.validate()) {
                                         setState(() {
-                                          loading = false;
-                                          error = 'Please supply valid email';
+                                          loading = true;
                                         });
-                                      } else {
-                                        OurUser ourUser =
-                                            OurUser(uid: user.uID);
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Home(
-                                              user: ourUser,
+                                        dynamic result =
+                                            await _auth.RegisterWithEandP(
+                                                email, password, user);
+
+                                        if (this.mounted && result == null) {
+                                          setState(() {
+                                            loading = false;
+                                            error = 'Please supply valid email';
+                                          });
+                                        } else {
+                                          OurUser ourUser =
+                                              OurUser(uid: user.uID);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Home(
+                                                user: ourUser,
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(height: 20.0),
-                              Container(
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Colors.blue,
-                                      Color.fromARGB(255, 7, 119, 210)
-                                    ],
+                                    },
                                   ),
-                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    widget.toggleView!();
-                                  },
-                                  child: Text('Login'),
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    backgroundColor: Colors.transparent,
-                                    padding: const EdgeInsets.all(16.0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          12), // <-- Radius
+                                SizedBox(height: 20.0),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Colors.blue,
+                                        Color.fromARGB(255, 7, 119, 210)
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      widget.toggleView!();
+                                    },
+                                    child: Text(
+                                      'Login',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor: Colors.transparent,
+                                      padding: const EdgeInsets.all(16.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            12), // <-- Radius
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Text(
