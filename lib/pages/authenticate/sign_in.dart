@@ -60,11 +60,11 @@ class _SignInState extends State<SignIn> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
-                        Center(
-                            child: Image.asset('assets/images/KwizLogo.png',
-                                height: 500, width: 500, scale: 0.5)),
-                        SizedBox(height: 20.0),
-                        TextFormField(
+                        // Center(
+                        //     child: Image.asset('assets/images/KwizLogo.png',
+                        //         height: 500, width: 500, scale: 0.5)),
+                        // SizedBox(height: 20.0),
+                          TextFormField(
                           decoration:
                               textInputDecoration.copyWith(hintText: 'Email'),
                           validator: (val) =>
