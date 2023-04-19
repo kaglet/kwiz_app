@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/bm.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
@@ -8,8 +9,8 @@ import '../services/database.dart';
 
 class Bookmark extends StatefulWidget {
   final OurUser user;
-  final String chosenCategory;
-  const Bookmark({super.key, required this.chosenCategory, required this.user});
+  //final String chosenCategory;
+  const Bookmark({super.key,  required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,102 +20,87 @@ class Bookmark extends StatefulWidget {
 class _BookmarkState extends State<Bookmark> {
   late String categoryName;
   DatabaseService service = DatabaseService();
-  List<Quiz>? categoryQuiz;
-  List<Quiz>? filteredQuizzes;
+  List? bookmarkedQuiz = [];
+  List? bookmarkedQuizList = [];
+  int bookmarkLength = 0;
+  int bookmarkedQuizListLength = 0;
+  UserData? userData;
+  List? _displayedItems = [];
 
+  int catLength = 0;
+  int fillLength = 0;
+  
   @override
   void initState() {
     super.initState();
-    categoryName = widget.chosenCategory;
+    _displayedItems = bookmarkedQuiz;
     loadData().then((value) {
       setState(() {});
     });
   }
 
-  int filLength = 0;
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
 
   // loads data from DB
   Future<void> loadData() async {
-    if (categoryName == 'All') {
-      categoryQuiz = await service.getAllQuizzes();
-    } else {
-      categoryQuiz = await service.getQuizByCategory(category: categoryName);
-    }
+    userData = await service.getUserAndBookmarks(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+    bookmarkedQuizList = userData!.bookmarkedQuizzes;
+    bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
-    filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-    filLength = filteredQuizzes!.length;
+    for (int i = 0; i < bookmarkedQuizListLength; i++) {
+      bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
+      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
+      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
+      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
+      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+
+    }
+    bookmarkLength = bookmarkedQuiz!.length;
+    _displayedItems = bookmarkedQuiz;
+    fillLength = _displayedItems!.length;
+    print("HERE");
+    print(bookmarkedQuiz);
   }
 
   final TextEditingController _searchController = TextEditingController();
 
-// This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
-// it is moved to normal lists first as this caused issues
-  void filterQuizzes(String searchTerm) {
+//This method is used to control the search bar
+  void _onSearchTextChanged(String text) {
     setState(() {
-      filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      List<String> quizzesNames = [];
-      List<String> filteredQuizzesNames = [];
-
-      for (int i = 0; i < filLength; i++) {
-        quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
-      }
-
-      filteredQuizzesNames = quizzesNames
-          .where(
-              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+      _displayedItems = bookmarkedQuiz!
+          .where((item) => item.toLowerCase().contains(text.toLowerCase()))
           .toList();
-
-      if (filteredQuizzesNames.isNotEmpty) {
-        filteredQuizzes!.clear();
-        for (int j = 0; j < filteredQuizzesNames.length; j++) {
-          for (int k = 0; k < filLength; k++) {
-            if (filteredQuizzesNames[j] ==
-                categoryQuiz!.elementAt(k).quizName) {
-              filteredQuizzes!.add(categoryQuiz!.elementAt(k));
-            }
-          }
-        }
-      } else {
-        filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      }
-
-      filLength = filteredQuizzesNames.length;
+      fillLength = _displayedItems!.length;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'View Quizzes',
+          'Quiz History',
           style: TextStyle(
-            fontSize: 30.0,
-            fontWeight: FontWeight.normal,
-            color: Colors.white,
-            fontFamily: 'TitanOne',
-          ),
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
         ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
         leading: IconButton(
-          icon: const Icon(Icons.category),
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.home),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Home(user: widget.user)),
-              );
-            },
-          ),
-        ],
       ),
-      body: Container(
+      body:Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -151,9 +137,7 @@ class _BookmarkState extends State<Bookmark> {
                     icon: const Icon(Icons.search),
                     color: const Color.fromRGBO(192, 192, 192,
                         1), // set the search icon color to a light grey
-                    onPressed: () {
-                      filterQuizzes(_searchController.text);
-                    },
+                    onPressed: () {},
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -168,9 +152,7 @@ class _BookmarkState extends State<Bookmark> {
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
-                onChanged: (value) {
-                  filterQuizzes(value);
-                },
+                onChanged: _onSearchTextChanged,
               ),
             ),
             Expanded(
@@ -179,12 +161,12 @@ class _BookmarkState extends State<Bookmark> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  filteredQuizzes == null
+                  _displayedItems == null
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: filLength,
+                          itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
@@ -192,10 +174,10 @@ class _BookmarkState extends State<Bookmark> {
                               Colors.orange.shade600,
                               Colors.orange.shade700,
                             ];
-
+      
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
-
+      
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 8.0,
@@ -220,7 +202,7 @@ class _BookmarkState extends State<Bookmark> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    filteredQuizzes!.elementAt(index).quizName,
+                                    _displayedItems?[index],
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.white,
@@ -231,8 +213,8 @@ class _BookmarkState extends State<Bookmark> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: [
-                                        const Text(
+                                      children: const [
+                                        Text(
                                           'Author: (TBA)',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
@@ -240,23 +222,23 @@ class _BookmarkState extends State<Bookmark> {
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        const SizedBox(width: 8),
+                                        SizedBox(width: 8),
                                         Text(
-                                          filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizCategory,
-                                          style: const TextStyle(
+                                          'Category: ',
+                                          style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        const SizedBox(width: 8),
+                                        SizedBox(width: 8),
                                         Text(
-                                          filteredQuizzes!
+                                          'Date Created: '
+                                          /*filteredQuizzes!
                                               .elementAt(index)
-                                              .quizDateCreated,
-                                          style: const TextStyle(
+                                              .quizDateCreated*/
+                                          ,
+                                          style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
@@ -280,16 +262,14 @@ class _BookmarkState extends State<Bookmark> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => StartQuiz(
-                                                user: widget.user,
-                                                chosenQuiz: filteredQuizzes!
-                                                    .elementAt(index)
-                                                    .quizID),
-                                          ),
-                                        );
+                                         Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => StartQuiz(
+                                                                          user: widget.user ,
+                                                                          chosenQuiz: bookmarkedQuizList?[index]),
+                                         ));
+                                        
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
