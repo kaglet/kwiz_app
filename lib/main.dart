@@ -36,7 +36,7 @@ Future<void> main() async {
         ),
       ),
       //Testing rebase issues, Hi Kago
-      home: Home(),
+      home: Wrapper(),
     ),
   ));
 }

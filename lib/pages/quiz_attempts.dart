@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
+import '../models/pastAttempt.dart';
 import '../services/database.dart';
+import '../pages/quiz_history.dart';
 
 class QuizAttempts extends StatefulWidget {
-  const QuizAttempts({super.key});
+  final String chosenQuizID;
+  final List? chosenQuizMarks;
+  final List? chosenQuizDatesCreated;
+  final String chosenQuizName;
+  const QuizAttempts({super.key, required this.chosenQuizID,
+                                required this.chosenQuizName,
+                                required this.chosenQuizMarks,
+                                required this.chosenQuizDatesCreated,});
   @override
   // ignore: library_private_types_in_public_api
   _QuizAttemptsState createState() => _QuizAttemptsState();
@@ -10,6 +20,11 @@ class QuizAttempts extends StatefulWidget {
 
 class _QuizAttemptsState extends State<QuizAttempts> {
   DatabaseService service = DatabaseService();
+  late String quizID;
+  late List? quizMarks;
+  late List? quizDatesCreated;
+  late String quizName;
+  late UserData pastAttemptQuizObject;
   List? distinctQuizzes;
   int catLength = 0;
   List? _displayedItems = [];
@@ -28,6 +43,11 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   @override
   void initState() {
     super.initState();
+    quizID = widget.chosenQuizID;
+    quizMarks = widget.chosenQuizMarks;
+    quizDatesCreated = widget.chosenQuizDatesCreated;
+    quizName = widget.chosenQuizName;
+    
     _displayedItems = categories;
     loaddata().then((value) {
       setState(() {});
@@ -54,8 +74,8 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Quiz Attempts',
+        title:  Text(
+           quizName +' Attempts' ,
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -137,7 +157,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: fillLength,
+                          itemCount: 3,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
@@ -165,9 +185,9 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(children: <Widget>[
-                                    Text('Attempt Number '),
-                                    Text('Score: '),
-                                    Text('Date Taken: ')
+                                    Text('Attempt Number ' + index.toString()),
+                                    Text('Score: ' + quizMarks?[index]),
+                                    Text('Date Taken: ' + quizDatesCreated?[index])
                                   ]),
                                 ),
                               ),
