@@ -36,12 +36,19 @@ class HomeState extends State<Home> {
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength + 1);
+    textControllerTitle.text = quizzes!.elementAt(randNum).quizName;
+    textControllerDesc.text = quizzes!.elementAt(randNum).quizDescription;
   }
 
   @override
   // return static home screen with navigation functionality //
   final AuthService _auth = AuthService();
+  TextEditingController textControllerTitle = TextEditingController();
+  TextEditingController textControllerDesc = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -98,7 +105,7 @@ class HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Profile()),
+                            MaterialPageRoute(builder: (context) => const Profile()),
                           );
                         },
                       ),
@@ -113,24 +120,82 @@ class HomeState extends State<Home> {
                       horizontal: 30.0, vertical: 30.0),
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        child: const Center(
-                          child: Text(
-                            'Surprise me!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.0,
-                              fontFamily: 'Nunito',
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 30.0,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: const Center(
+                              child: Text(
+                                'Surprise me!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 1.0,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 35.0,
+                          ),
+                          SizedBox(
+                            width: 90,
+                            height: 30,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color.fromARGB(255, 230, 131, 44),
+                                    Color.fromARGB(255, 244, 112, 72),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50)),
+                                  textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.normal),
+                                ),
+                                //This event takes us to the take_quiz screen
+                                onPressed: () {
+                                  randNum =
+                                      random.nextInt(allQuizzesLength + 1);
+                                  textControllerTitle.text =
+                                      quizzes!.elementAt(randNum).quizName;
+                                  textControllerDesc.text = quizzes!
+                                      .elementAt(randNum)
+                                      .quizDescription;
+                                },
+                                child: const Text(
+                                  'Randomize',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Nunito',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
-                        height: 20.0,
+                        height: 10.0,
                       ),
                       Row(
                         children: [
@@ -139,14 +204,17 @@ class HomeState extends State<Home> {
                                   child: CircularProgressIndicator(),
                                 )
                               : Expanded(
+                                
                                   child: IntrinsicHeight(
                                     child: SizedBox(
                                       height:
                                           200, // set a fixed height for the container
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(15),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                           color: const Color.fromARGB(
                                               255, 45, 64, 96),
                                         ),
@@ -160,36 +228,43 @@ class HomeState extends State<Home> {
                                                 const AlwaysScrollableScrollPhysics(),
                                             child: Column(
                                               children: [
-                                                Text(
-                                                  quizzes!
-                                                      .elementAt(randNum)
-                                                      .quizName,
+                                                TextField(
+                                                  controller:
+                                                      textControllerTitle,
+                                                  textAlign: TextAlign.left,
                                                   style: const TextStyle(
                                                       fontFamily: 'Nunito',
                                                       fontSize: 25,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.white,
                                                       decoration: TextDecoration
                                                           .underline),
+                                                  maxLines:
+                                                      null, // set maxLines to null or a higher value
+                                                  textInputAction: TextInputAction
+                                                      .newline, // enable line breaks
                                                 ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
                                                           0, 5, 0, 0),
                                                   //This widget displays the quiz's information
-                                                  child: RichText(
+
+                                                  child: TextField(
+                                                    controller:
+                                                        textControllerDesc,
                                                     textAlign: TextAlign.left,
-                                                    text: TextSpan(
-                                                      text: quizzes!
-                                                          .elementAt(randNum)
-                                                          .quizDescription,
-                                                      style: const TextStyle(
-                                                          fontFamily: 'Nunito',
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: Colors.white),
-                                                    ),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Nunito',
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: Colors.white),
+                                                    maxLines:
+                                                        null, // set maxLines to null or a higher value
+                                                    textInputAction: TextInputAction
+                                                        .newline, // enable line breaks
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -199,12 +274,15 @@ class HomeState extends State<Home> {
                                                     decoration: BoxDecoration(
                                                       gradient:
                                                           const LinearGradient(
-                                                        begin: Alignment.topLeft,
-                                                        end:
-                                                            Alignment.bottomRight,
+                                                        begin:
+                                                            Alignment.topLeft,
+                                                        end: Alignment
+                                                            .bottomRight,
                                                         colors: [
-                                                          Colors.orange,
-                                                          Colors.deepOrange
+                                                          Color.fromARGB(255,
+                                                              230, 131, 44),
+                                                          Color.fromARGB(255,
+                                                              244, 112, 72),
                                                         ],
                                                       ),
                                                       borderRadius:
@@ -217,16 +295,15 @@ class HomeState extends State<Home> {
                                                         elevation: 0,
                                                         backgroundColor:
                                                             Colors.transparent,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50)),
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50)),
                                                         textStyle:
                                                             const TextStyle(
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontSize: 20,
                                                                 fontWeight:
                                                                     FontWeight
