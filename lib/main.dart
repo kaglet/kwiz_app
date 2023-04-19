@@ -8,6 +8,7 @@ import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/auth.dart';
+import 'package:kwiz_v2/pages/bookmark.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -244,6 +244,8 @@ class DatabaseService {
         pastAttempts.add(pastAttempt);
       }
 
+      
+
       // user.pastAttemptQuizzes
       //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
 
@@ -255,6 +257,94 @@ class DatabaseService {
     }
     return null;
   }
+
+  //-------------------------------------------------------------------------------------------------
+
+  Future<UserData?> getUserAndBookmarks({String? userID}) async {
+    //Past aatempt cpuld change to user
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+
+    try {
+      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+
+      QuerySnapshot collectionSnapshot =
+          await userCollection.doc(userID).collection('Bookmarks').get();
+      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+        var docSnapshot = collectionSnapshot.docs[i];
+        Bookmarks bookmark = Bookmarks(
+            quizID: docSnapshot['QuizID'],
+            bookmarkQuizName: docSnapshot['BookmarkQuizName'],
+            bookmarkQuizDescription: docSnapshot['BookmarkQuizDescription'],
+            bookmarkQuizCategory: docSnapshot['BookmarkQuizCategory'],
+            bookmarkQuizDateCreated: docSnapshot['BookmarkQuizDateCreated']
+            );
+        
+        bookmarks.add(bookmark);
+      }
+
+      // user.pastAttemptQuizzes
+      //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
+
+      return user;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error!!!!! - $e");
+      }
+    }
+    return null;
+  }
+
+   //--------------------------------------------------------------------------------------------------
+
+  Future<void> addBookmarks(
+      {String? userID, Quiz? quiz}) async {
+    await userCollection.doc(userID).collection('Bookmarks').add({
+      'QuizID': quiz!.quizID,
+      'BookmarkQuizName': quiz.quizName,
+      // 'QuestionMark': Question!.QuestionMark,
+      'BookmarkQuizCategory': quiz.quizCategory,
+      'BookmarkQuizDescription': quiz.quizDescription,
+      'BookmarkQuizDateCreated': quiz.quizDateCreated,
+    });
+  }
+
+ //--------------------------------------------------------------------------------------------------
+
+  Future<void> createPastAttempt(
+      {String? userID, Quiz? quiz, int? quizMark, String? quizDateAttempted}) async {
+       
+    await userCollection.doc(userID).collection('Past Attempts').doc(quiz!.quizID).set({
+      'quizID': quiz.quizID,
+      'pastAttemptQuizName': quiz.quizName,
+      // 'QuestionMark': Question!.QuestionMark,
+      'pastAttemptQuizCategory': quiz.quizCategory,
+      'pastAttemptQuizDescription': quiz.quizDescription,
+      'pastAttemptQuizDateCreated': quiz.quizDateCreated,
+      'pastAttemptQuizMark': quiz.quizMark,
+      'pastAttemptQuizMarks': [quizMark],     
+      'pastAttemptQuizDatesAttempted': [quizDateAttempted]
+    });
+  }
+
+ //--------------------------------------------------------------------------------------------------
+
+Future<void> addPastAttempt({String? userID, int? quizMark, String? quizDateAttempted, String? quizID}) 
+  async {
+    await userCollection.doc(userID).collection('Past Attempts').doc(quizID).update({     //PROBLEM: doc(quizID) wont work. Docs not the same id
+      'pastAttemptQuizMarks': FieldValue.arrayUnion([quizMark]),
+      'pastAttemptQuizDatesAttempted': FieldValue.arrayUnion([quizDateAttempted]),
+    });
+}
+
 
   //--------------------------------------------------------------------------------------------------
   //This function gets a user and user information but fetches it with empty arrays for the bookmarks and past attempts
