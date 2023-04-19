@@ -47,97 +47,100 @@ class _SignInState extends State<SignIn> {
                 )
               ],*/
             ),
-            body: Container(
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-                child: Form(
-                    key: _formkey,
-                    child: Column(
-                      children: <Widget>[
-                        const Text(
-                          "KWIZ",
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
-                        Center(
-                            child: Image.asset('assets/images/KwizLogo.png',
-                                height: 500, width: 500, scale: 0.5)),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration:
-                              textInputDecoration.copyWith(hintText: 'Email'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter your email' : null,
-                          onChanged: (val) {
-                            email = val;
-                          },
-                        ),
-                        SizedBox(height: 20.0),
-                        TextFormField(
-                          decoration: textInputDecoration.copyWith(
-                              hintText: 'Password'),
-                          validator: (val) =>
-                              val!.isEmpty ? 'Enter your password' : null,
-                          obscureText: true,
-                          onChanged: (val) {
-                            password = val;
-                          },
-                        ),
-                        SizedBox(height: 20.0),
-                        ElevatedButton(
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(color: Colors.white),
+            body: SingleChildScrollView(
+              child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+                  child: Form(
+                      key: _formkey,
+                      child: Column(
+                        children: <Widget>[
+                          const Text(
+                            "KWIZ",
+                            style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
                           ),
-                          onPressed: () async {
-                            if (_formkey.currentState!.validate()) {
-                              setState(() => loading = true);
-                              dynamic result =
-                                  await _auth.SignInWithEandP(email, password);
-                              if (result == null) {
-                                setState(() {
-                                  loading = false;
-                                  error =
-                                      'could not sign in with those credentials';
-                                });
-                              } /*else{
-                                OurUser ourUser = OurUser(uid: user.uID);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Home(
-                                      user: ourUser,
+                          Center(
+                              child: Image.asset('assets/images/KwizLogo.png',
+                                  height: 500, width: 500, scale: 0.5)),
+                          SizedBox(height: 20.0),
+                          TextFormField(
+                            decoration:
+                                textInputDecoration.copyWith(hintText: 'Email'),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Enter your email' : null,
+                            onChanged: (val) {
+                              email = val;
+                            },
+                          ),
+                          SizedBox(height: 20.0),
+                          TextFormField(
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Password'),
+                            validator: (val) =>
+                                val!.isEmpty ? 'Enter your password' : null,
+                            obscureText: true,
+                            onChanged: (val) {
+                              password = val;
+                            },
+                          ),
+                          SizedBox(height: 20.0),
+                          ElevatedButton(
+                            child: Text(
+                              'Log in',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              if (_formkey.currentState!.validate()) {
+                                setState(() => loading = true);
+                                dynamic result = await _auth.SignInWithEandP(
+                                    email, password);
+                                if (result == null) {
+                                  setState(() {
+                                    loading = false;
+                                    error =
+                                        'could not sign in with those credentials';
+                                  });
+                                } /*else{
+                                  OurUser ourUser = OurUser(uid: user.uID);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Home(
+                                        user: ourUser,
+                                      ),
                                     ),
-                                  ),
-                                );
-                              }*/
-                            }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.pink[400]),
+                                  );
+                                }*/
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.pink[400]),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20.0),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            widget.toggleView!();
-                          },
-                          icon: Icon(Icons.person),
-                          label: Text('Register'),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.brown[350]),
+                          SizedBox(height: 20.0),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              widget.toggleView!();
+                            },
+                            icon: Icon(Icons.person),
+                            label: Text('Register'),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.brown[350]),
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20.0),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        )
-                      ],
-                    ))),
+                          SizedBox(height: 20.0),
+                          Text(
+                            error,
+                            style: TextStyle(color: Colors.red, fontSize: 14.0),
+                          )
+                        ],
+                      ))),
+            ),
           );
   }
 }

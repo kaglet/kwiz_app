@@ -15,7 +15,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? pastAttemptsList = [];
   int pastAttemptsListLength = 0;
- /* List? quizName;
+  /* List? quizName;
   List? quizID;
   List? marks;
   List? dates;*/
@@ -42,7 +42,9 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   Future<void> loaddata() async {
-    userData = await service.getUserAndPastAttempts(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2'); // change to service.getPastAttempts()
+    userData = await service.getUserAndPastAttempts(
+        userID:
+            'TNaCcDwiABgchtIZKjURlYjimPG2'); // change to service.getPastAttempts()
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
     //Getting list of distinct quizzes
@@ -52,7 +54,6 @@ class _QuizHistoryState extends State<QuizHistory> {
       quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
       quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
       dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
-
     }
     pastAttemptsLength = pastAttempts!.length;
     _displayedItems = pastAttempts;
@@ -90,7 +91,7 @@ class _QuizHistoryState extends State<QuizHistory> {
           },
         ),
       ),
-      body:Container(
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -164,10 +165,10 @@ class _QuizHistoryState extends State<QuizHistory> {
                               Colors.orange.shade600,
                               Colors.orange.shade700,
                             ];
-      
+
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
-      
+
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 8.0,
@@ -252,15 +253,12 @@ class _QuizHistoryState extends State<QuizHistory> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                         Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => QuizAttempts(chosenQuizID: pastAttemptsList![0].pastAttemptQuizID.toString(),
-                                                                          chosenQuizName: pastAttemptsList![0].pastAttemptQuizName.toString(),
-                                                                          chosenQuizMarks: pastAttemptsList?.elementAt(index).pastAttemptQuizMarks,
-                                                                          chosenQuizDatesCreated: pastAttemptsList?.elementAt(index).pastAttemptQuizDatesCreated),
-                                         ));
-                                        
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  pastAttempts![index],
+                                            ));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
