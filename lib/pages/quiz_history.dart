@@ -255,10 +255,11 @@ class _QuizHistoryState extends State<QuizHistory> {
                                          Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => QuizAttempts(chosenQuizID: pastAttemptsList![0].pastAttemptQuizID.toString(),
-                                                                          chosenQuizName: pastAttemptsList![0].pastAttemptQuizName.toString(),
-                                                                          chosenQuizMarks: pastAttemptsList?.elementAt(index).pastAttemptQuizMarks,
-                                                                          chosenQuizDatesCreated: pastAttemptsList?.elementAt(index).pastAttemptQuizDatesCreated),
+                                        builder: (context) => QuizAttempts(/*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
+                                                                          chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
+                                                                          chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
+                                                                          chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
+                                                                          chosenQuiz: pastAttemptsList?[index]),
                                          ));
                                         
                                       },
