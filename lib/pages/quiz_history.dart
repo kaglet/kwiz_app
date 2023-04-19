@@ -6,7 +6,7 @@ import '../services/database.dart';
 
 class QuizHistory extends StatefulWidget {
   final OurUser user;
-  const QuizHistory({super.key , required this.user});
+  const QuizHistory({super.key, required this.user});
   @override
   // ignore: library_private_types_in_public_api
   _QuizHistoryState createState() => _QuizHistoryState();
@@ -43,13 +43,8 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   Future<void> loaddata() async {
-<<<<<<< HEAD
     userData = await service.getUserAndPastAttempts(
-        userID:
-            'TNaCcDwiABgchtIZKjURlYjimPG2'); // change to service.getPastAttempts()
-=======
-    userData = await service.getUserAndPastAttempts(userID: widget.user.uid); // change to service.getPastAttempts()
->>>>>>> 53620b44c17af3dacf0f13c1a124b1ba3f02a766
+        userID: widget.user.uid); // change to service.getPastAttempts()
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
     //Getting list of distinct quizzes
