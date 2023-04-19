@@ -28,11 +28,22 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             backgroundColor: Colors.blue[100],
             appBar: AppBar(
-              backgroundColor: Colors.blue[700],
+              backgroundColor: Color.fromARGB(255, 27, 57, 82),
               elevation: 0.0,
-              title: Text('Sign in to Kwiz'),
+              title: Center(
+                child: Text(
+                  'Login',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                    fontFamily: 'TitanOne',
+                  ),
+                ),
+              ),
               /*actions: <Widget>[
                 ElevatedButton.icon(
                   onPressed: () {
@@ -47,100 +58,205 @@ class _SignInState extends State<SignIn> {
                 )
               ],*/
             ),
-            body: SingleChildScrollView(
-              child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
-                  child: Form(
-                      key: _formkey,
-                      child: Column(
-                        children: <Widget>[
-                          const Text(
-                            "KWIZ",
-                            style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                          Center(
-                              child: Image.asset('assets/images/KwizLogo.png',
-                                  height: 500, width: 500, scale: 0.5)),
-                          SizedBox(height: 20.0),
-                          TextFormField(
-                            decoration:
-                                textInputDecoration.copyWith(hintText: 'Email'),
-                            validator: (val) =>
-                                val!.isEmpty ? 'Enter your email' : null,
-                            onChanged: (val) {
-                              email = val;
-                            },
-                          ),
-                          SizedBox(height: 20.0),
-                          TextFormField(
-                            decoration: textInputDecoration.copyWith(
-                                hintText: 'Password'),
-                            validator: (val) =>
-                                val!.isEmpty ? 'Enter your password' : null,
-                            obscureText: true,
-                            onChanged: (val) {
-                              password = val;
-                            },
-                          ),
-                          SizedBox(height: 20.0),
-                          ElevatedButton(
-                            child: Text(
-                              'Log in',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () async {
-                              if (_formkey.currentState!.validate()) {
-                                setState(() => loading = true);
-                                dynamic result = await _auth.SignInWithEandP(
-                                    email, password);
-                                if (result == null) {
-                                  setState(() {
-                                    loading = false;
-                                    error =
-                                        'could not sign in with those credentials';
-                                  });
-                                } /*else{
-                                  OurUser ourUser = OurUser(uid: user.uID);
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Home(
-                                        user: ourUser,
+            body: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromARGB(255, 27, 57, 82),
+                      Color.fromARGB(255, 5, 12, 31),
+                    ],
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                child: Column(
+                  children: [
+                    Form(
+                        key: _formkey,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Image.asset('assets/images/KwizLogo.png',
+                                  height: 200, width: 200, scale: 0.5),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              TextFormField(
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                                decoration: InputDecoration(
+                                  alignLabelWithHint: true,
+                                  labelText: 'Email',
+                                  labelStyle: TextStyle(
+                                    fontFamily: 'Nonita',
+                                    color: Colors.grey,
+                                  ),
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Nonita',
+                                    color: Colors.grey,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.grey.shade400),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) =>
+                                    val!.isEmpty ? 'Enter your email' : null,
+                                onChanged: (val) {
+                                  email = val;
+                                },
+                              ),
+                              SizedBox(height: 20.0),
+                              TextFormField(
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                                decoration: InputDecoration(
+                                  alignLabelWithHint: true,
+                                  labelText: 'Password',
+                                  labelStyle: TextStyle(
+                                    fontFamily: 'Nonita',
+                                    color: Colors.grey,
+                                  ),
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Nonita',
+                                    color: Colors.grey,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.grey.shade400),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                validator: (val) =>
+                                    val!.isEmpty ? 'Enter your password' : null,
+                                obscureText: true,
+                                onChanged: (val) {
+                                  password = val;
+                                },
+                              ),
+                              SizedBox(height: 20.0),
+                              SizedBox(
+                                width: 150,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Colors.orange,
+                                            Colors.deepOrange
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ElevatedButton(
+                                        child: Text(
+                                          'Login',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () async {
+                                          if (_formkey.currentState!
+                                              .validate()) {
+                                            setState(() => loading = true);
+                                            dynamic result =
+                                                await _auth.SignInWithEandP(
+                                                    email, password);
+                                            if (result == null) {
+                                              setState(() {
+                                                loading = false;
+                                                error =
+                                                    'could not sign in with those credentials';
+                                              });
+                                            } /*else{
+                                          OurUser ourUser = OurUser(uid: user.uID);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Home(
+                                                user: ourUser,
+                                              ),
+                                            ),
+                                          );
+                                        }*/
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: Colors.transparent,
+                                          padding: const EdgeInsets.all(16.0),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                12), // <-- Radius
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  );
-                                }*/
-                              }
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.pink[400]),
-                            ),
+                                    SizedBox(height: 20.0),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Colors.blue,
+                                            Color.fromARGB(255, 7, 119, 210)
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          widget.toggleView!();
+                                        },
+                                        child: Text('Register'),
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          backgroundColor: Colors.transparent,
+                                          padding: const EdgeInsets.all(16.0),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                                12), // <-- Radius
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.0),
+                              Text(
+                                error,
+                                style: TextStyle(
+                                    color: Colors.red, fontSize: 14.0),
+                              )
+                            ],
                           ),
-                          SizedBox(height: 20.0),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              widget.toggleView!();
-                            },
-                            icon: Icon(Icons.person),
-                            label: Text('Register'),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.brown[350]),
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          Text(
-                            error,
-                            style: TextStyle(color: Colors.red, fontSize: 14.0),
-                          )
-                        ],
-                      ))),
-            ),
+                        )),
+                  ],
+                )),
           );
   }
 }
