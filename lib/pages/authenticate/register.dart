@@ -4,6 +4,8 @@ import 'package:kwiz_v2/services/auth.dart';
 import 'package:kwiz_v2/shared/const.dart';
 import 'package:kwiz_v2/shared/loading.dart';
 
+import '../home.dart';
+
 class Register extends StatefulWidget {
   final Function? toggleView;
   Register({required this.toggleView});
@@ -134,11 +136,22 @@ class _RegisterState extends State<Register> {
                               });
                               dynamic result = await _auth.RegisterWithEandP(
                                   email, password, user);
+
                               if (this.mounted && result == null) {
                                 setState(() {
                                   loading = false;
                                   error = 'Please supply valid email';
                                 });
+                              } else {
+                                OurUser ourUser = OurUser(uid: user.uID);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Home(
+                                      user: ourUser,
+                                    ),
+                                  ),
+                                );
                               }
                             }
                           },

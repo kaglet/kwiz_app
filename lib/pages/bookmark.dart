@@ -7,35 +7,58 @@ import 'home.dart';
 import '../services/database.dart';
 
 class Bookmark extends StatefulWidget {
-  final String userID;
-  const Bookmark({super.key, required this.userID});
+  final OurUser user;
+  //final String chosenCategory;
+  const Bookmark({super.key,  required this.user, required String userID});
 
   @override
   // ignore: library_private_types_in_public_api
-  _ViewQuizzesState createState() => _ViewQuizzesState();
+  _BookmarkState createState() => _BookmarkState();
 }
 
-class _ViewQuizzesState extends State<Bookmark> {
+class _BookmarkState extends State<Bookmark> {
   late String categoryName;
   DatabaseService service = DatabaseService();
-  List? bmQuizzes;
+  List? bmQuizzes = [];
+  List? bmList = [];
+  int bmQuizzesLength = 0;
+  UserData? userData;
+  List? _displayedItems = [];
   
   @override
   void initState() {
     super.initState();
-    categoryName = widget.userID;
+    _displayedItems = bmQuizzes;
     loadData().then((value) {
       setState(() {});
     });
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   int catLength = 0;
-  int filLength = 0;
-  UserData? userData;
+  int fillLength = 0;
   // loads data from DB
   Future<void> loadData() async {
-    userData = await service.getUserAndPastAttempts(userID: 'om1DwkvlNZ6AV0p1F9io');
-    bmQuizzes = userData!.bookmarkedQuizzes;
+    userData = await service.getUserAndBookmarks(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+    bmList = userData!.bookmarkedQuizzes;
+    bmQuizzesLength = bmQuizzes!.length;
+
+    for (int i = 0; i < bmQuizzesLength; i++) {
+      bmQuizzes!.add(bmList?[i].toString());
+      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
+      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
+      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
+      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+
+    }
+    _displayedItems = bmQuizzes;
+    fillLength = _displayedItems!.length;
+    print("HERE");
     print(bmQuizzes);
   }
 
@@ -76,6 +99,15 @@ class _ViewQuizzesState extends State<Bookmark> {
   //   });
   // }
 
+  void _onSearchTextChanged(String text) {
+    setState(() {
+      _displayedItems = bmQuizzes!
+          .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+          .toList();
+      fillLength = _displayedItems!.length;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +133,8 @@ class _ViewQuizzesState extends State<Bookmark> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(
+                    builder: (context) => Home(user: widget.user)),
               );
             },
           ),
@@ -177,7 +210,7 @@ class _ViewQuizzesState extends State<Bookmark> {
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: filLength,
+                          itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
@@ -235,7 +268,7 @@ class _ViewQuizzesState extends State<Bookmark> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                         bmQuizzes!.elementAt(index).quizCategory,
+                                         bmQuizzes!.elementAt(index).QuizID,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -244,7 +277,7 @@ class _ViewQuizzesState extends State<Bookmark> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                         bmQuizzes!.elementAt(index).quizDateCreated,
+                                         bmQuizzes!.elementAt(index),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -268,14 +301,16 @@ class _ViewQuizzesState extends State<Bookmark> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => StartQuiz(
-                                              chosenQuiz: bmQuizzes!.elementAt(index).quizID,
-                                            ),
-                                          ),
-                                        );
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => StartQuiz(
+                                        //         user: widget.user,
+                                        //         chosenQuiz: filteredQuizzes!
+                                        //             .elementAt(index)
+                                        //             .quizID),
+                                        //   ),
+                                        // );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,

@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
+import 'package:kwiz_v2/models/user.dart';
 
 class QuizScore extends StatefulWidget {
   //This global variable will be passed onto the take_quiz screen
+  final OurUser user;
   final String chosenQuiz;
   final int score;
   final List userAnswers;
-  const QuizScore({super.key, required this.chosenQuiz, required this.score, required this.userAnswers});
+  const QuizScore(
+      {super.key,
+      required this.chosenQuiz,
+      required this.score,
+      required this.userAnswers,
+      required this.user});
   @override
   QuizScoreState createState() => QuizScoreState();
 }
@@ -137,7 +144,8 @@ class QuizScoreState extends State<QuizScore> {
                                   textAlign: TextAlign.left,
                                   //This widget displays the date the quiz was created
                                   text: TextSpan(
-                                    text: 'The correct answers were: $answers . Your answers were: $userAnswers',
+                                    text:
+                                        'The correct answers were: $answers . Your answers were: $userAnswers',
                                     style: const TextStyle(
                                         fontFamily: 'Nunito',
                                         fontSize: 26,
@@ -179,7 +187,7 @@ class QuizScoreState extends State<QuizScore> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Home()),
+                                                  Home(user: widget.user)),
                                         );
                                       },
                                       child: const Text(

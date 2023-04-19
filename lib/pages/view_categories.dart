@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/view_quizzes.dart';
 // import 'view_quizzes.dart';
 import '../services/database.dart';
 
 class ViewCategories extends StatefulWidget {
-  const ViewCategories({super.key});
+  final OurUser user;
+  const ViewCategories({super.key, required this.user});
 
   @override
   //State<ViewCategoriesScreen> createState() => ViewCategoriesState();
@@ -79,6 +81,7 @@ class ViewCategoriesState extends State<ViewCategories> {
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
                   Navigator.pop(context);
+                  //Might need to do navigator.push because might lose user data
                 },
               ),
             ),
@@ -162,6 +165,7 @@ class ViewCategoriesState extends State<ViewCategories> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => ViewQuizzes(
+                                            user: widget.user,
                                             chosenCategory:
                                                 _displayedItems?[index])),
                                   );

@@ -37,7 +37,7 @@ Future<void> main() async {
         ),
       ),
       //Testing rebase issues, Hi Kago
-      home: Bookmark(userID: 'om1DwkvlNZ6AV0p1F9io',),
+      home: Wrapper(),
     ),
   ));
 }

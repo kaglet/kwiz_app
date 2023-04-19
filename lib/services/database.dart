@@ -214,9 +214,9 @@ class DatabaseService {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
       UserData user = UserData(
           //uid: docSnapshot['QuizName'],
-          userName: docSnapshot['userName'],
-          firstName: docSnapshot['firstName'],
-          lastName: docSnapshot['lastName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -225,6 +225,10 @@ class DatabaseService {
           await userCollection.doc(userID).collection('Past Attempts').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
+        List<String> pastAttemptQuizDatesAttempted =
+            List<String>.from(docSnapshot['pastAttemptQuizDatesAttempted']);
+        List<int> pastAttemptQuizMarks =
+            List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
@@ -234,11 +238,52 @@ class DatabaseService {
             pastAttemptQuizDateCreated:
                 docSnapshot['pastAttemptQuizDateCreated'],
             pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-            pastAttemptQuizMarks: docSnapshot['pastAttemptQuizMarks'],
-            pastAttemptQuizDatesAttempted:
-                docSnapshot[' pastAttemptQuizDatesAttempted']);
+            pastAttemptQuizMarks: pastAttemptQuizMarks,
+            pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
 
         pastAttempts.add(pastAttempt);
+      }
+
+      
+
+      // user.pastAttemptQuizzes
+      //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
+
+      return user;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error!!!!! - $e");
+      }
+    }
+    return null;
+  }
+
+  //-------------------------------------------------------------------------------------------------
+
+  Future<UserData?> getUserAndBookmarks({String? userID}) async {
+    //Past aatempt cpuld change to user
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+
+    try {
+      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+
+      QuerySnapshot collectionSnapshot =
+          await userCollection.doc(userID).collection('Bookmarks').get();
+      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+        var docSnapshot = collectionSnapshot.docs[i];
+        Bookmarks bookmark = Bookmarks(
+            quizID: docSnapshot['QuizID']);
+
+        bookmarks.add(bookmark);
       }
 
       // user.pastAttemptQuizzes
@@ -253,43 +298,22 @@ class DatabaseService {
     return null;
   }
 
-  //-------GETTING BOOKMARKS ONLY-------------------
-Future<UserData?> getUserAndBookmarkedQuizzes({String? userID}) async {
-  late List<PastAttempt> pastAttempts = [];
-  late List<Bookmarks> bookmarks = [];
+  //--------------------------------------------------------------------------------------------------
+  //This function gets a user and user information but fetches it with empty arrays for the bookmarks and past attempts
+  //If need the bookmarks or past attempts use other appropriate functions
+  Future<UserData?> getUser(String? uid) async {
+    DocumentSnapshot docSnapshot = await userCollection.doc(uid).get();
 
-  try {
-    DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+    UserData user = UserData(
+        uID: uid,
+        userName: docSnapshot['Username'],
+        firstName: docSnapshot['FirstName'],
+        lastName: docSnapshot['LastName'],
+        bookmarkedQuizzes: [],
+        pastAttemptQuizzes: []);
 
-    QuerySnapshot bookmarksSnapshot =
-        await userCollection.doc(userID).collection('Bookmarks').get();
-    for (int i = 0; i < bookmarksSnapshot.docs.length; i++) {
-      var docSnapshot = bookmarksSnapshot.docs[i];
-      Bookmarks bookmark = Bookmarks(
-          quizID: docSnapshot['quizID'],
-          bookmarkQuizName: docSnapshot['bookmarkQuizName'],
-          bookmarkQuizCategory: docSnapshot['bookmarkQuizCategory'],
-          bookmarkQuizDescription: docSnapshot['bookmarkQuizDescription'],
-          bookmarkQuizDateCreated: docSnapshot['bookmarkQuizDateCreated']);
-      bookmarks.add(bookmark);
-    }
-
-    return UserData(
-        userName: docSnapshot['userName'],
-        firstName: docSnapshot['firstName'],
-        lastName: docSnapshot['lastName'],
-        bookmarkedQuizzes: bookmarks,
-        pastAttemptQuizzes: pastAttempts,
-        uID: docSnapshot.id);
-  } catch (e) {
-    if (kDebugMode) {
-      print("Error!!!!! - $e");
-    }
+    return user;
   }
-  return null;
-}
-  //------------------------------------------------
-
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //streams
   //get quiz stream
