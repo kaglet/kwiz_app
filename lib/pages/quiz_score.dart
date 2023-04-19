@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -21,9 +24,12 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
+  late UserData userData;
   late String quizID = widget.chosenQuiz;
+  bool isfirstAttempt = true;
   late int score = widget.score;
   late List userAnswers = widget.userAnswers;
+  late String userID = widget.user.uid.toString();
   late String title;
   late int quizMaxScore;
   late List<String> answers = [];
@@ -31,11 +37,52 @@ class QuizScoreState extends State<QuizScore> {
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
 
+  Future<void> createAttempt() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await service.createPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString());
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> updateAttempt() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await service.addPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString(), quizID: quizID);
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
+    userData = (await service.getUserAndPastAttempts())!;
+    if (userData.pastAttemptQuizzes.isEmpty){
+      isfirstAttempt = true;
+    }
+    else{       //
+        userData.pastAttemptQuizzes.forEach((element) {
+      if(element.quizID == quizID){
+        isfirstAttempt = false;
+      }
+    });
+    }
+
+    if(isfirstAttempt){
+      createAttempt();
+    }
+    else{
+      updateAttempt();
+    }
+    
     quizMaxScore = userAnswers.length;
     for (int i = 0; i < quizMaxScore; i++) {
       answers.add(details.quizQuestions.elementAt(i).questionAnswer);
@@ -183,6 +230,8 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
+                                        
+                                        createAttempt();
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(

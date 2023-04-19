@@ -17,7 +17,7 @@ class Wrapper extends StatelessWidget {
     if (user == null) {
       return Authenticate();
     } else {
-      return Bookmark(user: user, userID: 'TNaCcDwiABgchtIZKjURlYjimPG2',);
+      return Home(user: user);
     }
   }
 }

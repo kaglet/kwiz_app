@@ -303,6 +303,8 @@ class DatabaseService {
     return null;
   }
 
+   //--------------------------------------------------------------------------------------------------
+
   Future<void> addBookmarks(
       {String? userID, Quiz? quiz}) async {
     userCollection.doc(userID).collection('Bookmarks').add({
@@ -315,17 +317,33 @@ class DatabaseService {
     });
   }
 
-  Future<void> addPastAttempt(
-      {String? userID, PastAttempt? pastAttempt}) async {
-    userCollection.doc(userID).collection('Bookmarks').add({
-      'QuizID': quiz!.quizID,
+ //--------------------------------------------------------------------------------------------------
+
+  Future<void> createPastAttempt(
+      {String? userID, Quiz? quiz, int? quizMark, String? quizDateAttempted}) async {
+       
+    userCollection.doc(userID).collection('Past Attempts').doc(quiz!.quizID).set({
+      'quizID': quiz.quizID,
       'pastAttemptQuizName': quiz.quizName,
       // 'QuestionMark': Question!.QuestionMark,
       'pastAttemptQuizCategory': quiz.quizCategory,
       'pastAttemptQuizDescription': quiz.quizDescription,
       'pastAttemptQuizDateCreated': quiz.quizDateCreated,
+      'pastAttemptQuizMark': quiz.quizMark,
+      'pastAttemptQuizMarks': [quizMark],     
+      'pastAttemptQuizDatesAttempted': [quizDateAttempted]
     });
   }
+
+ //--------------------------------------------------------------------------------------------------
+
+Future<void> addPastAttempt({String? userID, int? quizMark, String? quizDateAttempted, String? quizID}) 
+  async {
+    await userCollection.doc(userID).collection('Past Attempts').doc(quizID).update({     //PROBLEM: doc(quizID) wont work. Docs not the same id
+      'pastAttemptQuizMarks': FieldValue.arrayUnion([quizMark]),
+      'pastAttemptQuizDatesAttempted': FieldValue.arrayUnion([quizDateAttempted]),
+    });
+}
 
 
   //--------------------------------------------------------------------------------------------------
