@@ -281,8 +281,13 @@ class DatabaseService {
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
         Bookmarks bookmark = Bookmarks(
-            quizID: docSnapshot['QuizID']);
-
+            quizID: docSnapshot['QuizID'],
+            bookmarkQuizName: docSnapshot['BookmarkQuizName'],
+            bookmarkQuizDescription: docSnapshot['BookmarkQuizDescription'],
+            bookmarkQuizCategory: docSnapshot['BookmarkQuizCategory'],
+            bookmarkQuizDateCreated: docSnapshot['BookmarkQuizDateCreated']
+            );
+        
         bookmarks.add(bookmark);
       }
 
@@ -297,6 +302,31 @@ class DatabaseService {
     }
     return null;
   }
+
+  Future<void> addBookmarks(
+      {String? userID, Quiz? quiz}) async {
+    userCollection.doc(userID).collection('Bookmarks').add({
+      'QuizID': quiz!.quizID,
+      'BookmarkQuizName': quiz.quizName,
+      // 'QuestionMark': Question!.QuestionMark,
+      'BookmarkQuizCategory': quiz.quizCategory,
+      'BookmarkQuizDescription': quiz.quizDescription,
+      'BookmarkQuizDateCreated': quiz.quizDateCreated,
+    });
+  }
+
+  Future<void> addPastAttempt(
+      {String? userID, PastAttempt? pastAttempt}) async {
+    userCollection.doc(userID).collection('Bookmarks').add({
+      'QuizID': quiz!.quizID,
+      'pastAttemptQuizName': quiz.quizName,
+      // 'QuestionMark': Question!.QuestionMark,
+      'pastAttemptQuizCategory': quiz.quizCategory,
+      'pastAttemptQuizDescription': quiz.quizDescription,
+      'pastAttemptQuizDateCreated': quiz.quizDateCreated,
+    });
+  }
+
 
   //--------------------------------------------------------------------------------------------------
   //This function gets a user and user information but fetches it with empty arrays for the bookmarks and past attempts

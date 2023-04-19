@@ -46,10 +46,10 @@ class _BookmarkState extends State<Bookmark> {
   Future<void> loadData() async {
     userData = await service.getUserAndBookmarks(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
     bmList = userData!.bookmarkedQuizzes;
-    bmQuizzesLength = bmQuizzes!.length;
+    bmQuizzesLength = bmList!.length;
 
     for (int i = 0; i < bmQuizzesLength; i++) {
-      bmQuizzes!.add(bmList?[i].toString());
+      bmQuizzes!.add(bmList?[i].quizID);
       /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
       quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
       quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
@@ -246,7 +246,7 @@ class _BookmarkState extends State<Bookmark> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    bmQuizzes!.elementAt(index).quizName,
+                                    bmQuizzes!.elementAt(index).toString(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.white,
@@ -268,7 +268,7 @@ class _BookmarkState extends State<Bookmark> {
                                         ),
                                         const SizedBox(width: 8),
                                         Text(
-                                         bmQuizzes!.elementAt(index).QuizID,
+                                         bmQuizzes!.elementAt(index).toString(),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -301,16 +301,16 @@ class _BookmarkState extends State<Bookmark> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => StartQuiz(
-                                        //         user: widget.user,
-                                        //         chosenQuiz: filteredQuizzes!
-                                        //             .elementAt(index)
-                                        //             .quizID),
-                                        //   ),
-                                        // );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => StartQuiz(
+                                                user: widget.user,
+                                                chosenQuiz: bmList!
+                                                    .elementAt(index)
+                                                    .toString()),
+                                          ),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,
