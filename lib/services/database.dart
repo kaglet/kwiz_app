@@ -252,6 +252,44 @@ class DatabaseService {
     }
     return null;
   }
+
+  //-------GETTING BOOKMARKS ONLY-------------------
+Future<UserData?> getUserAndBookmarkedQuizzes({String? userID}) async {
+  late List<PastAttempt> pastAttempts = [];
+  late List<Bookmarks> bookmarks = [];
+
+  try {
+    DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+
+    QuerySnapshot bookmarksSnapshot =
+        await userCollection.doc(userID).collection('Bookmarks').get();
+    for (int i = 0; i < bookmarksSnapshot.docs.length; i++) {
+      var docSnapshot = bookmarksSnapshot.docs[i];
+      Bookmarks bookmark = Bookmarks(
+          quizID: docSnapshot['quizID'],
+          bookmarkQuizName: docSnapshot['bookmarkQuizName'],
+          bookmarkQuizCategory: docSnapshot['bookmarkQuizCategory'],
+          bookmarkQuizDescription: docSnapshot['bookmarkQuizDescription'],
+          bookmarkQuizDateCreated: docSnapshot['bookmarkQuizDateCreated']);
+      bookmarks.add(bookmark);
+    }
+
+    return UserData(
+        userName: docSnapshot['userName'],
+        firstName: docSnapshot['firstName'],
+        lastName: docSnapshot['lastName'],
+        bookmarkedQuizzes: bookmarks,
+        pastAttemptQuizzes: pastAttempts,
+        uID: docSnapshot.id);
+  } catch (e) {
+    if (kDebugMode) {
+      print("Error!!!!! - $e");
+    }
+  }
+  return null;
+}
+  //------------------------------------------------
+
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //streams
   //get quiz stream

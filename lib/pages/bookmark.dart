@@ -220,15 +220,6 @@ class _ViewQuizzesState extends State<Bookmark> {
                                       fontFamily: 'Nunito',
                                     ),
                                   ),
-                                  leading: IconButton(
-                                    onPressed: () {
-                                      // handle bookmark button press
-                                    },
-                                    icon: Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
-                                    ),
-                                  ),
                                   textColor: Colors.white,
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
