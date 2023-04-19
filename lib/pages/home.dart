@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/profile.dart';
+import 'package:kwiz_v2/pages/start_quiz.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 import 'package:kwiz_v2/services/database.dart';
 import 'package:kwiz_v2/pages/take_quiz.dart';
@@ -256,10 +257,10 @@ class HomeState extends State<Home> {
                                                 TextField(
                                                   controller:
                                                       textControllerTitle,
-                                                  textAlign: TextAlign.left,
+                                                  textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                       fontFamily: 'Nunito',
-                                                      fontSize: 25,
+                                                      fontSize: 22,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.white,
@@ -343,7 +344,7 @@ class HomeState extends State<Home> {
                                                           context,
                                                           MaterialPageRoute(
                                                             builder: (context) =>
-                                                                QuizScreen(quizzes!.elementAt(randNum).quizID, user: widget.user),
+                                                                StartQuiz( user: widget.user, chosenQuiz: quizzes!.elementAt(randNum).quizID),
                                                           ),
                                                         );
                                                       },
