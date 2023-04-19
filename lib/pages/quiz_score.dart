@@ -10,7 +10,7 @@ import 'package:kwiz_v2/models/user.dart';
 class QuizScore extends StatefulWidget {
   //This global variable will be passed onto the take_quiz screen
   final OurUser user;
-  final String chosenQuiz;
+  final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
   const QuizScore(
@@ -25,13 +25,13 @@ class QuizScore extends StatefulWidget {
 
 class QuizScoreState extends State<QuizScore> {
   late UserData userData;
-  late String quizID = widget.chosenQuiz;
+  late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
   late String title;
-  late int quizMaxScore;
+  late int quizMaxScore = 0;
   late List<String> answers = [];
   bool _isLoading = true;
   DatabaseService service =
@@ -41,7 +41,7 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    await service.createPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString());
+    await service.createPastAttempt(userID: userID, quiz:widget.chosenQuiz, quizMark: score, quizDateAttempted: DateTime.now().toString());
     setState(() {
       _isLoading = false;
     });
@@ -52,7 +52,8 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    await service.addPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString(), quizID: quizID);
+  //append array of marks and datetime. MAnually. send through to db and overwrite
+    await service.addPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString(), quizID: widget.chosenQuiz!.quizID);
     setState(() {
       _isLoading = false;
     });
@@ -64,24 +65,8 @@ class QuizScoreState extends State<QuizScore> {
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
-    userData = (await service.getUserAndPastAttempts())!;
-    if (userData.pastAttemptQuizzes.isEmpty){
-      isfirstAttempt = true;
-    }
-    else{       //
-        userData.pastAttemptQuizzes.forEach((element) {
-      if(element.quizID == quizID){
-        isfirstAttempt = false;
-      }
-    });
-    }
-
-    if(isfirstAttempt){
-      createAttempt();
-    }
-    else{
-      updateAttempt();
-    }
+    userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    
     
     quizMaxScore = userAnswers.length;
     for (int i = 0; i < quizMaxScore; i++) {
@@ -230,8 +215,24 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        
-                                        createAttempt();
+                                        if (userData.pastAttemptQuizzes.isEmpty){
+                                            isfirstAttempt = true;
+                                          }
+                                          else{       //
+                                              userData.pastAttemptQuizzes.forEach((element) {
+                                            if(element.quizID == quizID){
+                                              isfirstAttempt = false;
+                                            }
+                                          });
+                                          }
+
+                                          if(isfirstAttempt){
+                                            createAttempt();
+                                          }
+                                          else{
+                                            updateAttempt();
+                                          }
+                                      
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(

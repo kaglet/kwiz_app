@@ -307,7 +307,7 @@ class DatabaseService {
 
   Future<void> addBookmarks(
       {String? userID, Quiz? quiz}) async {
-    userCollection.doc(userID).collection('Bookmarks').add({
+    await userCollection.doc(userID).collection('Bookmarks').add({
       'QuizID': quiz!.quizID,
       'BookmarkQuizName': quiz.quizName,
       // 'QuestionMark': Question!.QuestionMark,
@@ -322,7 +322,7 @@ class DatabaseService {
   Future<void> createPastAttempt(
       {String? userID, Quiz? quiz, int? quizMark, String? quizDateAttempted}) async {
        
-    userCollection.doc(userID).collection('Past Attempts').doc(quiz!.quizID).set({
+    await userCollection.doc(userID).collection('Past Attempts').doc(quiz!.quizID).set({
       'quizID': quiz.quizID,
       'pastAttemptQuizName': quiz.quizName,
       // 'QuestionMark': Question!.QuestionMark,
