@@ -175,7 +175,11 @@ class _SignInState extends State<SignIn> {
                                       child: ElevatedButton(
                                         child: Text(
                                           'Login',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Nunito',
+                                          ),
                                         ),
                                         onPressed: () async {
                                           if (_formkey.currentState!
@@ -231,7 +235,14 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () {
                                           widget.toggleView!();
                                         },
-                                        child: Text('Register'),
+                                        child: Text(
+                                          'Register',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Nunito',
+                                          ),
+                                        ),
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,
                                           backgroundColor: Colors.transparent,
