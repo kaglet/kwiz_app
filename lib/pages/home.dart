@@ -5,7 +5,6 @@ import 'package:kwiz_v2/pages/profile.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 import 'package:kwiz_v2/services/database.dart';
-import 'package:kwiz_v2/pages/take_quiz.dart';
 import '../models/quizzes.dart';
 import '../services/auth.dart';
 import 'dart:math';
@@ -43,8 +42,7 @@ class HomeState extends State<Home> {
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength + 1);
     textControllerTitle.text = quizzes!.elementAt(randNum).quizName;
-    textControllerCat.text =
-        "Category: ${quizzes!.elementAt(randNum).quizCategory}";
+    textControllerCat.text = quizzes!.elementAt(randNum).quizCategory;
 
     currentUser = await service.getUser(widget.user.uid);
 
@@ -53,7 +51,6 @@ class HomeState extends State<Home> {
     });
   }
 
-  @override
   // return static home screen with navigation functionality //
   final AuthService _auth = AuthService();
 
@@ -271,21 +268,55 @@ class HomeState extends State<Home> {
                                                         .fromLTRB(0, 5, 0, 0),
                                                     //This widget displays the quiz's information
 
-                                                    child: TextField(
-                                                      controller:
-                                                          textControllerCat,
-                                                      textAlign: TextAlign.left,
-                                                      style: const TextStyle(
-                                                          fontFamily: 'Nunito',
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: Colors.white),
-                                                      maxLines:
-                                                          null, // set maxLines to null or a higher value
-                                                      textInputAction:
-                                                          TextInputAction
-                                                              .newline, // enable line breaks
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .baseline,
+                                                      textBaseline: TextBaseline
+                                                          .alphabetic,
+                                                      children: [
+                                                        const Text(
+                                                          'Category:',
+                                                          style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    230,
+                                                                    131,
+                                                                    44),
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            fontSize: 20,
+                                                            fontFamily:
+                                                                'Nunito',
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 10),
+                                                        Expanded(
+                                                          child: TextField(
+                                                            controller:
+                                                                textControllerCat,
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            maxLines: null,
+                                                            textInputAction:
+                                                                TextInputAction
+                                                                    .newline,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontFamily:
+                                                                  'Nunito',
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                   SizedBox(
@@ -361,7 +392,7 @@ class HomeState extends State<Home> {
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  )
                                                 ],
                                               ),
                                             ),
