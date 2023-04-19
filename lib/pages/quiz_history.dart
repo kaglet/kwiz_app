@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/quiz_attempts.dart';
 import '../services/database.dart';
 
 class QuizHistory extends StatefulWidget {
@@ -11,24 +13,19 @@ class QuizHistory extends StatefulWidget {
 
 class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
-  List? distinctQuizzes;
-  List? pastAttempts;
+  List? pastAttemptsList = [];
+  int pastAttemptsListLength = 0;
+ /* List? quizName;
+  List? quizID;
+  List? marks;
+  List? dates;*/
+  List? pastAttempts = [];
   int pastAttemptsLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
   UserData? userData;
+  String? name = '';
   final TextEditingController _searchController = TextEditingController();
-  Future<void> loaddata() async {
-    userData = await service.getUserAndPastAttempts(
-        userID: 'om1DwkvlNZ6AV0p1F9io'); // change to service.getPastAttempts()
-    pastAttempts = userData?.pastAttemptQuizzes;
-    print('Hello');
-    print(pastAttempts);
-    pastAttemptsLength = pastAttempts!.length;
-    _displayedItems = pastAttempts;
-    fillLength = _displayedItems!.length;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -42,6 +39,24 @@ class _QuizHistoryState extends State<QuizHistory> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> loaddata() async {
+    userData = await service.getUserAndPastAttempts(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2'); // change to service.getPastAttempts()
+    pastAttemptsList = userData!.pastAttemptQuizzes;
+    pastAttemptsListLength = pastAttemptsList!.length;
+    //Getting list of distinct quizzes
+    for (int i = 0; i < pastAttemptsListLength; i++) {
+      pastAttempts!.add(pastAttemptsList?[i].pastAttemptQuizName.toString());
+      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
+      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
+      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
+      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+
+    }
+    pastAttemptsLength = pastAttempts!.length;
+    _displayedItems = pastAttempts;
+    fillLength = _displayedItems!.length;
   }
 
 //This method is used to control the search bar
@@ -59,7 +74,7 @@ class _QuizHistoryState extends State<QuizHistory> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'History',
+          'Quiz History',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -75,7 +90,7 @@ class _QuizHistoryState extends State<QuizHistory> {
           },
         ),
       ),
-      body: Container(
+      body:Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -149,10 +164,10 @@ class _QuizHistoryState extends State<QuizHistory> {
                               Colors.orange.shade600,
                               Colors.orange.shade700,
                             ];
-
+      
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
-
+      
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 8.0,
@@ -237,13 +252,16 @@ class _QuizHistoryState extends State<QuizHistory> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        /*Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => QuizAttempts(
-                                                chosenQuiz: _displayedItems?[index].quizID),
-                                          ),
-                                        ); */
+                                         Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QuizAttempts(/*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
+                                                                          chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
+                                                                          chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
+                                                                          chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
+                                                                          chosenQuiz: pastAttemptsList?[index]),
+                                         ));
+                                        
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors

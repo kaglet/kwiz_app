@@ -214,7 +214,7 @@ class DatabaseService {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
       UserData user = UserData(
           //uid: docSnapshot['QuizName'],
-          userName: docSnapshot['UserName'],
+          userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
           bookmarkedQuizzes: bookmarks,
