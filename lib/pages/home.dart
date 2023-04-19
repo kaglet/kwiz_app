@@ -7,7 +7,6 @@ import 'package:kwiz_v2/services/database.dart';
 import 'package:kwiz_v2/pages/take_quiz.dart';
 import '../models/quizzes.dart';
 import '../services/auth.dart';
-import '../services/database.dart';
 import 'dart:math';
 // import 'add_quiz_about.dart';
 
@@ -36,14 +35,15 @@ class HomeState extends State<Home> {
 
   // loads data from DB
   Future<void> loadData() async {
+    setState(() {
+      _isLoading = true;
+    });
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength + 1);
     textControllerTitle.text = quizzes!.elementAt(randNum).quizName;
-    textControllerDesc.text = quizzes!.elementAt(randNum).quizDescription;
-     setState(() {
-      _isLoading = true;
-    });
+    textControllerCat.text = "Category: ${quizzes!.elementAt(randNum).quizCategory}";
+     
     currentUser = await service.getUser(widget.user.uid);
 
     setState(() {
@@ -68,7 +68,7 @@ class HomeState extends State<Home> {
 
 
   TextEditingController textControllerTitle = TextEditingController();
-  TextEditingController textControllerDesc = TextEditingController();
+  TextEditingController textControllerCat = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class HomeState extends State<Home> {
                               height: 70.0,
                               child: Text(
                                 currentUser!.userName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 28.0,
                                   fontWeight: FontWeight.normal,
@@ -208,9 +208,7 @@ class HomeState extends State<Home> {
                                       random.nextInt(allQuizzesLength + 1);
                                   textControllerTitle.text =
                                       quizzes!.elementAt(randNum).quizName;
-                                  textControllerDesc.text = quizzes!
-                                      .elementAt(randNum)
-                                      .quizDescription;
+                                  textControllerCat.text = "Category: ${quizzes!.elementAt(randNum).quizCategory}";
                                 },
                                 child: const Text(
                                   'Randomize',
@@ -230,16 +228,12 @@ class HomeState extends State<Home> {
                       ),
                       Row(
                         children: [
-                          quizzes == null
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Expanded(
+                               Expanded(
                                 
                                   child: IntrinsicHeight(
                                     child: SizedBox(
                                       height:
-                                          200, // set a fixed height for the container
+                                          180, // set a fixed height for the container
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -284,7 +278,7 @@ class HomeState extends State<Home> {
 
                                                   child: TextField(
                                                     controller:
-                                                        textControllerDesc,
+                                                        textControllerCat,
                                                     textAlign: TextAlign.left,
                                                     style: const TextStyle(
                                                         fontFamily: 'Nunito',
