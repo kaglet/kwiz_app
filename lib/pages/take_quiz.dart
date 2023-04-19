@@ -1,12 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_score.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 
 class QuizScreen extends StatefulWidget {
+  final OurUser user;
   final String qID;
-  const QuizScreen(this.qID, {super.key});
+  const QuizScreen(this.qID, {super.key, required this.user});
   @override
   QuizScreenState createState() => QuizScreenState();
 }
@@ -308,7 +309,13 @@ class QuizScreenState extends State<QuizScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          QuizScore(chosenQuiz: quiz!.quizID, score: score, userAnswers: userAnswers)),
+                                                          QuizScore(
+                                                              user: widget.user,
+                                                              chosenQuiz:
+                                                                  quiz!.quizID,
+                                                              score: score,
+                                                              userAnswers:
+                                                                  userAnswers)),
                                                 );
                                               },
                                               child: const Text('Submit'),

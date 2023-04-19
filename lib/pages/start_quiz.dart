@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'take_quiz.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 
 class StartQuiz extends StatefulWidget {
   //This global variable will be passed onto the take_quiz screen
+  final OurUser user;
   final String chosenQuiz;
-  const StartQuiz({super.key, required this.chosenQuiz});
+  const StartQuiz({super.key, required this.chosenQuiz, required this.user});
   @override
   StartQuizState createState() => StartQuizState();
 }
@@ -191,8 +193,10 @@ class StartQuizState extends State<StartQuiz> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QuizScreen(quizID)),
+                                              builder: (context) => QuizScreen(
+                                                    quizID,
+                                                    user: widget.user,
+                                                  )),
                                         );
                                       },
                                       child: const Text(

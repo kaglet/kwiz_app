@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'add_questions.dart';
 import '../classes/qa_container.dart';
 import 'home.dart';
@@ -11,8 +13,9 @@ class AddQuiz extends StatefulWidget {
   final _aboutQuizController = TextEditingController();
   final _categoryController = TextEditingController();
   final _titleController = TextEditingController();
+  final OurUser user;
 
-  AddQuiz({super.key});
+  AddQuiz({super.key, required this.user});
   @override
   State<AddQuiz> createState() => AddQuizState();
 }
@@ -25,7 +28,7 @@ class AddQuizState extends State<AddQuiz> {
   int currentIndex = 0;
 
   // screens for stacked widget
-  final List screens = [Home(), Profile()];
+  List<Widget> screens = [];
 
   late bool _isLoading;
 
@@ -48,6 +51,12 @@ class AddQuizState extends State<AddQuiz> {
     loaddata();
     super.initState();
     _selectedCategory = 'Art';
+    screens = [
+      Home(
+        user: widget.user,
+      ),
+      Profile(user: widget.user)
+    ];
   }
 
   @override
@@ -73,7 +82,8 @@ class AddQuizState extends State<AddQuiz> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Home()),
+                      MaterialPageRoute(
+                          builder: (context) => Home(user: widget.user)),
                     );
                   },
                 ),
@@ -246,7 +256,8 @@ class AddQuizState extends State<AddQuiz> {
                                       aboutQuiz:
                                           widget._aboutQuizController.text,
                                       category: _selectedCategory,
-                                      title: widget._titleController.text)),
+                                      title: widget._titleController.text,
+                                      user: widget.user)),
                             );
                           },
                           style: ElevatedButton.styleFrom(

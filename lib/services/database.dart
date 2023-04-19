@@ -214,9 +214,9 @@ class DatabaseService {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
       UserData user = UserData(
           //uid: docSnapshot['QuizName'],
-          userName: docSnapshot['userName'],
-          firstName: docSnapshot['firstName'],
-          lastName: docSnapshot['lastName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -225,6 +225,10 @@ class DatabaseService {
           await userCollection.doc(userID).collection('Past Attempts').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
+        List<String> pastAttemptQuizDatesAttempted =
+            List<String>.from(docSnapshot['pastAttemptQuizDatesAttempted']);
+        List<int> pastAttemptQuizMarks =
+            List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
@@ -234,9 +238,8 @@ class DatabaseService {
             pastAttemptQuizDateCreated:
                 docSnapshot['pastAttemptQuizDateCreated'],
             pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-            pastAttemptQuizMarks: docSnapshot['pastAttemptQuizMarks'],
-            pastAttemptQuizDatesAttempted:
-                docSnapshot[' pastAttemptQuizDatesAttempted']);
+            pastAttemptQuizMarks: pastAttemptQuizMarks,
+            pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
 
         pastAttempts.add(pastAttempt);
       }
@@ -251,6 +254,23 @@ class DatabaseService {
       }
     }
     return null;
+  }
+
+  //--------------------------------------------------------------------------------------------------
+  //This function gets a user and user information but fetches it with empty arrays for the bookmarks and past attempts
+  //If need the bookmarks or past attempts use other appropriate functions
+  Future<UserData?> getUser(String? uid) async {
+    DocumentSnapshot docSnapshot = await userCollection.doc(uid).get();
+
+    UserData user = UserData(
+        uID: uid,
+        userName: docSnapshot['Username'],
+        firstName: docSnapshot['FirstName'],
+        lastName: docSnapshot['LastName'],
+        bookmarkedQuizzes: [],
+        pastAttemptQuizzes: []);
+
+    return user;
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //streams

@@ -3,6 +3,7 @@ import 'package:kwiz_v2/pages/authenticate/register.dart';
 import 'package:kwiz_v2/services/auth.dart';
 import 'package:kwiz_v2/shared/const.dart';
 import 'package:kwiz_v2/shared/loading.dart';
+import 'package:kwiz_v2/models/user.dart';
 
 class SignIn extends StatefulWidget {
   final Function? toggleView;
@@ -59,11 +60,11 @@ class _SignInState extends State<SignIn> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
-                        Center(
-                            child: Image.asset('assets/images/KwizLogo.png',
-                                height: 500, width: 500, scale: 0.5)),
-                        SizedBox(height: 20.0),
-                        TextFormField(
+                        // Center(
+                        //     child: Image.asset('assets/images/KwizLogo.png',
+                        //         height: 500, width: 500, scale: 0.5)),
+                        // SizedBox(height: 20.0),
+                          TextFormField(
                           decoration:
                               textInputDecoration.copyWith(hintText: 'Email'),
                           validator: (val) =>
@@ -100,7 +101,17 @@ class _SignInState extends State<SignIn> {
                                   error =
                                       'could not sign in with those credentials';
                                 });
-                              }
+                              } /*else{
+                                OurUser ourUser = OurUser(uid: user.uID);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Home(
+                                      user: ourUser,
+                                    ),
+                                  ),
+                                );
+                              }*/
                             }
                           },
                           style: ButtonStyle(

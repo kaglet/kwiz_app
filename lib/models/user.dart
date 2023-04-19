@@ -4,14 +4,14 @@ import '../models/pastAttempt.dart';
 class OurUser {
   final String? uid;
 
-  OurUser({this.uid});
+  OurUser({required this.uid});
 }
 
 class UserData {
   final String? uID;
-  final String? userName;
-  final String? firstName;
-  final String? lastName;
+  final String userName;
+  final String firstName;
+  final String lastName;
   late final List<Bookmarks> bookmarkedQuizzes;
   late final List<PastAttempt> pastAttemptQuizzes;
 
