@@ -263,6 +263,7 @@ class HomeState extends State<Home> {
                                                       color: Colors.white,
                                                       decoration: TextDecoration
                                                           .underline),
+                                                            enabled: false,
                                                   maxLines:
                                                       null, // set maxLines to null or a higher value
                                                   textInputAction: TextInputAction
@@ -315,6 +316,7 @@ class HomeState extends State<Home> {
                                                                 FontWeight.w400,
                                                             color: Colors.white,
                                                           ),
+                                                           enabled: false,
                                                         ),
                                                       ),
                                                     ],
