@@ -48,6 +48,12 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     filLength = filteredQuizzes!.length;
   }
 
+  Future<void> bookmarkItem(int index) async {
+    await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
+  
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
   final TextEditingController _searchController = TextEditingController();
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
@@ -233,8 +239,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   leading: IconButton(
                                     onPressed: () {
                                       // handle bookmark button press
+                                      bookmarkItem(index);
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.bookmark_border,
                                       color: Colors.white,
                                     ),
