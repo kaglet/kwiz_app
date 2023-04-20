@@ -60,7 +60,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
     //Bookmarks
     userData = await service.getUserAndBookmarks(
-        userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+        userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');    //user.uid
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
