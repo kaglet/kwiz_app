@@ -51,7 +51,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   Future<void> bookmarkItem(int index) async {
     await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
   
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   final TextEditingController _searchController = TextEditingController();
