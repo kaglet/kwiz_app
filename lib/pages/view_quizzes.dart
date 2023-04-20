@@ -29,19 +29,18 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   int bookmarkedQuizListLength = 0;
   UserData? userData;
   List<bool> isBookmarkedList = [];
+  bool _isLoading = true;
    final TextEditingController _searchController = TextEditingController();
-
 
   @override
   void initState() {
     super.initState();
     categoryName = widget.chosenCategory;
+    _startLoading();
     loadData().then((value) {
       setState(() {});
     });
   }
-
-
 
   int catLength = 0;
   int filLength = 0;
@@ -71,9 +70,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   }
 
   Future<void> bookmarkItem(int index) async {
+    setState(() {
+      _isLoading = true;
+    });
     await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
-  
-    //Navigator.popUntil(context, (route) => route.isFirst);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void updateBookmarkList() {
@@ -129,10 +132,19 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     });
   }
 
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:  _isLoading
+          ? null
+          :AppBar(
         title: const Text(
           'View Quizzes',
           style: TextStyle(
@@ -161,7 +173,11 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
           ),
         ],
       ),
-      body: Container(
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
