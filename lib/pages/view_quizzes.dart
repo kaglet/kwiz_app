@@ -64,6 +64,12 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     updateBookmarkList();
   }
 
+  Future<void> bookmarkItem(int index) async {
+    await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
+  
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
   void updateBookmarkList() {
     isBookmarkedList = List.filled(filLength, false);
 
@@ -263,9 +269,11 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   leading: IconButton(
                                     onPressed: () {
                                       // handle bookmark button press
+
                                       setState(() {
                                         isBookmarkedList[index] =
                                             !isBookmarkedList[index];
+                                            bookmarkItem(index);
                                       });
                                     },
                                     icon: Icon(
@@ -275,6 +283,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                       color: isBookmarkedList[index]
                                           ? Colors.blue
                                           : Colors.white,
+
                                     ),
                                   ),
                                   textColor: Colors.white,

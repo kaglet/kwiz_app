@@ -267,9 +267,9 @@ class _BookmarkState extends State<Bookmark> {
                                     MaterialPageRoute(
                                         builder: (context) => StartQuiz(
                                                                           user: widget.user ,
-                                                                          chosenQuiz: bookmarkedQuizList?[index]),
+                                                                          chosenQuiz: bookmarkedQuizList?[index].quizID),
                                          ));
-                                        
+                                        print(bookmarkedQuiz![index].quizId);
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
