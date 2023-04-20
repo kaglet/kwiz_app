@@ -319,32 +319,6 @@ class DatabaseService {
 
  //--------------------------------------------------------------------------------------------------
 
-  Future<void> deleteDocumentByField(String fieldName, dynamic fieldValue) async {
-  try {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('your_collection')
-        .where(fieldName, isEqualTo: fieldValue)
-        .get();
-
-    if (querySnapshot.docs.length == 0) {
-      // Handle case where no documents match the query
-      print('No documents match the query');
-      return;
-    }
-
-    // Delete all documents that match the query
-    querySnapshot.docs.forEach((document) {
-      document.reference.delete();
-    });
-
-    print('Documents deleted successfully');
-  } catch (error) {
-    print('Failed to delete documents: $error');
-  }
-}
-
- //--------------------------------------------------------------------------------------------------
-
   Future<void> createPastAttempt(
       {String? userID, Quiz? quiz, int? quizMark, String? quizDateAttempted}) async {
        
