@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
+import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 import '../services/database.dart';
@@ -132,7 +133,7 @@ class _ProfileState extends State<Profile> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const QuizHistory()),
+                                            QuizHistory(user: widget.user)),
                                   );
                                 },
                                 child: Card(
@@ -184,8 +185,8 @@ class _ProfileState extends State<Profile> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AddQuiz(
-                                              user: widget.user,
+                                        builder: (context) => Bookmark(
+                                              user: widget.user
                                             )),
                                   );
                                 },

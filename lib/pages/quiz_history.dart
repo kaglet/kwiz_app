@@ -5,7 +5,8 @@ import 'package:kwiz_v2/pages/quiz_attempts.dart';
 import '../services/database.dart';
 
 class QuizHistory extends StatefulWidget {
-  const QuizHistory({super.key});
+  final OurUser user;
+  const QuizHistory({super.key, required this.user});
   @override
   // ignore: library_private_types_in_public_api
   _QuizHistoryState createState() => _QuizHistoryState();
@@ -15,7 +16,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? pastAttemptsList = [];
   int pastAttemptsListLength = 0;
- /* List? quizName;
+  /* List? quizName;
   List? quizID;
   List? marks;
   List? dates;*/
@@ -42,7 +43,8 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   Future<void> loaddata() async {
-    userData = await service.getUserAndPastAttempts(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2'); // change to service.getPastAttempts()
+    userData = await service.getUserAndPastAttempts(
+        userID: widget.user.uid); // change to service.getPastAttempts()
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
     //Getting list of distinct quizzes
@@ -52,7 +54,6 @@ class _QuizHistoryState extends State<QuizHistory> {
       quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
       quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
       dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
-
     }
     pastAttemptsLength = pastAttempts!.length;
     _displayedItems = pastAttempts;
@@ -90,7 +91,7 @@ class _QuizHistoryState extends State<QuizHistory> {
           },
         ),
       ),
-      body:Container(
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -164,10 +165,10 @@ class _QuizHistoryState extends State<QuizHistory> {
                               Colors.orange.shade600,
                               Colors.orange.shade700,
                             ];
-      
+
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
-      
+
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 8.0,
@@ -252,16 +253,19 @@ class _QuizHistoryState extends State<QuizHistory> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                         Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => QuizAttempts(/*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  QuizAttempts(
+                                                      /*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
                                                                           chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
                                                                           chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
                                                                           chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
-                                                                          chosenQuiz: pastAttemptsList?[index]),
-                                         ));
-                                        
+                                                      chosenQuiz:
+                                                          pastAttemptsList?[
+                                                              index]),
+                                            ));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors

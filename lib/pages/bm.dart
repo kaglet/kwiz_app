@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/bookmark.dart';
+import '../models/bookmarks.dart';
 import '../models/pastAttempt.dart';
 import '../services/database.dart';
 import '../pages/quiz_history.dart';
 
-class QuizAttempts extends StatefulWidget {
+class bm extends StatefulWidget {
   /*final String chosenQuizID;
   final List? chosenQuizMarks;
   final List? chosenQuizDatesCreated;
   final String chosenQuizName; */
-  final PastAttempt chosenQuiz;
-  const QuizAttempts(
-      {super.key,
-      /*required this.chosenQuizID,
+  final Bookmarks chosenQuiz;
+  const bm({super.key, /*required this.chosenQuizID,
                                 required this.chosenQuizName,
                                 required this.chosenQuizMarks,
                                 required this.chosenQuizDatesCreated,*/
-      required this.chosenQuiz});
+                                required this.chosenQuiz});
   @override
   // ignore: library_private_types_in_public_api
-  _QuizAttemptsState createState() => _QuizAttemptsState();
+  _bmState createState() => _bmState();
 }
 
-class _QuizAttemptsState extends State<QuizAttempts> {
+class _bmState extends State<bm> {
   DatabaseService service = DatabaseService();
   late String quizID;
   late List? quizMarks;
   late List? quizDatesCreated;
   late String quizName;
-  late PastAttempt pastAttempt;
+  late Bookmarks bookmark;
   List? distinctQuizzes;
   int catLength = 0;
   List? _displayedItems = [];
@@ -51,8 +51,9 @@ class _QuizAttemptsState extends State<QuizAttempts> {
     // quizMarks = widget.chosenQuizMarks;
     // quizDatesCreated = widget.chosenQuizDatesCreated;
     // quizName = widget.chosenQuizName;
-    pastAttempt = widget.chosenQuiz;
-
+    bookmark = widget.chosenQuiz;
+    
+    
     _displayedItems = categories;
     loaddata().then((value) {
       setState(() {});
@@ -79,8 +80,8 @@ class _QuizAttemptsState extends State<QuizAttempts> {
   Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          pastAttempt.pastAttemptQuizName + ' Attempts',
+        title:  Text(
+           bookmark.bookmarkQuizName +' Attempts' ,
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -162,7 +163,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
-                          itemCount: fillLength,
+                          itemCount: 3,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
                               Colors.orange.shade400,
@@ -190,13 +191,9 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: Column(children: <Widget>[
-                                    Text('Attempt Number ${index + 1}'),
-                                    Text(
-                                        'Score: ${pastAttempt.pastAttemptQuizMarks[index]}'),
-                                    Text('Date Taken: ' +
-                                        pastAttempt
-                                                .pastAttemptQuizDatesAttempted[
-                                            index])
+                                    //Text('Attempt Number ${index+1}'),
+                                    //Text('Score: ${bookmark.pastAttemptQuizMarks[index]}' ),
+                                    Text('Quiz Name: ${bookmark.bookmarkQuizDateCreated}')
                                   ]),
                                 ),
                               ),

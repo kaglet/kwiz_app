@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -7,7 +10,7 @@ import 'package:kwiz_v2/models/user.dart';
 class QuizScore extends StatefulWidget {
   //This global variable will be passed onto the take_quiz screen
   final OurUser user;
-  final String chosenQuiz;
+  final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
   const QuizScore(
@@ -21,21 +24,50 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
-  late String quizID = widget.chosenQuiz;
+  late UserData userData;
+  late String quizID = widget.chosenQuiz!.quizID;
+  bool isfirstAttempt = true;
   late int score = widget.score;
   late List userAnswers = widget.userAnswers;
+  late String userID = widget.user.uid.toString();
   late String title;
-  late int quizMaxScore;
+  late int quizMaxScore = 0;
   late List<String> answers = [];
   bool _isLoading = true;
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
+
+  Future<void> createAttempt() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await service.createPastAttempt(userID: userID, quiz:widget.chosenQuiz, quizMark: score, quizDateAttempted: DateTime.now().toString());
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> updateAttempt() async {
+    setState(() {
+      _isLoading = true;
+    });
+  //append array of marks and datetime. MAnually. send through to db and overwrite
+    await service.addPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString(), quizID: widget.chosenQuiz!.quizID);
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.popUntil(context, (route) => route.isFirst);
+  }
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
+    userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    
+    
     quizMaxScore = userAnswers.length;
     for (int i = 0; i < quizMaxScore; i++) {
       answers.add(details.quizQuestions.elementAt(i).questionAnswer);
@@ -183,6 +215,24 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
+                                        if (userData.pastAttemptQuizzes.isEmpty){
+                                            isfirstAttempt = true;
+                                          }
+                                          else{       //
+                                              userData.pastAttemptQuizzes.forEach((element) {
+                                            if(element.quizID == quizID){
+                                              isfirstAttempt = false;
+                                            }
+                                          });
+                                          }
+
+                                          if(isfirstAttempt){
+                                            createAttempt();
+                                          }
+                                          else{
+                                            updateAttempt();
+                                          }
+                                      
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
