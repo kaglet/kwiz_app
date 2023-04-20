@@ -186,8 +186,9 @@ class _AddQuestionsState extends State<AddQuestions> {
                                       quizCategory: widget.category,
                                       quizDescription: widget.aboutQuiz,
                                       quizMark: 0,
-                                      quizDateCreated:
-                                          DateTime.now().toString(),
+                                      quizDateCreated: DateTime.now()
+                                          .toString()
+                                          .substring(0, 10),
                                       quizQuestions: savedQAs,
                                       quizID: '');
                                   // send quiz to database
