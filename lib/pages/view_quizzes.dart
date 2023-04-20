@@ -69,13 +69,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   }
 
   Future<void> bookmarkItem(int index) async {
-    setState(() {
-      _isLoading = true;
-    });
+    // setState(() {
+    //   _isLoading = true;
+    // });
     await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
-    setState(() {
-      _isLoading = false;
-    });
+    // setState(() {
+    //   _isLoading = false;
+    // });
   }
 
   
@@ -246,7 +246,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  filteredQuizzes == null
+                  filteredQuizzes == null && _isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
