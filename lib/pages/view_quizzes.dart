@@ -27,10 +27,11 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   List<Bookmarks>? bookmarkedQuizList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
+  int catLength = 0;
+  int filLength = 0;
   UserData? userData;
   List<bool> isBookmarkedList = [];
-   final TextEditingController _searchController = TextEditingController();
-
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -40,11 +41,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       setState(() {});
     });
   }
-
-
-
-  int catLength = 0;
-  int filLength = 0;
 
   // loads data from DB
   Future<void> loadData() async {
@@ -64,10 +60,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
-
     //Bookmark Logic
     updateBookmarkList();
-
   }
 
   void updateBookmarkList() {
@@ -82,8 +76,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       }
     }
   }
-
-
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
