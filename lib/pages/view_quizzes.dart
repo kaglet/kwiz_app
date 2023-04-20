@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
-import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
@@ -66,6 +65,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
   Future<void> bookmarkItem(int index) async {
     await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
+  
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  
+  Future<void> removeBookmark(int index) async {
+    await service.deleteBookmarks(userID: widget.user.uid, quizID: filteredQuizzes!.elementAt(index).quizID);
   
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
@@ -273,7 +279,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                       setState(() {
                                         isBookmarkedList[index] =
                                             !isBookmarkedList[index];
+
+                                            if (isBookmarkedList[index] == true){
                                             bookmarkItem(index);
+                                            }
+                                            else{
+                                              removeBookmark(index);
+                                            }
                                       });
                                     },
                                     icon: Icon(

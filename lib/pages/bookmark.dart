@@ -48,7 +48,7 @@ class _BookmarkState extends State<Bookmark> {
 
   // loads data from DB
   Future<void> loadData() async {
-    userData = await service.getUserAndBookmarks(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+    userData = await service.getUserAndBookmarks(userID: widget.user.uid);
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
