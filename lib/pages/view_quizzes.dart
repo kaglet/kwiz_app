@@ -22,6 +22,11 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
+  List? bookmarkedQuiz = [];
+  List? bookmarkedQuizList = [];
+  int bookmarkLength = 0;
+  int bookmarkedQuizListLength = 0;
+  UserData? userData;
 
   @override
   void initState() {
@@ -46,6 +51,22 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     catLength = categoryQuiz!.length;
     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
     filLength = filteredQuizzes!.length;
+
+    //Bookmarks
+    userData = await service.getUserAndBookmarks(
+        userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+    bookmarkedQuizList = userData!.bookmarkedQuizzes;
+    bookmarkedQuizListLength = bookmarkedQuizList!.length;
+
+    for (int i = 0; i < bookmarkedQuizListLength; i++) {
+      bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
+      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
+      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
+      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
+      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+    }
+    bookmarkLength = bookmarkedQuiz!.length;
+        print(bookmarkedQuiz);
   }
 
   final TextEditingController _searchController = TextEditingController();
@@ -233,8 +254,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   leading: IconButton(
                                     onPressed: () {
                                       // handle bookmark button press
+                                      setState(() {});
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.bookmark_border,
                                       color: Colors.white,
                                     ),
