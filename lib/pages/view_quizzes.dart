@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
+import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
 // import 'start_quiz.dart';
@@ -22,11 +24,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
-  List? bookmarkedQuiz = [];
-  List? bookmarkedQuizList = [];
+  List<Bookmarks>? bookmarkedQuizList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
   UserData? userData;
+  List<bool> isBookmarkedList = [];
+   final TextEditingController _searchController = TextEditingController();
+
 
   @override
   void initState() {
@@ -36,6 +40,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       setState(() {});
     });
   }
+
+
 
   int catLength = 0;
   int filLength = 0;
@@ -47,7 +53,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     } else {
       categoryQuiz = await service.getQuizByCategory(category: categoryName);
     }
-    print('Hello');
+
     catLength = categoryQuiz!.length;
     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
     filLength = filteredQuizzes!.length;
@@ -58,18 +64,26 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
-    for (int i = 0; i < bookmarkedQuizListLength; i++) {
-      bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
-      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
-      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
-      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
-      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
-    }
-    bookmarkLength = bookmarkedQuiz!.length;
-        print(bookmarkedQuiz);
+
+    //Bookmark Logic
+    updateBookmarkList();
+
   }
 
-  final TextEditingController _searchController = TextEditingController();
+  void updateBookmarkList() {
+    isBookmarkedList = List.filled(filLength, false);
+
+    for (int i = 0; i < filLength; i++) {
+      for (int j = 0; j < bookmarkedQuizListLength; j++) {
+        if (filteredQuizzes!.elementAt(i).quizID ==
+            bookmarkedQuizList!.elementAt(j).quizID) {
+          isBookmarkedList[i] = true;
+        }
+      }
+    }
+  }
+
+
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
@@ -103,6 +117,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       }
 
       filLength = filteredQuizzesNames.length;
+
+      //Keep bookmarks vaild
+      updateBookmarkList();
     });
   }
 
@@ -254,11 +271,18 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   leading: IconButton(
                                     onPressed: () {
                                       // handle bookmark button press
-                                      setState(() {});
+                                      setState(() {
+                                        isBookmarkedList[index] =
+                                            !isBookmarkedList[index];
+                                      });
                                     },
-                                    icon: const Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
+                                    icon: Icon(
+                                      isBookmarkedList[index]
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border,
+                                      color: isBookmarkedList[index]
+                                          ? Colors.blue
+                                          : Colors.white,
                                     ),
                                   ),
                                   textColor: Colors.white,
