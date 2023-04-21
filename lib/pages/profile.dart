@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
-import 'package:kwiz_v2/pages/view_categories.dart';
 import '../services/database.dart';
 import 'package:kwiz_v2/models/user.dart';
 
@@ -51,7 +49,7 @@ class _ProfileState extends State<Profile> {
                   fontFamily: 'TitanOne',
                 ),
               ),
-              backgroundColor: Color.fromARGB(255, 27, 57, 82),
+              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
               actions: [
                 IconButton(
                   icon: const Icon(Icons.home),
@@ -81,7 +79,7 @@ class _ProfileState extends State<Profile> {
                 Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(children: <Widget>[
+                      Column(children: const <Widget>[
                         Text(
                           'My Profile',
                           style: TextStyle(
@@ -99,7 +97,7 @@ class _ProfileState extends State<Profile> {
                         Text('email'),
                         Text('etc'),
                       ]),
-                      SizedBox(
+                      const SizedBox(
                         width: 30.0,
                       ),
                       IconButton(

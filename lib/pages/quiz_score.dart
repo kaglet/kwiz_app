@@ -1,7 +1,6 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -33,6 +32,7 @@ class QuizScoreState extends State<QuizScore> {
   late String title;
   late int quizMaxScore = 0;
   late List<String> answers = [];
+  late List<int> markHistories = [];
   bool _isLoading = true;
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
@@ -45,7 +45,7 @@ class QuizScoreState extends State<QuizScore> {
         userID: userID,
         quiz: widget.chosenQuiz,
         quizMark: score,
-        quizDateAttempted: DateTime.now().toString());
+        quizDateAttempted: DateTime.now().toString().substring(0, 16));
     setState(() {
       _isLoading = false;
     });
@@ -57,10 +57,17 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     //append array of marks and datetime. MAnually. send through to db and overwrite
+
+    userData.pastAttemptQuizzes.forEach((element) {
+      if (element.quizID == quizID) {
+        markHistories = element.pastAttemptQuizMarks;
+        markHistories.add(score);
+      }
+    });
     await service.addPastAttempt(
         userID: userID,
-        quizMark: score,
-        quizDateAttempted: DateTime.now().toString(),
+        quizMarks: markHistories,
+        quizDateAttempted: DateTime.now().toString().substring(0, 16),
         quizID: widget.chosenQuiz!.quizID);
     setState(() {
       _isLoading = false;
@@ -102,7 +109,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 27, 57, 82),
+      backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
           ? null
