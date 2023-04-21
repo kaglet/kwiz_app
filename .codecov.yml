@@ -3,4 +3,4 @@ codecov:
   file:
     - coverage/lcov.info
   ignore:
-    - lib/widgets/* # Ignore widget files
+    - lib/pages/
