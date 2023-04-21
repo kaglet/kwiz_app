@@ -236,7 +236,7 @@ class DatabaseService {
             List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
-            quizAuthor: docSnapshot['QuizAuthor'],
+            pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
             pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
             pastAttemptQuizDescription:
