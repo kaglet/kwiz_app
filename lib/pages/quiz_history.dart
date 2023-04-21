@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
 import '../services/database.dart';

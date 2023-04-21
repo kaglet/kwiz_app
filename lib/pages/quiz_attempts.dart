@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/models/user.dart';
 import '../models/pastAttempt.dart';
 import '../services/database.dart';
-import '../pages/quiz_history.dart';
 
 class QuizAttempts extends StatefulWidget {
   /*final String chosenQuizID;
@@ -81,7 +79,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
       appBar: AppBar(
         title: Text(
           pastAttempt.pastAttemptQuizName + ' Attempts',
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
               color: Colors.white,
@@ -175,9 +173,9 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                                 index % blueAndOrangeShades.length];
 
                             return Card(
-                              margin: EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
+                              margin: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
