@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
@@ -41,7 +41,11 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    await service.createPastAttempt(userID: userID, quiz:widget.chosenQuiz, quizMark: score, quizDateAttempted: DateTime.now().toString());
+    await service.createPastAttempt(
+        userID: userID,
+        quiz: widget.chosenQuiz,
+        quizMark: score,
+        quizDateAttempted: DateTime.now().toString());
     setState(() {
       _isLoading = false;
     });
@@ -52,8 +56,12 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-  //append array of marks and datetime. MAnually. send through to db and overwrite
-    await service.addPastAttempt(userID: userID, quizMark: score, quizDateAttempted: DateTime.now().toString(), quizID: widget.chosenQuiz!.quizID);
+    //append array of marks and datetime. MAnually. send through to db and overwrite
+    await service.addPastAttempt(
+        userID: userID,
+        quizMark: score,
+        quizDateAttempted: DateTime.now().toString(),
+        quizID: widget.chosenQuiz!.quizID);
     setState(() {
       _isLoading = false;
     });
@@ -66,8 +74,7 @@ class QuizScoreState extends State<QuizScore> {
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
-    
-    
+
     quizMaxScore = userAnswers.length;
     for (int i = 0; i < quizMaxScore; i++) {
       answers.add(details.quizQuestions.elementAt(i).questionAnswer);
@@ -215,24 +222,25 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        if (userData.pastAttemptQuizzes.isEmpty){
-                                            isfirstAttempt = true;
-                                          }
-                                          else{       //
-                                              userData.pastAttemptQuizzes.forEach((element) {
-                                            if(element.quizID == quizID){
+                                        if (userData
+                                            .pastAttemptQuizzes.isEmpty) {
+                                          isfirstAttempt = true;
+                                        } else {
+                                          //
+                                          userData.pastAttemptQuizzes
+                                              .forEach((element) {
+                                            if (element.quizID == quizID) {
                                               isfirstAttempt = false;
                                             }
                                           });
-                                          }
+                                        }
 
-                                          if(isfirstAttempt){
-                                            createAttempt();
-                                          }
-                                          else{
-                                            updateAttempt();
-                                          }
-                                      
+                                        if (isfirstAttempt) {
+                                          createAttempt();
+                                        } else {
+                                          updateAttempt();
+                                        }
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
