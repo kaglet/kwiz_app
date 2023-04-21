@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
+import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
 // import 'start_quiz.dart';
@@ -22,23 +23,28 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
-  List? bookmarkedQuiz = [];
-  List? bookmarkedQuizList = [];
+  List<Bookmarks>? bookmarkedQuizList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
+  int catLength = 0;
+  int filLength = 0;
   UserData? userData;
+  List<bool> isBookmarkedList = [];
+  bool _isLoading = true;
+   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     categoryName = widget.chosenCategory;
+    _startLoading();
     loadData().then((value) {
       setState(() {});
     });
   }
 
-  int catLength = 0;
-  int filLength = 0;
+  // int catLength = 0;
+  // int filLength = 0;
 
   // loads data from DB
   Future<void> loadData() async {
@@ -47,29 +53,50 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     } else {
       categoryQuiz = await service.getQuizByCategory(category: categoryName);
     }
-    print('Hello');
+
     catLength = categoryQuiz!.length;
     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
     filLength = filteredQuizzes!.length;
 
     //Bookmarks
     userData = await service.getUserAndBookmarks(
-        userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+        userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');    //user.uid
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
-    for (int i = 0; i < bookmarkedQuizListLength; i++) {
-      bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
-      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
-      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
-      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
-      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
-    }
-    bookmarkLength = bookmarkedQuiz!.length;
-        print(bookmarkedQuiz);
+    //Bookmark Logic
+    updateBookmarkList();
   }
 
-  final TextEditingController _searchController = TextEditingController();
+  Future<void> bookmarkItem(int index) async {
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
+    // setState(() {
+    //   _isLoading = false;
+    // });
+  }
+
+  
+  Future<void> removeBookmark(int index) async {
+    await service.deleteBookmarks(userID: widget.user.uid, quizID: filteredQuizzes!.elementAt(index).quizID);
+  
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  void updateBookmarkList() {
+    isBookmarkedList = List.filled(filLength, false);
+
+    for (int i = 0; i < filLength; i++) {
+      for (int j = 0; j < bookmarkedQuizListLength; j++) {
+        if (filteredQuizzes!.elementAt(i).quizID ==
+            bookmarkedQuizList!.elementAt(j).quizID) {
+          isBookmarkedList[i] = true;
+        }
+      }
+    }
+  }
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
@@ -103,13 +130,25 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       }
 
       filLength = filteredQuizzesNames.length;
+
+      //Keep bookmarks vaild
+      updateBookmarkList();
+    });
+  }
+
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar:  _isLoading
+          ? null
+          :AppBar(
         title: const Text(
           'View Quizzes',
           style: TextStyle(
@@ -138,7 +177,11 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
           ),
         ],
       ),
-      body: Container(
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -203,7 +246,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  filteredQuizzes == null
+                  filteredQuizzes == null && _isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -254,11 +297,27 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   leading: IconButton(
                                     onPressed: () {
                                       // handle bookmark button press
-                                      setState(() {});
+
+                                      setState(() {
+                                        isBookmarkedList[index] =
+                                            !isBookmarkedList[index];
+
+                                            if (isBookmarkedList[index] == true){
+                                            bookmarkItem(index);
+                                            }
+                                            else{
+                                              removeBookmark(index);
+                                            }
+                                      });
                                     },
-                                    icon: const Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
+                                    icon: Icon(
+                                      isBookmarkedList[index]
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border,
+                                      color: isBookmarkedList[index]
+                                          ? Colors.blue
+                                          : Colors.white,
+
                                     ),
                                   ),
                                   textColor: Colors.white,

@@ -313,6 +313,32 @@ class DatabaseService {
     });
   }
 
+  Future<void> deleteBookmarks({String? userID, String? quizID}) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userID)
+          .collection('Bookmarks')
+          .where('QuizID', isEqualTo: quizID)
+          .get();
+
+      print(userID);
+      if (querySnapshot.docs.isEmpty) {
+        // Handle case where no documents match the query
+        print('No documents match the query');
+        return;
+      }
+      // Delete all documents that match the query
+      querySnapshot.docs.forEach((document) {
+        document.reference.delete();
+      });
+
+      print('Documents deleted successfully');
+    } catch (error) {
+      print('Failed to delete documents: $error');
+    }
+  }
+
   //--------------------------------------------------------------------------------------------------
 
   Future<void> createPastAttempt(
