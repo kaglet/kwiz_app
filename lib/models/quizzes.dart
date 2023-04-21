@@ -11,8 +11,6 @@ class Quiz {
 
   late final List<Question> quizQuestions;
 
-  final String quizAuthor;
-
   Quiz({
     required this.quizName,
     required this.quizCategory,
@@ -21,6 +19,5 @@ class Quiz {
     required this.quizDateCreated,
     required this.quizQuestions,
     required this.quizID,
-    required this.quizAuthor,
   });
 }

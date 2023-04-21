@@ -26,13 +26,6 @@ class AddQuizState extends State<AddQuiz> {
   String _selectedCategory = 'Art';
   DatabaseService service = DatabaseService();
   int currentIndex = 0;
-  UserData? currentUser = UserData(
-      uID: ' ',
-      userName: ' ',
-      firstName: ' ',
-      lastName: ' ',
-      bookmarkedQuizzes: [],
-      pastAttemptQuizzes: []);
 
   // screens for stacked widget
   List<Widget> screens = [];
@@ -46,7 +39,6 @@ class AddQuizState extends State<AddQuiz> {
       _isLoading = true;
     });
     categories = await service.getCategories();
-    currentUser = await service.getUser(widget.user.uid);
     // categories = categoriesDynamic?.map((e) => e.toString()).toList();
     setState(() {
       _isLoading = false;
@@ -265,8 +257,7 @@ class AddQuizState extends State<AddQuiz> {
                                           widget._aboutQuizController.text,
                                       category: _selectedCategory,
                                       title: widget._titleController.text,
-                                      user: widget.user,
-                                      currentUser: currentUser)),
+                                      user: widget.user)),
                             );
                           },
                           style: ElevatedButton.styleFrom(

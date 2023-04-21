@@ -30,7 +30,6 @@ class DatabaseService {
       'QuizDescription': quizInstance.quizDescription,
       // 'QuizMark': QuizInstance.QuizMark,
       'QuizDateCreated': quizInstance.quizDateCreated,
-      'QuizAuthor': quizInstance.quizAuthor
     });
 
     //this uses the quiz ID and adds each question to a SUb Collection
@@ -106,8 +105,7 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id,
-          quizAuthor: docSnapshot['QuizAuthor']);
+          quizID: docSnapshot.id);
       quizzes.add(quiz);
     }
     return quizzes;
@@ -129,8 +127,7 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id,
-          quizAuthor: docSnapshot['QuizAuthor']);
+          quizID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
           await quizCollection.doc(quizID).collection('Questions').get();
@@ -181,8 +178,7 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id,
-          quizAuthor: docSnapshot['QuizAuhor']);
+          quizID: docSnapshot.id);
       quizzes.add(quiz);
     }
     return quizzes;
@@ -203,8 +199,7 @@ class DatabaseService {
         quizMark: 0,
         quizDateCreated: docSnapshot['QuizDateCreated'],
         quizQuestions: questions,
-        quizID: docSnapshot.id,
-        quizAuthor: docSnapshot['QuizAuthor']);
+        quizID: docSnapshot.id);
 
     return quiz;
   }
