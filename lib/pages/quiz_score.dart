@@ -46,7 +46,7 @@ class QuizScoreState extends State<QuizScore> {
         userID: userID,
         quiz: widget.chosenQuiz,
         quizMark: score,
-        quizDateAttempted: DateTime.now().toString());
+        quizDateAttempted: DateTime.now().toString().substring(0,16));
     setState(() {
       _isLoading = false;
     });
@@ -68,7 +68,7 @@ class QuizScoreState extends State<QuizScore> {
     await service.addPastAttempt(
         userID: userID,
         quizMarks: markHistories,
-        quizDateAttempted: DateTime.now().toString(),
+        quizDateAttempted: DateTime.now().toString().substring(0,16),
         quizID: widget.chosenQuiz!.quizID);
     setState(() {
       _isLoading = false;

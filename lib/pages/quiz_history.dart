@@ -258,10 +258,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   QuizAttempts(
-                                                      /*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
-                                                                          chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
-                                                                          chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
-                                                                          chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
+                                                      user: widget.user,
                                                       chosenQuiz:
                                                           pastAttemptsList?[
                                                               index]),
