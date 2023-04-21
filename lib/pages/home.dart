@@ -201,7 +201,7 @@ class HomeState extends State<Home> {
                                               .elementAt(randNum)
                                               .quizName;
                                           textControllerCat.text =
-                                              "Category: ${quizzes!.elementAt(randNum).quizCategory}";
+                                              quizzes!.elementAt(randNum).quizCategory;
                                         },
                                         child: const Text(
                                           'Randomize',

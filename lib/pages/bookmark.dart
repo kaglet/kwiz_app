@@ -48,7 +48,7 @@ class _BookmarkState extends State<Bookmark> {
 
   // loads data from DB
   Future<void> loadData() async {
-    userData = await service.getUserAndBookmarks(userID: 'TNaCcDwiABgchtIZKjURlYjimPG2');
+    userData = await service.getUserAndBookmarks(userID: widget.user.uid);
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
@@ -267,9 +267,9 @@ class _BookmarkState extends State<Bookmark> {
                                     MaterialPageRoute(
                                         builder: (context) => StartQuiz(
                                                                           user: widget.user ,
-                                                                          chosenQuiz: bookmarkedQuizList?[index]),
+                                                                          chosenQuiz: bookmarkedQuizList?[index].quizID),
                                          ));
-                                        
+                                        print(bookmarkedQuiz![index].quizId);
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
