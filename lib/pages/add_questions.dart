@@ -13,13 +13,15 @@ class AddQuestions extends StatefulWidget {
   final String title;
   final String aboutQuiz;
   final OurUser user;
+  final UserData? currentUser;
 
   const AddQuestions(
       {super.key,
       required this.aboutQuiz,
       required this.title,
       required this.category,
-      required this.user});
+      required this.user,
+      required this.currentUser});
 
   @override
   State<AddQuestions> createState() => _AddQuestionsState();
@@ -31,7 +33,6 @@ class _AddQuestionsState extends State<AddQuestions> {
   // DatabaseService service = DatabaseService();
   DatabaseService service = DatabaseService();
   int currentIndex = 0;
-
   bool _isLoading = false;
 
   // load before adding quiz with questions data to database, and complete loading once done, then navigate to next screen
@@ -185,12 +186,14 @@ class _AddQuestionsState extends State<AddQuestions> {
                                       quizName: widget.title,
                                       quizCategory: widget.category,
                                       quizDescription: widget.aboutQuiz,
-                                      quizMark: 0,
+                                      quizMark: savedQAs.length,
                                       quizDateCreated: DateTime.now()
                                           .toString()
                                           .substring(0, 10),
                                       quizQuestions: savedQAs,
-                                      quizID: '');
+                                      // quizAuthorID: widget.user.uid,
+                                      quizID: '',
+                                      quizAuthor: widget.currentUser!.userName);
                                   // send quiz to database
                                   addData(quiz);
                                 },
