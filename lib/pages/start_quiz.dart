@@ -56,7 +56,7 @@ class StartQuizState extends State<StartQuiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 27, 57, 82),
+      backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
           ? null

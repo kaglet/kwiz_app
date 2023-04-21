@@ -1,7 +1,6 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -46,7 +45,7 @@ class QuizScoreState extends State<QuizScore> {
         userID: userID,
         quiz: widget.chosenQuiz,
         quizMark: score,
-        quizDateAttempted: DateTime.now().toString());
+        quizDateAttempted: DateTime.now().toString().substring(0,16));
     setState(() {
       _isLoading = false;
     });
@@ -68,7 +67,7 @@ class QuizScoreState extends State<QuizScore> {
     await service.addPastAttempt(
         userID: userID,
         quizMarks: markHistories,
-        quizDateAttempted: DateTime.now().toString(),
+        quizDateAttempted: DateTime.now().toString().substring(0,16),
         quizID: widget.chosenQuiz!.quizID);
     setState(() {
       _isLoading = false;
@@ -110,7 +109,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 27, 57, 82),
+      backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
           ? null

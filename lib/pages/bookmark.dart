@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
-import 'package:kwiz_v2/pages/bm.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
-import '../models/quizzes.dart';
-import 'home.dart';
 // import 'start_quiz.dart';
 import '../services/database.dart';
 
@@ -63,8 +60,7 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuiz!.length;
     _displayedItems = bookmarkedQuiz;
     fillLength = _displayedItems!.length;
-    print("HERE");
-    print(bookmarkedQuiz);
+
   }
 
   final TextEditingController _searchController = TextEditingController();
@@ -84,7 +80,7 @@ class _BookmarkState extends State<Bookmark> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Quiz History',
+          'My Bookmarks',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -269,7 +265,7 @@ class _BookmarkState extends State<Bookmark> {
                                                                           user: widget.user ,
                                                                           chosenQuiz: bookmarkedQuizList?[index].quizID),
                                          ));
-                                        print(bookmarkedQuiz![index].quizId);
+                                     
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors

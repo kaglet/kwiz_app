@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
 import '../services/database.dart';
@@ -258,10 +257,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   QuizAttempts(
-                                                      /*chosenQuizID: pastAttemptsList![index].pastAttemptQuizID.toString(),
-                                                                          chosenQuizName: pastAttemptsList![index].pastAttemptQuizName.toString(),
-                                                                          chosenQuizMarks: pastAttemptsList?[index].pastAttemptQuizMarks,
-                                                                          chosenQuizDatesCreated: pastAttemptsList?[index].pastAttemptQuizDatesCreated*/
+                                                      user: widget.user,
                                                       chosenQuiz:
                                                           pastAttemptsList?[
                                                               index]),
