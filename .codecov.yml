@@ -1,5 +1,5 @@
 codecov:
-  token: CODECOV_TOKEN=923ca82c-c4fd-40c9-87d8-dd0f57c6fc80
+  token: 
   file:
     - coverage/lcov.info
   ignore:
