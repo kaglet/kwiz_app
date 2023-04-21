@@ -236,6 +236,7 @@ class DatabaseService {
             List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
+            quizAuthor: docSnapshot['QuizAuthor'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
             pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
             pastAttemptQuizDescription:
@@ -358,6 +359,7 @@ class DatabaseService {
         .set({
       'quizID': quiz.quizID,
       'pastAttemptQuizName': quiz.quizName,
+      'pastAttemptQuizAuthor': quiz.quizAuthor,
       // 'QuestionMark': Question!.QuestionMark,
       'pastAttemptQuizCategory': quiz.quizCategory,
       'pastAttemptQuizDescription': quiz.quizDescription,
