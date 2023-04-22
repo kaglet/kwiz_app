@@ -182,7 +182,7 @@ class DatabaseService {
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
-          quizAuthor: docSnapshot['QuizAuhor']);
+          quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
     return quizzes;
