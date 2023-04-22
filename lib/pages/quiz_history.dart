@@ -15,13 +15,10 @@ class _QuizHistoryState extends State<QuizHistory> {
   DatabaseService service = DatabaseService();
   List? pastAttemptsList = [];
   int pastAttemptsListLength = 0;
-  /* List? quizName;
-  List? quizID;
-  List? marks;
-  List? dates;*/
   List? pastAttempts = [];
   int pastAttemptsLength = 0;
   List? _displayedItems = [];
+  bool _isLoading = true;
   int fillLength = 0;
   UserData? userData;
   String? name = '';
@@ -30,6 +27,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   void initState() {
     super.initState();
     _displayedItems = pastAttempts;
+    _startLoading();
     loaddata().then((value) {
       setState(() {});
     });
@@ -43,16 +41,13 @@ class _QuizHistoryState extends State<QuizHistory> {
 
   Future<void> loaddata() async {
     userData = await service.getUserAndPastAttempts(
-        userID: widget.user.uid); // change to service.getPastAttempts()
+        userID: widget.user.uid);
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
-    //Getting list of distinct quizzes
+    //Extracting the List of disticnt quiz names for each past attempt
     for (int i = 0; i < pastAttemptsListLength; i++) {
-      pastAttempts!.add(pastAttemptsList?[i].pastAttemptQuizName.toString());
-      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
-      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
-      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
-      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+      pastAttempts!.add(pastAttemptsList?[i]);
+      
     }
     pastAttemptsLength = pastAttempts!.length;
     _displayedItems = pastAttempts;
@@ -63,9 +58,16 @@ class _QuizHistoryState extends State<QuizHistory> {
   void _onSearchTextChanged(String text) {
     setState(() {
       _displayedItems = pastAttempts!
-          .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+          .where((item) => item.pastAttemptQuizName.toLowerCase().contains(text.toLowerCase()))
           .toList();
       fillLength = _displayedItems!.length;
+    });
+  }
+
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -151,8 +153,8 @@ class _QuizHistoryState extends State<QuizHistory> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  _displayedItems == null
-                      ? const Center(
+                  _isLoading ?
+                      const Center(
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
@@ -192,7 +194,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    _displayedItems?[index],
+                                    _displayedItems?[index].pastAttemptQuizName,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.white,
@@ -203,9 +205,9 @@ class _QuizHistoryState extends State<QuizHistory> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: const [
+                                      children:  [
                                         Text(
-                                          'Author: (TBA)',
+                                          '${_displayedItems?[index].pastAttemptQuizAuthor} |',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -214,7 +216,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'Category: ',
+                                          '${_displayedItems?[index].pastAttemptQuizCategory} |',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -223,10 +225,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'Date Created: '
-                                          /*filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizDateCreated*/
+                                        '${_displayedItems?[index].pastAttemptQuizDateCreated}'
                                           ,
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
