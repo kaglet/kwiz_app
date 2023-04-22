@@ -1,3 +1,6 @@
-ignore:
-  - "kwiz_v2/lib"  # ignore folders and all its contents
-  - "*.dart"
+coverage:
+  status:
+    project:
+      default:
+        target: 100%
+        threshold: 1%
