@@ -333,7 +333,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                             children: [
                                               Text(
                                                 '${filteredQuizzes!.elementAt(index).quizAuthor} |',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
                                                   fontFamily: 'Nunito',
