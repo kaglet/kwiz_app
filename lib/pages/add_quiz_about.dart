@@ -51,12 +51,12 @@ class AddQuizState extends State<AddQuiz> {
     loaddata();
     super.initState();
     _selectedCategory = 'Art';
-    screens = [
-      Home(
-        user: widget.user,
-      ),
-      Profile(user: widget.user)
-    ];
+    // screens = [
+    //   Home(
+    //     user: widget.user,
+    //   ),
+    //   Profile(user: widget.user)
+    // ];
   }
 
   @override
