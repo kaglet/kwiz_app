@@ -325,8 +325,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       children: [
-                                        const Text(
-                                          'Author: (TBA)',
+                                        Text(
+                                          'Author: ${filteredQuizzes![index].quizAuthor}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,

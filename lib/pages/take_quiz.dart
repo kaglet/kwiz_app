@@ -316,7 +316,7 @@ class QuizScreenState extends State<QuizScreen> {
                                                               user: widget.user,
                                                               chosenQuiz: quiz,
                                                               score: score,
-                                                              //answers: answers,
+                                                              answers: answers,
                                                               userAnswers:
                                                                   userAnswers)),
                                                 );

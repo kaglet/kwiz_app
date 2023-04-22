@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
@@ -19,6 +21,7 @@ class _BookmarkState extends State<Bookmark> {
   List? bookmarkedQuiz = [];
   List? bookmarkedQuizList = [];
   List? _displayedItems = [];
+ // List? authorNames = [];
   List<bool> isBookmarkedList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
@@ -55,6 +58,7 @@ class _BookmarkState extends State<Bookmark> {
 
     for (int i = 0; i < bookmarkedQuizListLength; i++) {
       bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
+      //authorNames!.add(bookmarkedQuizList?[i].bookmarkQuizAuthor.toString());
       /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
       quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
       quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
@@ -256,9 +260,9 @@ class _BookmarkState extends State<Bookmark> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: const [
+                                      children: [
                                         Text(
-                                          'Author: (TBA)',
+                                          'Author: ${bookmarkedQuizList![index].bookmarkQuizAuthor}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
