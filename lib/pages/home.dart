@@ -62,7 +62,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   // return static home screen with navigation functionality //
-  final AuthService _auth = AuthService();
 
   UserData? currentUser = UserData(
       uID: ' ',

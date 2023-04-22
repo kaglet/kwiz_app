@@ -50,6 +50,8 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   Future<void> loadData() async {
     if (categoryName == 'All') {
       categoryQuiz = await service.getAllQuizzes();
+      
+
     } else {
       categoryQuiz = await service.getQuizByCategory(category: categoryName);
     }
@@ -137,7 +139,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   }
 
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1200));
     setState(() {
       _isLoading = false;
     });

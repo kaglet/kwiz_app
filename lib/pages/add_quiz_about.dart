@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'add_questions.dart';
 import '../classes/qa_container.dart';
 import 'home.dart';
-import 'profile.dart';
 import '../services/database.dart';
 
 class AddQuiz extends StatefulWidget {

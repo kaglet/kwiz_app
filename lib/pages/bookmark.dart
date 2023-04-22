@@ -262,8 +262,22 @@ class _BookmarkState extends State<Bookmark> {
                                     child: Row(
                                       children: [
                                         Text(
+<<<<<<< HEAD
                                           'Author: ${bookmarkedQuizList![index].bookmarkQuizAuthor}',
                                           style: TextStyle(
+=======
+                                         '${bookmarkedQuizList!.elementAt(index).bookmarkQuizName} |',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                            fontFamily: 'Nunito',
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                         Text(
+                                          '${bookmarkedQuizList!.elementAt(index).bookmarkQuizCategory} |',
+                                          style: const TextStyle(
+>>>>>>> bca27a2938750edaa13b6acfb6b2cfcf33e66934
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
@@ -271,21 +285,8 @@ class _BookmarkState extends State<Bookmark> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'Category: ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Date Created: '
-                                          /*filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizDateCreated*/
-                                          ,
-                                          style: TextStyle(
+                                          '${bookmarkedQuizList!.elementAt(index).bookmarkQuizDateCreated}',
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
