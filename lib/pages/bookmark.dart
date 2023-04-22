@@ -1,8 +1,10 @@
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
-// import 'start_quiz.dart';
 import '../services/database.dart';
+import '../shared/loading.dart';
 
 class Bookmark extends StatefulWidget {
   final OurUser user;
@@ -20,6 +22,7 @@ class _BookmarkState extends State<Bookmark> {
   List? bookmarkedQuiz = [];
   List? bookmarkedQuizList = [];
   List? _displayedItems = [];
+ // List? authorNames = [];
   List<bool> isBookmarkedList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
@@ -56,6 +59,7 @@ class _BookmarkState extends State<Bookmark> {
 
     for (int i = 0; i < bookmarkedQuizListLength; i++) {
       bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
+      //authorNames!.add(bookmarkedQuizList?[i].bookmarkQuizAuthor.toString());
       /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
       quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
       quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
@@ -65,9 +69,6 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuiz!.length;
     _displayedItems = bookmarkedQuiz;
     fillLength = _displayedItems!.length;
-    updateBookmarkList();
-    print("HERE");
-    print(bookmarkedQuiz);
   }
 
   void updateBookmarkList() {
@@ -126,9 +127,9 @@ class _BookmarkState extends State<Bookmark> {
         ),
       ),
       body:_isLoading
-          ? const Center(
+          ? Loading() /*const Center(
               child: CircularProgressIndicator(),
-            )
+            )*/
           :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -257,19 +258,10 @@ class _BookmarkState extends State<Bookmark> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children: [
+                                      children:  [
                                         Text(
-                                         '${bookmarkedQuizList!.elementAt(index).bookmarkQuizName} |',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                         Text(
-                                          '${bookmarkedQuizList!.elementAt(index).bookmarkQuizCategory} |',
-                                          style: const TextStyle(
+                                          'Author: ${bookmarkedQuizList![index].bookmarkQuizAuthor}',
+                                          style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
@@ -277,8 +269,12 @@ class _BookmarkState extends State<Bookmark> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          '${bookmarkedQuizList!.elementAt(index).bookmarkQuizDateCreated}',
-                                          style: const TextStyle(
+                                          'Date Created: '
+                                          /*filteredQuizzes!
+                                              .elementAt(index)
+                                              .quizDateCreated*/
+                                          ,
+                                          style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',

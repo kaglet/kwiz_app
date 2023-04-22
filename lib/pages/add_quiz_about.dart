@@ -2,6 +2,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/shared/loading.dart';
+import '../shared/loading.dart';
 import 'add_questions.dart';
 import '../classes/qa_container.dart';
 import 'home.dart';
@@ -105,9 +107,7 @@ class AddQuizState extends State<AddQuiz> {
         // if isLoading is false, display circular progress widget for loading screen else display child of body
         child: SafeArea(
           child: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? Loading()
               //after data is loaded this displays
               : Padding(
                   padding: const EdgeInsets.all(8.0),

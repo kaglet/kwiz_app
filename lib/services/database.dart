@@ -287,6 +287,7 @@ class DatabaseService {
         Bookmarks bookmark = Bookmarks(
             quizID: docSnapshot['QuizID'],
             bookmarkQuizName: docSnapshot['BookmarkQuizName'],
+            bookmarkQuizAuthor: docSnapshot['BookmarkQuizAuthor'],
             bookmarkQuizDescription: docSnapshot['BookmarkQuizDescription'],
             bookmarkQuizCategory: docSnapshot['BookmarkQuizCategory'],
             bookmarkQuizDateCreated: docSnapshot['BookmarkQuizDateCreated']);
@@ -312,6 +313,7 @@ class DatabaseService {
     await userCollection.doc(userID).collection('Bookmarks').add({
       'QuizID': quiz!.quizID,
       'BookmarkQuizName': quiz.quizName,
+      'BookmarkQuizAuthor': quiz.quizAuthor,
       // 'QuestionMark': Question!.QuestionMark,
       'BookmarkQuizCategory': quiz.quizCategory,
       'BookmarkQuizDescription': quiz.quizDescription,
@@ -351,7 +353,7 @@ class DatabaseService {
       {String? userID,
       Quiz? quiz,
       int? quizMark,
-      String? quizDateAttempted}) async {
+      String? quizDateAttempted, required String quizAuthor}) async {
     await userCollection
         .doc(userID)
         .collection('Past Attempts')

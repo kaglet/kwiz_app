@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
@@ -31,7 +32,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   UserData? userData;
   List<bool> isBookmarkedList = [];
   bool _isLoading = true;
-  final TextEditingController _searchController = TextEditingController();
+   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -74,18 +75,16 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     // setState(() {
     //   _isLoading = true;
     // });
-    await service.addBookmarks(
-        userID: widget.user.uid, quiz: filteredQuizzes![index]);
+    await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
     // setState(() {
     //   _isLoading = false;
     // });
   }
 
+  
   Future<void> removeBookmark(int index) async {
-    await service.deleteBookmarks(
-        userID: widget.user.uid,
-        quizID: filteredQuizzes!.elementAt(index).quizID);
-
+    await service.deleteBookmarks(userID: widget.user.uid, quizID: filteredQuizzes!.elementAt(index).quizID);
+  
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
@@ -141,7 +140,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   }
 
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1200));
+    await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       _isLoading = false;
     });
@@ -251,9 +250,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                           decoration: const BoxDecoration(),
                         ),
                         filteredQuizzes == null && _isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
+                            ? Loading()
                             : ListView.builder(
                                 itemCount: filLength,
                                 itemBuilder: (context, index) {
@@ -264,50 +261,47 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                     Colors.orange.shade700,
                                   ];
 
-                                  final Color color1 = blueAndOrangeShades[
-                                      index % blueAndOrangeShades.length];
+                            final Color color1 = blueAndOrangeShades[
+                                index % blueAndOrangeShades.length];
 
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                      horizontal: 16,
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: color1,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 3.0,
+                                    spreadRadius: 2.0,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Card(
+                                color: const Color.fromARGB(240, 45, 64, 96),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ListTile(
+                                  title: Text(
+                                    filteredQuizzes!.elementAt(index).quizName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: color1,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 3.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Card(
-                                      color:
-                                          const Color.fromARGB(240, 45, 64, 96),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(
-                                          filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizName,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            // handle bookmark button press
+                                  ),
+                                  leading: IconButton(
+                                    onPressed: () {
+                                      // handle bookmark button press
 
-                                            setState(() {
-                                              isBookmarkedList[index] =
-                                                  !isBookmarkedList[index];
+                                      setState(() {
+                                        isBookmarkedList[index] =
+                                            !isBookmarkedList[index];
 
                                               if (isBookmarkedList[index] ==
                                                   true) {

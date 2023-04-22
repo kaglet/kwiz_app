@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import '../services/database.dart';
 
 class QuizHistory extends StatefulWidget {
@@ -65,7 +66,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 1300));
     setState(() {
       _isLoading = false;
     });
@@ -154,9 +155,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                     decoration: const BoxDecoration(),
                   ),
                   _isLoading ?
-                      const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                      Loading()
                       : ListView.builder(
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
