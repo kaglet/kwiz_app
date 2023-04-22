@@ -326,7 +326,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '${filteredQuizzes!.elementAt(index).quizAuthor} |',
+                                                '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -335,7 +335,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                '${filteredQuizzes!.elementAt(index).quizCategory} |',
+                                                '${filteredQuizzes!.elementAt(index).quizCategory}   |',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
