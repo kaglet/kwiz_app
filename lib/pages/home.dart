@@ -18,16 +18,26 @@ class Home extends StatefulWidget {
   State<Home> createState() => HomeState();
 }
 
-class HomeState extends State<Home> {
+class HomeState extends State<Home> with TickerProviderStateMixin {
   int allQuizzesLength = 0;
   int randNum = 0;
   Random random = Random();
   DatabaseService service = DatabaseService();
   List<Quiz>? quizzes;
 
+  final _tween = Tween<Offset>(
+    begin: Offset(1.0, 0.0),
+    end: Offset.zero,
+  );
+
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+
     loadData().then((value) {
       setState(() {});
     });
@@ -65,6 +75,32 @@ class HomeState extends State<Home> {
 
   TextEditingController textControllerTitle = TextEditingController();
   TextEditingController textControllerCat = TextEditingController();
+
+  late OverlayEntry overlayEntry;
+  late AnimationController _controller;
+
+  void showOverlay(BuildContext context) {
+    overlayEntry = OverlayEntry(
+      builder: (BuildContext context) {
+        return Positioned(
+          top: 0.0,
+          right: 0.0,
+          bottom: 0.0,
+          child: SlideTransition(
+            position: _tween.animate(_controller),
+            child: Material(
+              child: Profile(
+                  user: widget.user,
+                  overlayEntry: overlayEntry,
+                  controller: _controller),
+            ),
+          ),
+        );
+      },
+    );
+    Overlay.of(context)!.insert(overlayEntry);
+    _controller.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,35 +150,33 @@ class HomeState extends State<Home> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 40.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            Profile(user: widget.user)),
-                                  );
+                              child: GestureDetector(
+                                onTap: () {
+                                  showOverlay(context);
                                 },
+                                child: const Padding(
+                                  padding: EdgeInsets.only(right: 16.0),
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 40.0,
+                                  ),
+                                ),
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.login,
-                                  color: Colors.white,
-                                  size: 40.0,
-                                ),
-                                onPressed: () async {
-                                  await _auth.signOut();
-                                },
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: IconButton(
+                            //     icon: const Icon(
+                            //       Icons.login,
+                            //       color: Colors.white,
+                            //       size: 40.0,
+                            //     ),
+                            //     onPressed: () async {
+                            //       await _auth.signOut();
+                            //     },
+                            //   ),
+                            // ),
                           ]),
                       Container(
                         decoration: const BoxDecoration(

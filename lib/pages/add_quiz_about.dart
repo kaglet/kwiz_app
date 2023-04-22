@@ -59,12 +59,12 @@ class AddQuizState extends State<AddQuiz> {
     loaddata();
     super.initState();
     _selectedCategory = 'Art';
-    screens = [
-      Home(
-        user: widget.user,
-      ),
-      Profile(user: widget.user)
-    ];
+    // screens = [
+    //   Home(
+    //     user: widget.user,
+    //   ),
+    //   Profile(user: widget.user)
+    // ];
   }
 
   @override
@@ -74,29 +74,23 @@ class AddQuizState extends State<AddQuiz> {
       appBar: _isLoading
           ? null
           : AppBar(
-              title: const Text(
-                'Quiz Creator',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontFamily: 'TitanOne',
-                ),
-              ),
-              backgroundColor: Color.fromARGB(255, 27, 57, 82),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.home),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Home(user: widget.user)),
-                    );
-                  },
-                ),
-              ],
-            ),
+        title: const Text(
+          'Quiz Creator',
+          style: TextStyle(
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
+        ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: widget.user),));
+          },
+        ),
+      ),
       // prevent renderflex overflow error just in case
       resizeToAvoidBottomInset: false,
       body: Container(

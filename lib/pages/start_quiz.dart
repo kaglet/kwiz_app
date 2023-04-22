@@ -58,9 +58,7 @@ class StartQuizState extends State<StartQuiz> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
-      appBar: _isLoading
-          ? null
-          : AppBar(
+      appBar:AppBar(
               title: Text(
                 title,
                 style: const TextStyle(
@@ -148,18 +146,6 @@ class StartQuizState extends State<StartQuiz> {
                                     ),
                                   ),
                                 ),
-                                // RichText(
-                                //   textAlign: TextAlign.left,
-                                //   //This widget displays the date the quiz was created
-                                //   text: TextSpan(
-                                //     text: 'Date Created: $date',
-                                //     style: const TextStyle(
-                                //         fontFamily: 'Nunito',
-                                //         fontSize: 26,
-                                //         fontWeight: FontWeight.w400,
-                                //         color: Colors.white),
-                                //   ),
-                                // ),
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
