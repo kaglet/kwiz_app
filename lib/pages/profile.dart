@@ -8,13 +8,13 @@ import 'package:kwiz_v2/models/user.dart';
 class Profile extends StatefulWidget {
   final OurUser user;
   //final VoidCallback onClose;
-  final OverlayEntry overlayEntry;
   final AnimationController controller;
+  final void Function(bool) onOverlayClose;
   const Profile(
       {super.key,
       required this.user,
-      required this.overlayEntry,
-      required this.controller});
+      required this.controller,
+      required this. onOverlayClose});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -22,6 +22,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   bool _isLoading = false;
+  late void Function(bool) onOverlayClose;
   List? quizzes = [];
   DatabaseService service = DatabaseService();
   late final OverlayEntry overlayEntry;
@@ -52,10 +53,12 @@ class _ProfileState extends State<Profile> {
   void initState() {
     loaddata();
     super.initState();
-    overlayEntry = widget.overlayEntry;
     controller = widget.controller;
+   onOverlayClose = widget.onOverlayClose;
   }
 
+  
+ 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -91,6 +94,8 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () {
+                      onOverlayClose(false);
+
                       controller.reverse();
                       // overlayEntry.remove();
                     }, // call the callback function here
@@ -188,6 +193,7 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
+                                     onOverlayClose(false);
                                     controller.reverse();
                                     //   overlayEntry.remove();
 
@@ -245,6 +251,7 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
+                                     onOverlayClose(false);
                                     controller.reverse();
                                     //  overlayEntry.remove();
                                     Navigator.push(
@@ -321,8 +328,10 @@ class _ProfileState extends State<Profile> {
                                                   begin: Alignment.topCenter,
                                                   end: Alignment.bottomCenter,
                                                   colors: [
-                                                    Color.fromARGB(255, 29, 124, 148),
-                                                    Color.fromARGB(255, 50, 68, 150),
+                                                    Color.fromARGB(
+                                                        255, 29, 124, 148),
+                                                    Color.fromARGB(
+                                                        255, 50, 68, 150),
                                                   ],
                                                 ),
                                                 borderRadius:
@@ -363,7 +372,6 @@ class _ProfileState extends State<Profile> {
                                                           Navigator.of(context)
                                                               .pop();
                                                           controller.forward();
-                                                    
                                                         },
                                                         child: Container(
                                                           decoration:
@@ -371,8 +379,16 @@ class _ProfileState extends State<Profile> {
                                                             gradient:
                                                                 const LinearGradient(
                                                               colors: [
-                                                               Color.fromARGB(255, 222, 127, 43),
-                                            Color.fromARGB(255, 246, 120, 82),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    222,
+                                                                    127,
+                                                                    43),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    246,
+                                                                    120,
+                                                                    82),
                                                               ],
                                                               begin: Alignment
                                                                   .centerLeft,
@@ -384,8 +400,9 @@ class _ProfileState extends State<Profile> {
                                                                     .circular(
                                                                         10.0),
                                                           ),
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
                                                                   vertical:
                                                                       10.0,
                                                                   horizontal:
@@ -422,8 +439,16 @@ class _ProfileState extends State<Profile> {
                                                             gradient:
                                                                 const LinearGradient(
                                                               colors: [
-                                                                 Color.fromARGB(255, 222, 127, 43),
-                                            Color.fromARGB(255, 246, 120, 82),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    222,
+                                                                    127,
+                                                                    43),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    246,
+                                                                    120,
+                                                                    82),
                                                               ],
                                                               begin: Alignment
                                                                   .centerLeft,
