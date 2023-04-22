@@ -1,6 +1,7 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -12,11 +13,13 @@ class QuizScore extends StatefulWidget {
   final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
+  final List answers;
   const QuizScore(
       {super.key,
       required this.chosenQuiz,
       required this.score,
       required this.userAnswers,
+      required this.answers,
       required this.user});
   @override
   QuizScoreState createState() => QuizScoreState();
@@ -27,11 +30,12 @@ class QuizScoreState extends State<QuizScore> {
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
+  late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
   late String title;
-  late int quizMaxScore = 0;
-  late List<String> answers = [];
+  late int quizMaxScore = widget.answers.length;
+  //late List<String> answers = [];
   late List<int> markHistories = [];
   bool _isLoading = true;
   DatabaseService service =
@@ -42,10 +46,12 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     await service.createPastAttempt(
-        userID: userID,
-        quiz: widget.chosenQuiz,
-        quizMark: score,
-        quizDateAttempted: DateTime.now().toString().substring(0, 16));
+      userID: userID,
+      quiz: widget.chosenQuiz,
+      quizMark: score,
+      quizAuthor: widget.chosenQuiz!.quizAuthor,
+      quizDateAttempted: DateTime.now().toString().substring(0, 16),
+    );
     setState(() {
       _isLoading = false;
     });
@@ -82,10 +88,10 @@ class QuizScoreState extends State<QuizScore> {
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
 
-    quizMaxScore = userAnswers.length;
-    for (int i = 0; i < quizMaxScore; i++) {
-      answers.add(details.quizQuestions.elementAt(i).questionAnswer);
-    }
+    // for (int i = 0; i < quizMaxScore; i++) {
+    //   answers.add(details.quizQuestions.elementAt(i).questionAnswer);
+    // }
+    //print(answers);
   }
 
 //This ensures that the quiz information and category image/gif have loaded
@@ -109,7 +115,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+      backgroundColor: Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
           ? null
@@ -159,17 +165,18 @@ class QuizScoreState extends State<QuizScore> {
                           padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                           child: SingleChildScrollView(
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 //This widget displays the quiz's title
-                                Text(
-                                  title,
-                                  style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      decoration: TextDecoration.underline),
-                                ),
+                                // Text(
+                                //   title,
+                                //   style: const TextStyle(
+                                //       fontFamily: 'Nunito',
+                                //       fontSize: 30,
+                                //       fontWeight: FontWeight.bold,
+                                //       color: Colors.white,
+                                //       decoration: TextDecoration.underline),
+                                // ),
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 5, 0, 0),
@@ -177,12 +184,19 @@ class QuizScoreState extends State<QuizScore> {
                                   child: RichText(
                                     textAlign: TextAlign.left,
                                     text: TextSpan(
-                                      text: "Your scored $score/$quizMaxScore!",
+                                      text: score >= quizPassScore
+                                          ? "Well done! You passed with a score of $score/$quizMaxScore!\n"
+                                          : score >= quizMaxScore * 0.75
+                                              ? "You were close! You scored $score/$quizMaxScore.\n"
+                                              : score >= quizMaxScore * 0.5
+                                                  ? "You have some room for improvement. You scored $score/$quizMaxScore.\n"
+                                                  : "You need to study more. You scored $score/$quizMaxScore.\n",
                                       style: const TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white),
+                                        fontFamily: 'Nunito',
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -190,15 +204,54 @@ class QuizScoreState extends State<QuizScore> {
                                   textAlign: TextAlign.left,
                                   //This widget displays the date the quiz was created
                                   text: TextSpan(
-                                    text:
-                                        'The correct answers were: $answers . Your answers were: $userAnswers',
+                                    text: 'The correct answers were:\n',
                                     style: const TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white),
+                                      fontFamily: 'Nunito',
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
+                                    children: List.generate(
+                                        widget.answers.length, (index) {
+                                      return TextSpan(
+                                        text:
+                                            '${index + 1}. ${widget.answers[index]}\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }),
                                   ),
                                 ),
+                                RichText(
+                                  textAlign: TextAlign.left,
+                                  text: TextSpan(
+                                    text: 'Your answers were:\n',
+                                    style: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
+                                    children: List.generate(userAnswers.length,
+                                        (index) {
+                                      return TextSpan(
+                                        text:
+                                            '${index + 1}. ${userAnswers[index]}\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,

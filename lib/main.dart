@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:kwiz_v2/pages/authenticate/start_screen.dart';
-import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/pages/wrapper.dart';
-import 'package:kwiz_v2/pages/profile.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/auth.dart';
-import 'package:kwiz_v2/pages/bookmark.dart';
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

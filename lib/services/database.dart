@@ -30,6 +30,7 @@ class DatabaseService {
       'QuizDescription': quizInstance.quizDescription,
       // 'QuizMark': QuizInstance.QuizMark,
       'QuizDateCreated': quizInstance.quizDateCreated,
+      'QuizAuthor': quizInstance.quizAuthor
     });
 
     //this uses the quiz ID and adds each question to a SUb Collection
@@ -105,7 +106,8 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id);
+          quizID: docSnapshot.id,
+          quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
     return quizzes;
@@ -127,7 +129,8 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id);
+          quizID: docSnapshot.id,
+          quizAuthor: docSnapshot['QuizAuthor']);
 
       QuerySnapshot collectionSnapshot =
           await quizCollection.doc(quizID).collection('Questions').get();
@@ -178,7 +181,8 @@ class DatabaseService {
           quizMark: 0,
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
-          quizID: docSnapshot.id);
+          quizID: docSnapshot.id,
+          quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
     return quizzes;
@@ -199,7 +203,8 @@ class DatabaseService {
         quizMark: 0,
         quizDateCreated: docSnapshot['QuizDateCreated'],
         quizQuestions: questions,
-        quizID: docSnapshot.id);
+        quizID: docSnapshot.id,
+        quizAuthor: docSnapshot['QuizAuthor']);
 
     return quiz;
   }
@@ -231,6 +236,7 @@ class DatabaseService {
             List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
             quizID: docSnapshot['quizID'],
+            pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
             pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
             pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
             pastAttemptQuizDescription:
@@ -281,6 +287,7 @@ class DatabaseService {
         Bookmarks bookmark = Bookmarks(
             quizID: docSnapshot['QuizID'],
             bookmarkQuizName: docSnapshot['BookmarkQuizName'],
+            bookmarkQuizAuthor: docSnapshot['BookmarkQuizAuthor'],
             bookmarkQuizDescription: docSnapshot['BookmarkQuizDescription'],
             bookmarkQuizCategory: docSnapshot['BookmarkQuizCategory'],
             bookmarkQuizDateCreated: docSnapshot['BookmarkQuizDateCreated']);
@@ -306,6 +313,7 @@ class DatabaseService {
     await userCollection.doc(userID).collection('Bookmarks').add({
       'QuizID': quiz!.quizID,
       'BookmarkQuizName': quiz.quizName,
+      'BookmarkQuizAuthor': quiz.quizAuthor,
       // 'QuestionMark': Question!.QuestionMark,
       'BookmarkQuizCategory': quiz.quizCategory,
       'BookmarkQuizDescription': quiz.quizDescription,
@@ -345,7 +353,7 @@ class DatabaseService {
       {String? userID,
       Quiz? quiz,
       int? quizMark,
-      String? quizDateAttempted}) async {
+      String? quizDateAttempted, required String quizAuthor}) async {
     await userCollection
         .doc(userID)
         .collection('Past Attempts')
@@ -353,6 +361,7 @@ class DatabaseService {
         .set({
       'quizID': quiz.quizID,
       'pastAttemptQuizName': quiz.quizName,
+      'pastAttemptQuizAuthor': quiz.quizAuthor,
       // 'QuestionMark': Question!.QuestionMark,
       'pastAttemptQuizCategory': quiz.quizCategory,
       'pastAttemptQuizDescription': quiz.quizDescription,

@@ -4,6 +4,7 @@ class Bookmarks {
   final String quizID;
   final String bookmarkQuizName;
   final String bookmarkQuizCategory;
+  final String bookmarkQuizAuthor;
   final String bookmarkQuizDescription;
   final String bookmarkQuizDateCreated;
 
@@ -11,6 +12,7 @@ class Bookmarks {
     required this.quizID,
     required this.bookmarkQuizName,
     required this.bookmarkQuizCategory,
+    required this.bookmarkQuizAuthor,
     required this.bookmarkQuizDescription,
     required this.bookmarkQuizDateCreated
   });
