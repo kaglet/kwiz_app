@@ -1,2 +1,4 @@
 ignore:
-  - "lib/services"       # wildcards accepted
+  - "lib/pages"       # wildcards accepted
+  - "lib/models"
+  - "lib/shared"  
