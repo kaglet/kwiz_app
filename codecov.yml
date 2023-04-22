@@ -1,2 +1,2 @@
 ignore:
-  # - "**/*.dart"       # wildcards accepted
+  - "lib/services"       # wildcards accepted
