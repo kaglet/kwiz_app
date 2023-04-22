@@ -34,4 +34,6 @@ void main() {
 
     expect(testCategories, categories);
   });
+
+  test();
 }
