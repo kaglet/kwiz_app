@@ -1,4 +1,3 @@
 ignore:
-  - "path/to/folder"  # ignore folders and all its contents
-  - "test_*.rb"       # wildcards accepted
-  - "**/*.py"         # glob accepted
+  - "kwiz_v2/lib"  # ignore folders and all its contents
+  - "*.dart"
