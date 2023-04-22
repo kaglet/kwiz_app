@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
-<<<<<<< HEAD
-import '../models/bookmarks.dart';
-import '../models/quizzes.dart';
-import 'home.dart';
-=======
->>>>>>> origin
 // import 'start_quiz.dart';
 import '../services/database.dart';
 
@@ -71,13 +65,9 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuiz!.length;
     _displayedItems = bookmarkedQuiz;
     fillLength = _displayedItems!.length;
-<<<<<<< HEAD
     updateBookmarkList();
     print("HERE");
     print(bookmarkedQuiz);
-=======
-
->>>>>>> origin
   }
 
   void updateBookmarkList() {
