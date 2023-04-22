@@ -1,6 +1,7 @@
 class PastAttempt {
 //Used so you can naviagte to the quiz from viewing past attempts
   final String quizID;
+  final String pastAttemptQuizAuthor;
   final String pastAttemptQuizName;
   final String pastAttemptQuizCategory;
   final String pastAttemptQuizDescription;
@@ -12,6 +13,7 @@ class PastAttempt {
 
   PastAttempt(
       {required this.quizID,
+      required this.pastAttemptQuizAuthor,
       required this.pastAttemptQuizName,
       required this.pastAttemptQuizCategory,
       required this.pastAttemptQuizDescription,

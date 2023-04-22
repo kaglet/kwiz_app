@@ -21,7 +21,6 @@ class QuizScreenState extends State<QuizScreen> {
   Quiz? quiz;
 
   List<String> userAnswers = [];
-  
 
   //Getting quiz, length of quiz and populating quiz questions and answers
   Future<void> loaddata() async {
@@ -296,7 +295,6 @@ class QuizScreenState extends State<QuizScreen> {
                                     }
                                     // Show the score in an alert dialog
 
-
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -313,8 +311,7 @@ class QuizScreenState extends State<QuizScreen> {
                                                       builder: (context) =>
                                                           QuizScore(
                                                               user: widget.user,
-                                                              chosenQuiz:
-                                                                  quiz,
+                                                              chosenQuiz: quiz,
                                                               score: score,
                                                               userAnswers:
                                                                   userAnswers)),
