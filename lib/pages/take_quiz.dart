@@ -292,6 +292,7 @@ class QuizScreenState extends State<QuizScreen> {
                                         score++;
                                         //print(answerController.text);
                                       }
+                                      
                                     }
                                     // Show the score in an alert dialog
 
@@ -305,6 +306,8 @@ class QuizScreenState extends State<QuizScreen> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
+                                              print(answers);
+
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -313,6 +316,7 @@ class QuizScreenState extends State<QuizScreen> {
                                                               user: widget.user,
                                                               chosenQuiz: quiz,
                                                               score: score,
+                                                              answers: answers,
                                                               userAnswers:
                                                                   userAnswers)),
                                                 );

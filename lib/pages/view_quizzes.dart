@@ -31,7 +31,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   UserData? userData;
   List<bool> isBookmarkedList = [];
   bool _isLoading = true;
-  final TextEditingController _searchController = TextEditingController();
+   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -72,18 +72,16 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     // setState(() {
     //   _isLoading = true;
     // });
-    await service.addBookmarks(
-        userID: widget.user.uid, quiz: filteredQuizzes![index]);
+    await service.addBookmarks(userID: widget.user.uid, quiz:filteredQuizzes![index]);
     // setState(() {
     //   _isLoading = false;
     // });
   }
 
+  
   Future<void> removeBookmark(int index) async {
-    await service.deleteBookmarks(
-        userID: widget.user.uid,
-        quizID: filteredQuizzes!.elementAt(index).quizID);
-
+    await service.deleteBookmarks(userID: widget.user.uid, quizID: filteredQuizzes!.elementAt(index).quizID);
+  
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
@@ -148,275 +146,274 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _isLoading
+      appBar:  _isLoading
           ? null
-          : AppBar(
-              title: const Text(
-                'View Quizzes',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontFamily: 'TitanOne',
-                ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.category),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.home),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Home(user: widget.user)),
-                    );
-                  },
-                ),
-              ],
-            ),
+          :AppBar(
+        title: const Text(
+          'View Quizzes',
+          style: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+            fontFamily: 'TitanOne',
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.category),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Home(user: widget.user)),
+              );
+            },
+          ),
+        ],
+      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 27, 57, 82),
-                    Color.fromARGB(255, 5, 12, 31),
-                  ],
+          :Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 27, 57, 82),
+              Color.fromARGB(255, 5, 12, 31),
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Nunito',
                 ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Nunito',
-                      ),
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 45, 64,
-                            96), // set the background color to a darker grey
-                        hintText: 'Search quizzes',
-                        hintStyle: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontFamily:
-                              'Nunito', // set the hint text color to a light grey
-                        ),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          color: const Color.fromRGBO(192, 192, 192,
-                              1), // set the search icon color to a light grey
-                          onPressed: () {
-                            filterQuizzes(_searchController.text);
-                          },
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromRGBO(81, 95, 87,
-                                  1)), // set the border color to a darker grey
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .white), // set the focused border color to white
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        filterQuizzes(value);
-                      },
-                    ),
+                controller: _searchController,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 45, 64,
+                      96), // set the background color to a darker grey
+                  hintText: 'Search quizzes',
+                  hintStyle: const TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white,
+                    fontFamily:
+                        'Nunito', // set the hint text color to a light grey
                   ),
-                  Expanded(
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: const BoxDecoration(),
-                        ),
-                        filteredQuizzes == null && _isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : ListView.builder(
-                                itemCount: filLength,
-                                itemBuilder: (context, index) {
-                                  final List<Color> blueAndOrangeShades = [
-                                    Colors.orange.shade400,
-                                    Colors.orange.shade500,
-                                    Colors.orange.shade600,
-                                    Colors.orange.shade700,
-                                  ];
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    color: const Color.fromRGBO(192, 192, 192,
+                        1), // set the search icon color to a light grey
+                    onPressed: () {
+                      filterQuizzes(_searchController.text);
+                    },
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(81, 95, 87,
+                            1)), // set the border color to a darker grey
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: Colors
+                            .white), // set the focused border color to white
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  filterQuizzes(value);
+                },
+              ),
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(),
+                  ),
+                  filteredQuizzes == null && _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: filLength,
+                          itemBuilder: (context, index) {
+                            final List<Color> blueAndOrangeShades = [
+                              Colors.orange.shade400,
+                              Colors.orange.shade500,
+                              Colors.orange.shade600,
+                              Colors.orange.shade700,
+                            ];
 
-                                  final Color color1 = blueAndOrangeShades[
-                                      index % blueAndOrangeShades.length];
+                            final Color color1 = blueAndOrangeShades[
+                                index % blueAndOrangeShades.length];
 
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                      horizontal: 16,
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 16,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: color1,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 3.0,
+                                    spreadRadius: 2.0,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Card(
+                                color: const Color.fromARGB(240, 45, 64, 96),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ListTile(
+                                  title: Text(
+                                    filteredQuizzes!.elementAt(index).quizName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
                                     ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: color1,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 3.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 2),
+                                  ),
+                                  leading: IconButton(
+                                    onPressed: () {
+                                      // handle bookmark button press
+
+                                      setState(() {
+                                        isBookmarkedList[index] =
+                                            !isBookmarkedList[index];
+
+                                            if (isBookmarkedList[index] == true){
+                                            bookmarkItem(index);
+                                            }
+                                            else{
+                                              removeBookmark(index);
+                                            }
+                                      });
+                                    },
+                                    icon: Icon(
+                                      isBookmarkedList[index]
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_border,
+                                      color: isBookmarkedList[index]
+                                          ? Colors.blue
+                                          : Colors.white,
+
+                                    ),
+                                  ),
+                                  textColor: Colors.white,
+                                  subtitle: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        const Text(
+                                          'Author: (TBA)',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                            fontFamily: 'Nunito',
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                    child: Card(
-                                      color:
-                                          const Color.fromARGB(240, 45, 64, 96),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(
+                                        const SizedBox(width: 8),
+                                        Text(
                                           filteredQuizzes!
                                               .elementAt(index)
-                                              .quizName,
+                                              .quizCategory,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            // handle bookmark button press
-
-                                            setState(() {
-                                              isBookmarkedList[index] =
-                                                  !isBookmarkedList[index];
-
-                                              if (isBookmarkedList[index] ==
-                                                  true) {
-                                                bookmarkItem(index);
-                                              } else {
-                                                removeBookmark(index);
-                                              }
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isBookmarkedList[index]
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_border,
-                                            color: isBookmarkedList[index]
-                                                ? Colors.blue
-                                                : Colors.white,
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          filteredQuizzes!
+                                              .elementAt(index)
+                                              .quizDateCreated,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                            fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        textColor: Colors.white,
-                                        subtitle: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizAuthor} |',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizCategory} |',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizDateCreated}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                            ],
+                                      ],
+                                    ),
+                                  ),
+                                  trailing: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          color1,
+                                          const Color.fromARGB(
+                                              255, 59, 98, 172),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                    ),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => StartQuiz(
+                                              user: widget.user,
+                                              chosenQuiz: filteredQuizzes!
+                                                  .elementAt(index)
+                                                  .quizID,
+                                            ),
                                           ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
                                         ),
-                                        trailing: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                color1,
-                                                const Color.fromARGB(
-                                                    255, 59, 98, 172),
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                          ),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StartQuiz(
-                                                    user: widget.user,
-                                                    chosenQuiz: filteredQuizzes!
-                                                        .elementAt(index)
-                                                        .quizID,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'Start Quiz',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.white,
-                                                fontFamily: 'Nunito',
-                                              ),
-                                            ),
-                                          ),
+                                      ),
+                                      child: const Text(
+                                        'Start Quiz',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white,
+                                          fontFamily: 'Nunito',
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
+                                  ),
+                                ),
                               ),
-                      ],
-                    ),
-                  )
+                            );
+                          },
+                        ),
                 ],
               ),
-            ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
