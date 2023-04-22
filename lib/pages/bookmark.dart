@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
+<<<<<<< HEAD
 import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
+=======
+>>>>>>> origin
 // import 'start_quiz.dart';
 import '../services/database.dart';
 
@@ -68,9 +71,13 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuiz!.length;
     _displayedItems = bookmarkedQuiz;
     fillLength = _displayedItems!.length;
+<<<<<<< HEAD
     updateBookmarkList();
     print("HERE");
     print(bookmarkedQuiz);
+=======
+
+>>>>>>> origin
   }
 
   void updateBookmarkList() {
@@ -112,7 +119,7 @@ class _BookmarkState extends State<Bookmark> {
           ? null
           :AppBar(
         title: const Text(
-          'Quiz History',
+          'My Bookmarks',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -316,7 +323,7 @@ class _BookmarkState extends State<Bookmark> {
                                                                           user: widget.user ,
                                                                           chosenQuiz: bookmarkedQuizList?[index].quizID),
                                          ));
-                                        print(bookmarkedQuiz![index].quizId);
+                                     
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors

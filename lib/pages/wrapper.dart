@@ -1,13 +1,8 @@
-import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/pages/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
-import 'package:kwiz_v2/pages/profile.dart';
-import 'package:kwiz_v2/services/database.dart';
-import 'package:kwiz_v2/shared/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:kwiz_v2/pages/authenticate/start_screen.dart';
 
 class Wrapper extends StatelessWidget {
   @override

@@ -35,7 +35,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
       appBar: AppBar(
         title: Text(
           pastAttempt.pastAttemptQuizName + ' Attempts',
-          style: TextStyle(
+          style: const TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
               color: Colors.white,
@@ -73,9 +73,9 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             return Card(
-                              margin: EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
+                              margin: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
