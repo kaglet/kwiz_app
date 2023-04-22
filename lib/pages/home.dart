@@ -164,19 +164,19 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.login,
-                                  color: Colors.white,
-                                  size: 40.0,
-                                ),
-                                onPressed: () async {
-                                  await _auth.signOut();
-                                },
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: IconButton(
+                            //     icon: const Icon(
+                            //       Icons.login,
+                            //       color: Colors.white,
+                            //       size: 40.0,
+                            //     ),
+                            //     onPressed: () async {
+                            //       await _auth.signOut();
+                            //     },
+                            //   ),
+                            // ),
                           ]),
                       Container(
                         decoration: const BoxDecoration(
