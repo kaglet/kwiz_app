@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/view_quizzes.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 // import 'view_quizzes.dart';
 import '../services/database.dart';
 
@@ -145,9 +146,7 @@ class ViewCategoriesState extends State<ViewCategories> {
                   ),
                   Expanded(
                     child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
+            ? Loading()
                 :Padding(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                       //This GridView diplays all available categories as tiles

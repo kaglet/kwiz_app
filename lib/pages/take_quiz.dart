@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_score.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 
@@ -98,9 +99,9 @@ class QuizScreenState extends State<QuizScreen> {
             ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(
+            ? Loading() /*const Center(
                 child: CircularProgressIndicator(),
-              )
+              )*/
             //after data is loaded this displays
             : Container(
                 decoration: const BoxDecoration(

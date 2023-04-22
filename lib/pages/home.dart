@@ -5,6 +5,7 @@ import 'package:kwiz_v2/pages/profile.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import 'package:kwiz_v2/pages/view_categories.dart';
 import 'package:kwiz_v2/services/database.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import '../models/quizzes.dart';
 import '../services/auth.dart';
 import 'dart:math';
@@ -118,9 +119,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         ),
         child: SafeArea(
           child: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
+              ? Loading()
               //after data is loaded this displays
               : Padding(
                   padding: const EdgeInsets.all(15.0),

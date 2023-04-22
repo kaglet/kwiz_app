@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import 'take_quiz.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
@@ -78,9 +79,7 @@ class StartQuizState extends State<StartQuiz> {
             ),
       //The entire body is wrapped with a SingleChild Scroll view that ensures that the page is scrollable vertically so that the user can always see all the components
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? Loading()
           : SafeArea(
               child: SingleChildScrollView(
                 child: Container(
