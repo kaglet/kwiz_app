@@ -1,2 +1,2 @@
 ignore:
-  - "*.dart"       # wildcards accepted
+  - "**/*.dart"       # wildcards accepted
