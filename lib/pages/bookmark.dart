@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
-import 'package:kwiz_v2/pages/bm.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
+import '../models/bookmarks.dart';
 import '../models/quizzes.dart';
 import 'home.dart';
 // import 'start_quiz.dart';
@@ -22,18 +22,20 @@ class _BookmarkState extends State<Bookmark> {
   DatabaseService service = DatabaseService();
   List? bookmarkedQuiz = [];
   List? bookmarkedQuizList = [];
+  List? _displayedItems = [];
+  List<bool> isBookmarkedList = [];
   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
   UserData? userData;
-  List? _displayedItems = [];
-
   int catLength = 0;
   int fillLength = 0;
+  bool _isLoading = true;
   
   @override
   void initState() {
     super.initState();
     _displayedItems = bookmarkedQuiz;
+    _startLoading();
     loadData().then((value) {
       setState(() {});
     });
@@ -45,6 +47,9 @@ class _BookmarkState extends State<Bookmark> {
     super.dispose();
   }
 
+  Future<void> removeBookmark(int index) async {
+    await service.deleteBookmarks(userID: widget.user.uid, quizID: bookmarkedQuizList![index].quizID);
+  }
 
   // loads data from DB
   Future<void> loadData() async {
@@ -63,8 +68,29 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuiz!.length;
     _displayedItems = bookmarkedQuiz;
     fillLength = _displayedItems!.length;
+    updateBookmarkList();
     print("HERE");
     print(bookmarkedQuiz);
+  }
+
+  void updateBookmarkList() {
+    isBookmarkedList = List.filled(fillLength, false);
+
+    for (int i = 0; i < fillLength; i++) {
+      for (int j = 0; j < bookmarkedQuizListLength; j++) {
+        if (_displayedItems!.elementAt(i).quizID ==
+            bookmarkedQuizList!.elementAt(j).quizID) {
+          isBookmarkedList[i] = true;
+        }
+      }
+    }
+  }
+
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   final TextEditingController _searchController = TextEditingController();
@@ -82,7 +108,9 @@ class _BookmarkState extends State<Bookmark> {
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _isLoading
+          ? null
+          :AppBar(
         title: const Text(
           'Quiz History',
           style: TextStyle(
@@ -100,7 +128,11 @@ class _BookmarkState extends State<Bookmark> {
           },
         ),
       ),
-      body:Container(
+      body:_isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -161,7 +193,7 @@ class _BookmarkState extends State<Bookmark> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  _displayedItems == null
+                  _displayedItems == null &&_isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -209,6 +241,21 @@ class _BookmarkState extends State<Bookmark> {
                                       fontFamily: 'Nunito',
                                     ),
                                   ),
+                                  leading: IconButton(
+                                    icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        // Remove the selected bookmark from the list
+                                        removeBookmark(index);
+                                        // Refresh the list of displayed items
+                                        setState(() {
+                                          _displayedItems!.removeAt(index);
+                                          bookmarkedQuizList!.removeAt(index);
+                                          fillLength = _displayedItems!.length;
+                                        });
+                                      },
+                                      color: Colors.white,
+                                  ),
+                                  
                                   textColor: Colors.white,
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
