@@ -30,7 +30,7 @@ class QuizScoreState extends State<QuizScore> {
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
-  late double quizPassScore = quizMaxScore/2.floor();
+  late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
   late String title;
@@ -88,7 +88,6 @@ class QuizScoreState extends State<QuizScore> {
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
 
-    
     // for (int i = 0; i < quizMaxScore; i++) {
     //   answers.add(details.quizQuestions.elementAt(i).questionAnswer);
     // }
@@ -185,10 +184,13 @@ class QuizScoreState extends State<QuizScore> {
                                   child: RichText(
                                     textAlign: TextAlign.left,
                                     text: TextSpan(
-                                      text: score >= quizPassScore ? "Well done! You passed with a score of $score/$quizMaxScore!\n" :
-                                        score >= quizMaxScore * 0.75 ? "You were close! You scored $score/$quizMaxScore.\n" :
-                                        score >= quizMaxScore * 0.5 ? "You have some room for improvement. You scored $score/$quizMaxScore.\n" :
-                                        "You need to study more. You scored $score/$quizMaxScore.\n",
+                                      text: score >= quizPassScore
+                                          ? "Well done! You passed with a score of $score/$quizMaxScore!\n"
+                                          : score >= quizMaxScore * 0.75
+                                              ? "You were close! You scored $score/$quizMaxScore.\n"
+                                              : score >= quizMaxScore * 0.5
+                                                  ? "You have some room for improvement. You scored $score/$quizMaxScore.\n"
+                                                  : "You need to study more. You scored $score/$quizMaxScore.\n",
                                       style: const TextStyle(
                                         fontFamily: 'Nunito',
                                         fontSize: 28,
@@ -198,53 +200,57 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ),
                                 ),
-                                      RichText(
-                                        textAlign: TextAlign.left,
-                                        //This widget displays the date the quiz was created
-                                        text: TextSpan(
-                                          text: 'The correct answers were:\n',
-                                          style: const TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontSize: 26,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white,
-                                          ),
-                                          children: List.generate(widget.answers.length, (index) {
-                                            return TextSpan(
-                                              text: '${index + 1}. ${widget.answers[index]}\n',
-                                              style: const TextStyle(
-                                                fontFamily: 'Nunito',
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          }),
+                                RichText(
+                                  textAlign: TextAlign.left,
+                                  //This widget displays the date the quiz was created
+                                  text: TextSpan(
+                                    text: 'The correct answers were:\n',
+                                    style: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
+                                    children: List.generate(
+                                        widget.answers.length, (index) {
+                                      return TextSpan(
+                                        text:
+                                            '${index + 1}. ${widget.answers[index]}\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
                                         ),
-                                      ),
-                                      RichText(
-                                        textAlign: TextAlign.left,
-                                        text: TextSpan(
-                                          text: 'Your answers were:\n',
-                                          style: const TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontSize: 26,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white,
-                                          ),
-                                          children: List.generate(userAnswers.length, (index) {
-                                            return TextSpan(
-                                              text: '${index + 1}. ${userAnswers[index]}\n',
-                                              style: const TextStyle(
-                                                fontFamily: 'Nunito',
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          }),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                RichText(
+                                  textAlign: TextAlign.left,
+                                  text: TextSpan(
+                                    text: 'Your answers were:\n',
+                                    style: const TextStyle(
+                                      fontFamily: 'Nunito',
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                    ),
+                                    children: List.generate(userAnswers.length,
+                                        (index) {
+                                      return TextSpan(
+                                        text:
+                                            '${index + 1}. ${userAnswers[index]}\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
                                         ),
-                                      ),
+                                      );
+                                    }),
+                                  ),
+                                ),
 
                                 SizedBox(
                                   width: double.infinity,
