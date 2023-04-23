@@ -35,7 +35,7 @@ class _SignInState extends State<SignIn> {
               elevation: 0.0,
               title: Center(
                 child: Text(
-                  'Login',
+                  'KWIZ',
                   style: TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.normal,
