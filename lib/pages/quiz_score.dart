@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -133,9 +134,7 @@ class QuizScoreState extends State<QuizScore> {
             ),
       //The entire body is wrapped with a SingleChild Scroll view that ensures that the page is scrollable vertically so that the user can always see all the components
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? Loading()
           : SafeArea(
               child: SingleChildScrollView(
                 child: Container(
