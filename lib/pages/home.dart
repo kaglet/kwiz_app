@@ -136,9 +136,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
             child: SafeArea(
               child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? Loading()
                   //after data is loaded this displays
                   : Padding(
                       padding: const EdgeInsets.all(15.0),
