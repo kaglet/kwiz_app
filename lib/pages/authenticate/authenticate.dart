@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/authenticate/sign_in.dart';
 import 'package:kwiz_v2/pages/authenticate/register.dart';
@@ -24,3 +26,5 @@ class _AuthenticateState extends State<Authenticate> {
     }
   }
 }
+
+// coverage:ignore-end

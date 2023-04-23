@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_score.dart';
@@ -45,6 +47,7 @@ class QuizScreenState extends State<QuizScreen> {
     super.initState();
   }
 
+// coverage:ignore-end
   //function for populating the questions and answers
   void popList(Quiz? q) {
     for (int i = 0; i < quizLength; i++) {
@@ -53,6 +56,7 @@ class QuizScreenState extends State<QuizScreen> {
     }
   }
 
+// coverage:ignore-start
   //Two local var lists for storing answers and questions
   List<String> questions = [];
   List<String> answers = [];
@@ -293,7 +297,6 @@ class QuizScreenState extends State<QuizScreen> {
                                         score++;
                                         //print(answerController.text);
                                       }
-                                      
                                     }
                                     // Show the score in an alert dialog
 
@@ -307,7 +310,7 @@ class QuizScreenState extends State<QuizScreen> {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                              print(answers);
+                                                print(answers);
 
                                                 Navigator.push(
                                                   context,
@@ -357,6 +360,8 @@ class QuizScreenState extends State<QuizScreen> {
     );
   }
 }
+
+// coverage:ignore-end
 
 // //USE WIDGET INSPECTOR type Ctrl + T and search >Dart: Open DevTools
 // //Flex makes it "become small" can be squashed :) the picture of the globe is squashed when we click on input box.

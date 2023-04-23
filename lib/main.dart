@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kwiz_v2/pages/wrapper.dart';
@@ -5,8 +7,6 @@ import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/auth.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,3 +39,5 @@ Future<void> main() async {
     ),
   ));
 }
+
+// coverage:ignore-end

@@ -1,4 +1,3 @@
-// coverage:ignore-start
 import 'dart:math';
 
 import 'package:kwiz_v2/models/questions.dart';
@@ -750,4 +749,3 @@ class MockDataService extends Mock implements DatabaseService {
     return pastAttempt;
   }
 }
-// coverage:ignore-end
