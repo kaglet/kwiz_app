@@ -6,6 +6,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:kwiz_v2/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/database.dart';
 import 'package:kwiz_v2/services/mock_database.dart';
 
@@ -15,5 +16,13 @@ void main() {
     final List? testCategories = await service.getCategories();
 
     expect(testCategories, ['Art', 'Science']);
+  });
+
+  test('get user and past attempts', () async {
+    final service = MockDataService();
+    String UserId = "id";
+    final UserData? userData = await service.getUserAndPastAttempts(userID: UserId);
+
+    expect(userData?.firstName, "Test");
   });
 }
