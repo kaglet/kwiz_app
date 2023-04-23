@@ -55,4 +55,11 @@ void main() {
 
     expect(userData?.firstName, "Test");
   });
+  test('get quiz and questions', () async {
+    final service = MockDataService();
+    String quizId = "quizId";
+    final Quiz? quiz = await service.getQuizAndQuestions(quizID: quizId);
+
+    expect(quiz?.quizID, "quizId");
+  });
 }
