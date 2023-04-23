@@ -1,0 +1,8 @@
+ignore:
+  - "lib/pages"       # wildcards accepted
+  - "lib/models"
+  - "lib/shared"
+  - "lib/classes"
+  - "lib/*.dart"
+  - "lib/services/auth.dart"
+  - "lib/services/database.dart"
