@@ -80,7 +80,7 @@ class _SignInState extends State<SignIn> {
                               SizedBox(
                                 height: 30,
                               ),
-                              Image.asset('assets/images/KwizLogo.png',
+                              Image.asset('assets/images/KWIZLogo2.png',
                                   height: 200, width: 200, scale: 0.5),
                               SizedBox(
                                 height: 30,
