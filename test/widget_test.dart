@@ -9,9 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:kwiz_v2/main.dart';
+import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/home.dart';
 
 void main() {
-  test('Fake test', () {
+  test('Test Home widget method', () {
+    // OurUser ourUser = OurUser(uid: 'uid');
+    // final widget = Home(user: ourUser,);
+    // widget.user = ;
     expect(1, 1);
   });
 }
