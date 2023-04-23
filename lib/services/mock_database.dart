@@ -1,3 +1,4 @@
+// coverage:ignore-start
 import 'package:kwiz_v2/services/database.dart';
 import 'package:mockito/mockito.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,3 +32,4 @@ class MockDataService extends Mock implements DatabaseService {
     return (categories);
   }
 }
+// coverage:ignore-end
