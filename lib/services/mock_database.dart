@@ -1,4 +1,3 @@
-// coverage:ignore-start
 import 'package:kwiz_v2/models/questions.dart';
 import 'package:kwiz_v2/models/quizzes.dart';
 import 'package:kwiz_v2/services/database.dart';
@@ -190,4 +189,3 @@ class MockDataService extends Mock implements DatabaseService {
     return user;
   }
 }
-// coverage:ignore-end

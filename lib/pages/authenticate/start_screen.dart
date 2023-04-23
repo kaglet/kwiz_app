@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/authenticate/authenticate.dart';
 import 'package:kwiz_v2/pages/authenticate/register.dart';
@@ -53,3 +55,5 @@ class StartScreen extends StatelessWidget {
     );
   }
 }
+
+// coverage:ignore-end

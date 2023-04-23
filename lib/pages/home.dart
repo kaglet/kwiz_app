@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
@@ -81,12 +83,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   bool isOverlayShowing = false;
 
-   void setOverlayShowing(bool value) {
+  void setOverlayShowing(bool value) {
     setState(() {
       isOverlayShowing = value;
     });
   }
-
 
   void showOverlay(BuildContext context) {
     overlayEntry = OverlayEntry(
@@ -98,12 +99,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           child: SlideTransition(
             position: _tween.animate(_controller),
             child: Material(
-              child: Profile(
-                  user: widget.user,
-
-                  controller: _controller,
-                  onOverlayClose: setOverlayShowing)
-            ),
+                child: Profile(
+                    user: widget.user,
+                    controller: _controller,
+                    onOverlayClose: setOverlayShowing)),
           ),
         );
       },
@@ -599,3 +598,5 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 }
+
+// coverage:ignore-end

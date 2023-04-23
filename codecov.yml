@@ -1,5 +1,4 @@
-ignore:
-  - "lib/pages"       # wildcards accepted
+ignore:       # wildcards accepted
   - "lib/models"
   - "lib/shared"
   - "lib/classes"

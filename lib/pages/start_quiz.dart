@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -59,24 +61,24 @@ class StartQuizState extends State<StartQuiz> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
-      appBar:AppBar(
-              title: Text(
-                title,
-                style: const TextStyle(
-                    fontFamily: 'TitanOne',
-                    fontSize: 30,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: const TextStyle(
+              fontFamily: 'TitanOne',
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.start,
+        ),
+        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       //The entire body is wrapped with a SingleChild Scroll view that ensures that the page is scrollable vertically so that the user can always see all the components
       body: _isLoading
           ? Loading()
@@ -208,3 +210,5 @@ class StartQuizState extends State<StartQuiz> {
     );
   }
 }
+
+// coverage:ignore-end
