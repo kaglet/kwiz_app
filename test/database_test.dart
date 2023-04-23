@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kwiz_v2/models/questions.dart';
 import 'package:kwiz_v2/models/quizzes.dart';
+import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/database.dart';
 import 'package:kwiz_v2/services/mock_database.dart';
 
@@ -44,5 +45,14 @@ void main() {
         quizAuthor: 'Kg');
     Quiz? quizOutput = await service.addQuizWithQuestions(quiz);
     expect(quizOutput?.quizID, quiz.quizID);
+  });
+
+  test('get user and past attempts', () async {
+    final service = MockDataService();
+    String UserId = "id";
+    final UserData? userData =
+        await service.getUserAndPastAttempts(userID: UserId);
+
+    expect(userData?.firstName, "Test");
   });
 }
