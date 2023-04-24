@@ -209,7 +209,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 35.0,
+                                      width: 70.0,
                                     ),
                                     SizedBox(
                                       width: 90,

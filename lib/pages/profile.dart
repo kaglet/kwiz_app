@@ -77,6 +77,16 @@ class _ProfileState extends State<Profile> {
                     fontFamily: 'TitanOne',
                   ),
                 ),
+                backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                    
+                      // overlayEntry.remove();
+                    }, // call the callback function here
+                  ),
+                ],
               )
             : AppBar(
                 toolbarHeight: 60,
@@ -112,8 +122,8 @@ class _ProfileState extends State<Profile> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(255, 32, 94, 145),
-                  Color.fromARGB(255, 18, 38, 92),
+                  Color.fromARGB(255, 27, 57, 82),
+              Color.fromARGB(255, 5, 12, 31),
                 ],
               ),
             ),
@@ -160,16 +170,29 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10.0,
                             ),
-                            const Text(
-                              'email',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.0,
-                                fontFamily: 'Nunito',
+                            Text(
+                                '${currentUser!.firstName} ${currentUser!.lastName}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 1.0,
+                                  fontFamily: 'Nunito',
+                                ),
                               ),
+                            const SizedBox(
+                              height: 10.0,
                             ),
+                            // const Text(
+                            //   'email',
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 18.0,
+                            //     fontWeight: FontWeight.w600,
+                            //     letterSpacing: 1.0,
+                            //     fontFamily: 'Nunito',
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -241,7 +264,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         const SizedBox(
-                          height: 70.0,
+                          height: 60.0,
                         ),
                         Row(
                           children: [
@@ -298,7 +321,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         const SizedBox(
-                          height: 100.0,
+                          height: 90.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,13 +348,12 @@ class _ProfileState extends State<Profile> {
                                             content: Container(
                                               decoration: BoxDecoration(
                                                 gradient: const LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
                                                   colors: [
                                                     Color.fromARGB(
-                                                        255, 29, 124, 148),
-                                                    Color.fromARGB(
-                                                        255, 50, 68, 150),
+                                                        255, 27, 57, 82),
+                                                    Color.fromARGB(255, 11, 26, 68),
                                                   ],
                                                 ),
                                                 borderRadius:
@@ -349,7 +371,7 @@ class _ProfileState extends State<Profile> {
                                                       fontFamily: 'Nunito',
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 12.0),
+                                                  const SizedBox(height: 15.0),
                                                   const Text(
                                                     'Are you sure you want to log out?',
                                                     style: TextStyle(
@@ -361,7 +383,7 @@ class _ProfileState extends State<Profile> {
                                                       fontFamily: 'Nunito',
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 10.0),
+                                                  const SizedBox(height: 15.0),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -468,7 +490,7 @@ class _ProfileState extends State<Profile> {
                                                                   horizontal:
                                                                       20.0),
                                                           child: const Text(
-                                                            'Ok',
+                                                            ' Ok ',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -486,6 +508,7 @@ class _ProfileState extends State<Profile> {
                                                       )
                                                     ],
                                                   ),
+                                                     const SizedBox(height: 10.0),
                                                 ],
                                               ),
                                             ),

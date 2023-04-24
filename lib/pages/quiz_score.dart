@@ -132,6 +132,7 @@ class QuizScoreState extends State<QuizScore> {
                 textAlign: TextAlign.start,
               ),
               backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+              automaticallyImplyLeading: false,
             ),
       //The entire body is wrapped with a SingleChild Scroll view that ensures that the page is scrollable vertically so that the user can always see all the components
       body: _isLoading

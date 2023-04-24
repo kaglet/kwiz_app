@@ -193,6 +193,8 @@ class QuizScreenState extends State<QuizScreen> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  userAnswers[currentIndex] =
+                                      answerController.text.trim();
                                   setState(() {
                                     currentIndex--;
                                     updateText();
