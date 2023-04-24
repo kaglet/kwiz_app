@@ -55,6 +55,7 @@ class _QuizHistoryState extends State<QuizHistory> {
     fillLength = _displayedItems!.length;
   }
 
+// coverage:ignore-end
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
@@ -67,7 +68,7 @@ class _QuizHistoryState extends State<QuizHistory> {
     });
   }
 
-// coverage:ignore-end
+// coverage:ignore-start
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 1300));
     setState(() {
