@@ -78,7 +78,9 @@ class _QuizHistoryState extends State<QuizHistory> {
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _isLoading
+          ? null
+          : AppBar(
         title: const Text(
           'Quiz History',
           style: TextStyle(
@@ -96,7 +98,8 @@ class _QuizHistoryState extends State<QuizHistory> {
           },
         ),
       ),
-      body: Container(
+      body: _isLoading ? Loading()
+        :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -157,9 +160,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  _isLoading
-                      ? Loading()
-                      : ListView.builder(
+                  ListView.builder(
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
@@ -259,8 +260,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                                   QuizAttempts(
                                                       user: widget.user,
                                                       chosenQuiz:
-                                                          pastAttemptsList?[
-                                                              index]),
+                                                          _displayedItems?[index]),
                                             ));
                                       },
                                       style: ElevatedButton.styleFrom(

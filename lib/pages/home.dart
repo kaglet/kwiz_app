@@ -209,54 +209,56 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 70.0,
+                                      width: 62.0,
                                     ),
-                                    SizedBox(
-                                      width: 90,
-                                      height: 30,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              Color.fromARGB(255, 230, 131, 44),
-                                              Color.fromARGB(255, 244, 112, 72),
-                                            ],
+                                    Expanded(
+                                      child: SizedBox(
+                                        width: 95,
+                                        height: 30,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color.fromARGB(255, 230, 131, 44),
+                                                Color.fromARGB(255, 244, 112, 72),
+                                              ],
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(9),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(9),
-                                        ),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 0,
-                                            backgroundColor: Colors.transparent,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50)),
-                                            textStyle: const TextStyle(
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 0,
+                                              backgroundColor: Colors.transparent,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50)),
+                                              textStyle: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.normal),
+                                            ),
+                                            //This event takes us to the take_quiz screen
+                                            onPressed: () {
+                                              randNum = random
+                                                  .nextInt(allQuizzesLength + 1);
+                                              textControllerTitle.text = quizzes!
+                                                  .elementAt(randNum)
+                                                  .quizName;
+                                              textControllerCat.text = quizzes!
+                                                  .elementAt(randNum)
+                                                  .quizCategory;
+                                            },
+                                            child: const Text(
+                                              'Randomize',
+                                              style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 11,
                                                 fontWeight: FontWeight.bold,
-                                                fontStyle: FontStyle.normal),
-                                          ),
-                                          //This event takes us to the take_quiz screen
-                                          onPressed: () {
-                                            randNum = random
-                                                .nextInt(allQuizzesLength + 1);
-                                            textControllerTitle.text = quizzes!
-                                                .elementAt(randNum)
-                                                .quizName;
-                                            textControllerCat.text = quizzes!
-                                                .elementAt(randNum)
-                                                .quizCategory;
-                                          },
-                                          child: const Text(
-                                            'Randomize',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Nunito',
+                                                fontFamily: 'Nunito',
+                                              ),
                                             ),
                                           ),
                                         ),

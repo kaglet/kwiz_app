@@ -22,22 +22,17 @@ class ViewCategoriesState extends State<ViewCategories> {
   int catLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
-  late bool _isLoading;
+  late bool _isLoading = true;
 
   final TextEditingController _controller = TextEditingController();
 //Loading Data from the database
   Future<void> loaddata() async {
-    setState(() {
-      _isLoading = true;
-    });
+
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
     _displayedItems = categories;
     fillLength = _displayedItems!.length;
-    setState(() {
-      _isLoading = false;
-    });
   }
 
 //This ensures that category tiles are populated and that we can search for a category
@@ -45,6 +40,7 @@ class ViewCategoriesState extends State<ViewCategories> {
   void initState() {
     super.initState();
     _displayedItems = categories;
+    _startLoading();
     loaddata().then((value) {
       setState(() {});
     });
@@ -67,6 +63,13 @@ class ViewCategoriesState extends State<ViewCategories> {
     });
   }
 
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1300));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   bool shadowColor = false;
   double? scrolledUnderElevation;
 
@@ -74,7 +77,9 @@ class ViewCategoriesState extends State<ViewCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: Color.fromARGB(255, 27, 57, 82),
-      appBar: AppBar(
+      appBar: _isLoading
+          ? null
+          : AppBar(
         title: const Text(
           'Catalogue',
           style: TextStyle(
@@ -95,7 +100,8 @@ class ViewCategoriesState extends State<ViewCategories> {
       ),
       resizeToAvoidBottomInset: false,
       //This condition diplays a circular progress indicator that will appear untill all categories are displayed
-      body: SafeArea(
+      body: _isLoading ? Loading()
+        :SafeArea(
         child: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -147,9 +153,7 @@ class ViewCategoriesState extends State<ViewCategories> {
                 ),
               ),
               Expanded(
-                child: _isLoading
-                    ? Loading()
-                    : Padding(
+                child:  Padding(
                         padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                         //This GridView diplays all available categories as tiles
                         child: GridView.builder(

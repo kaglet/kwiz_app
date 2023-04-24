@@ -86,7 +86,7 @@ class _BookmarkState extends State<Bookmark> {
   // }
 
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       _isLoading = false;
     });
@@ -165,9 +165,7 @@ class _BookmarkState extends State<Bookmark> {
               ),
             ),
       body: _isLoading
-          ? Loading() /*const Center(
-              child: CircularProgressIndicator(),
-            )*/
+          ? Loading() 
           : Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
