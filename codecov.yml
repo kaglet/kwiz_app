@@ -1,7 +1,10 @@
 ignore:       # wildcards accepted
   - "lib/models"
   - "lib/shared"
-  - "lib/classes"
+  - "lib/classes/about_card.dart"
+  - "lib/classes/multiline_textfield.dart"
+  - "lib/classes/qa_container.dart"
+  - "lib/classes/qa_obj.dart"
   - "lib/*.dart"
   - "lib/services/auth.dart"
   - "lib/services/database.dart"
