@@ -114,7 +114,10 @@ class QuizScoreState extends State<QuizScore> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      
       backgroundColor: Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
@@ -137,197 +140,208 @@ class QuizScoreState extends State<QuizScore> {
           ? Loading()
           : SafeArea(
               child: SingleChildScrollView(
-                child: Container(
-                  //The entire body is wrapped with a container so that we can get the background with a gradient effect
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color.fromARGB(255, 27, 57, 82),
-                        Color.fromARGB(255, 5, 12, 31),
-                      ],
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 5, left: 5, top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        //This container displays the selected quiz's information and the start button
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            color: const Color.fromARGB(255, 45, 64, 96),
-                          ),
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                //This widget displays the quiz's title
-                                // Text(
-                                //   title,
-                                //   style: const TextStyle(
-                                //       fontFamily: 'Nunito',
-                                //       fontSize: 30,
-                                //       fontWeight: FontWeight.bold,
-                                //       color: Colors.white,
-                                //       decoration: TextDecoration.underline),
-                                // ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                                  //This widget displays the quiz's information
-                                  child: RichText(
-                                    textAlign: TextAlign.left,
-                                    text: TextSpan(
-                                      text: score >= quizPassScore
-                                          ? "Well done! You passed with a score of $score/$quizMaxScore!\n"
-                                          : score >= quizMaxScore * 0.75
-                                              ? "You were close! You scored $score/$quizMaxScore.\n"
+                    child: Container(
+                      width: screenWidth,
+                      height: screenHeight,
+                      //The entire body is wrapped with a container so that we can get the background with a gradient effect
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color.fromARGB(255, 27, 57, 82),
+                            Color.fromARGB(255, 5, 12, 31),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 5, left: 5,),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            //This container displays the selected quiz's information and the start button
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              // decoration: BoxDecoration(
+                              //   borderRadius: BorderRadius.circular(0),
+                              //   color: const Color.fromARGB(255, 45, 64, 96),
+                              // ),
+                              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: RichText(
+                                        textAlign: TextAlign.left,
+                                        text: TextSpan(
+                                          text: score >= quizPassScore
+                                            ? "Well done! \nYou passed with a score of "
+                                            : score >= quizMaxScore * 0.75
+                                              ? "You were close! \nYou scored "
                                               : score >= quizMaxScore * 0.5
-                                                  ? "You have some room for improvement. You scored $score/$quizMaxScore.\n"
-                                                  : "You need to study more. You scored $score/$quizMaxScore.\n",
-                                      style: const TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                RichText(
-                                  textAlign: TextAlign.left,
-                                  //This widget displays the date the quiz was created
-                                  text: TextSpan(
-                                    text: 'The correct answers were:\n',
-                                    style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                    children: List.generate(
-                                        widget.answers.length, (index) {
-                                      return TextSpan(
-                                        text:
-                                            '${index + 1}. ${widget.answers[index]}\n',
-                                        style: const TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-                                RichText(
-                                  textAlign: TextAlign.left,
-                                  text: TextSpan(
-                                    text: 'Your answers were:\n',
-                                    style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                    children: List.generate(userAnswers.length,
-                                        (index) {
-                                      return TextSpan(
-                                        text:
-                                            '${index + 1}. ${userAnswers[index]}\n',
-                                        style: const TextStyle(
-                                          fontFamily: 'Nunito',
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: const LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.orange,
-                                          Colors.deepOrange
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 0,
-                                        backgroundColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50)),
-                                        textStyle: const TextStyle(
+                                                ? "You have some room for improvement. \nYou scored "
+                                                : "You need to study more. \nYou scored ",
+                                          style: const TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.w400,
                                             color: Colors.white,
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.normal),
-                                      ),
-                                      //This event takes us to the take_quiz screen
-                                      onPressed: () {
-                                        if (userData
-                                            .pastAttemptQuizzes.isEmpty) {
-                                          isfirstAttempt = true;
-                                        } else {
-                                          //
-                                          userData.pastAttemptQuizzes
-                                              .forEach((element) {
-                                            if (element.quizID == quizID) {
-                                              isfirstAttempt = false;
-                                            }
-                                          });
-                                        }
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: "$score/$quizMaxScore\n",
+                                              style: TextStyle(
+                                                fontFamily: 'Nunito',
+                                                fontSize: 28,
+                                                fontWeight: FontWeight.w400,
+                                                color: score >= quizPassScore ? const Color.fromARGB(255, 82, 177, 255) : const Color.fromARGB(255, 230, 131, 44),
+                                                shadows: [
+                                                  Shadow(
+                                                    blurRadius: 10.0,
+                                                    color: Colors.white.withOpacity(0.5),
+                                                    offset: const Offset(0.0, 0.0),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
 
-                                        if (isfirstAttempt) {
-                                          createAttempt();
-                                        } else {
-                                          updateAttempt();
-                                        }
-
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Home(user: widget.user)),
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Finish Review',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Nunito',
                                         ),
                                       ),
                                     ),
-                                  ),
+                                    RichText(
+                                      textAlign: TextAlign.left,
+                                      //This widget displays the date the quiz was created
+                                      text: TextSpan(
+                                        text: 'The correct answers were:\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.w400,
+                                          color:Color.fromARGB(255, 230, 131,44 ),
+                                        ),
+                                        children: List.generate(
+                                            widget.answers.length, (index) {
+                                          return TextSpan(
+                                            text:
+                                                '${index + 1}. ${widget.answers[index]}\n',
+                                            style: const TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                    RichText(
+                                      textAlign: TextAlign.left,
+                                      text: TextSpan(
+                                        text: 'Your answers were:\n',
+                                        style: const TextStyle(
+                                          fontFamily: 'Nunito',
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.w400,
+                                          color:Color.fromARGB(255, 230, 131,44 ),
+                                        ),
+                                        children: List.generate(userAnswers.length,
+                                            (index) {
+                                          return TextSpan(
+                                            text:
+                                                '${index + 1}. ${userAnswers[index]}\n',
+                                            style: const TextStyle(
+                                              fontFamily: 'Nunito',
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      width: double.infinity,
+                                      height: 50,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.deepOrange
+                                            ],
+                                          ),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50)),
+                                            textStyle: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.normal),
+                                          ),
+                                          //This event takes us to the take_quiz screen
+                                          onPressed: () {
+                                            if (userData
+                                                .pastAttemptQuizzes.isEmpty) {
+                                              isfirstAttempt = true;
+                                            } else {
+                                              //
+                                              userData.pastAttemptQuizzes
+                                                  .forEach((element) {
+                                                if (element.quizID == quizID) {
+                                                  isfirstAttempt = false;
+                                                }
+                                              });
+                                            }
+
+                                            if (isfirstAttempt) {
+                                              createAttempt();
+                                            } else {
+                                              updateAttempt();
+                                            }
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Home(user: widget.user)),
+                                            );
+                                          },
+                                          child: const Text(
+                                            'Finish Review',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
                 ),
               ),
-            ),
+           
     );
   }
 }

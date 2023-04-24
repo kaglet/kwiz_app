@@ -61,7 +61,8 @@ class StartQuizState extends State<StartQuiz> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
+      appBar: _isLoading ? null
+      :AppBar(
         title: Text(
           title,
           style: const TextStyle(
