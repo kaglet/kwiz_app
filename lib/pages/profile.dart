@@ -77,6 +77,16 @@ class _ProfileState extends State<Profile> {
                     fontFamily: 'TitanOne',
                   ),
                 ),
+                backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                    
+                      // overlayEntry.remove();
+                    }, // call the callback function here
+                  ),
+                ],
               )
             : AppBar(
                 toolbarHeight: 60,
@@ -112,8 +122,8 @@ class _ProfileState extends State<Profile> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(255, 18, 66, 105),
-                  Color.fromARGB(255, 14, 30, 77),
+                  Color.fromARGB(255, 27, 57, 82),
+              Color.fromARGB(255, 5, 12, 31),
                 ],
               ),
             ),
@@ -173,16 +183,16 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10.0,
                             ),
-                            const Text(
-                              'email',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1.0,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
+                            // const Text(
+                            //   'email',
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 18.0,
+                            //     fontWeight: FontWeight.w600,
+                            //     letterSpacing: 1.0,
+                            //     fontFamily: 'Nunito',
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
