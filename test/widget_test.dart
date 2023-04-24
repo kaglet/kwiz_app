@@ -16,7 +16,7 @@ void main() {
   test('Test Home widget method', () {
     // OurUser ourUser = OurUser(uid: 'uid');
     // final widget = Home(user: ourUser,);
-    // widget.user = ;
+    // expect(widget.user, '');
     expect(1, 1);
   });
 }
