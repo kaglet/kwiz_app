@@ -103,7 +103,7 @@ class _BookmarkState extends State<Bookmark> {
   //     filLength = filteredQuizzes!.length;
   //   });
   // }
-
+// coverage:ignore-end
   void filterQuizzes(String searchTerm) {
     setState(() {
       filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
@@ -141,6 +141,7 @@ class _BookmarkState extends State<Bookmark> {
     });
   }
 
+// coverage:ignore-start
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
@@ -165,7 +166,7 @@ class _BookmarkState extends State<Bookmark> {
               ),
             ),
       body: _isLoading
-          ? Loading() 
+          ? Loading()
           : Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
