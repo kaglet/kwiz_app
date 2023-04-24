@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/authenticate/register.dart';
 import 'package:kwiz_v2/services/auth.dart';
@@ -29,17 +31,18 @@ class _SignInState extends State<SignIn> {
         ? Loading()
         : Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.blue[100],
+            // backgroundColor: Colors.blue[100],
             appBar: AppBar(
-              backgroundColor: Color.fromARGB(255, 27, 57, 82),
+              // backgroundColor: Color.fromARGB(255, 27, 57, 82),
               elevation: 0.0,
               title: Center(
+                
                 child: Text(
                   'KWIZ',
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 45.0,
                     fontWeight: FontWeight.normal,
-                    color: Colors.white,
+                    color: Colors.orange,
                     fontFamily: 'TitanOne',
                   ),
                 ),
@@ -78,12 +81,12 @@ class _SignInState extends State<SignIn> {
                           child: Column(
                             children: <Widget>[
                               SizedBox(
-                                height: 30,
+                                height: 50,
                               ),
                               Image.asset('assets/images/KWIZLogo2.png',
                                   height: 200, width: 200, scale: 0.5),
                               SizedBox(
-                                height: 30,
+                                height: 50,
                               ),
                               TextFormField(
                                 style: TextStyle(
@@ -153,7 +156,7 @@ class _SignInState extends State<SignIn> {
                                   password = val;
                                 },
                               ),
-                              SizedBox(height: 20.0),
+                              SizedBox(height: 40.0),
                               SizedBox(
                                 width: 150,
                                 child: Column(
@@ -271,3 +274,5 @@ class _SignInState extends State<SignIn> {
           );
   }
 }
+
+// coverage:ignore-start

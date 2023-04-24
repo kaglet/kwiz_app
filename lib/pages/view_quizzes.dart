@@ -87,6 +87,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+// coverage:ignore-end
   void updateBookmarkList() {
     isBookmarkedList = List.filled(filLength, false);
 
@@ -100,7 +101,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     }
   }
 
-// coverage:ignore-end
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
   void filterQuizzes(String searchTerm) {

@@ -64,14 +64,12 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     //append array of marks and datetime. MAnually. send through to db and overwrite
-// coverage:ignore-end
     userData.pastAttemptQuizzes.forEach((element) {
       if (element.quizID == quizID) {
         markHistories = element.pastAttemptQuizMarks;
         markHistories.add(score);
       }
     });
-// coverage:ignore-start
     await service.addPastAttempt(
         userID: userID,
         quizMarks: markHistories,

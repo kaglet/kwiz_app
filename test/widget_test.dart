@@ -16,7 +16,10 @@ void main() {
   test('Test Home widget method', () {
     // OurUser ourUser = OurUser(uid: 'uid');
     // final widget = Home(user: ourUser,);
-    // widget.user = ;
+    // expect(widget.user, '');
     expect(1, 1);
+    // Test authenticate, filter quizzes is a big one, validators in register and sign in, (refactor to functions where needed), in add_questions the add new quiz by extraction,
+    // Test load data by refactoring part of the processing as a new function
+    // Test populate question and answers on take quiz page, bookmark functionality on view quizzes page
   });
 }
