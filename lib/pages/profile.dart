@@ -376,7 +376,7 @@ class _ProfileState extends State<Profile> {
                                                     'Are you sure you want to log out?',
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 14.0,
+                                                      fontSize: 13.0,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       letterSpacing: 1.0,
@@ -401,16 +401,8 @@ class _ProfileState extends State<Profile> {
                                                             gradient:
                                                                 const LinearGradient(
                                                               colors: [
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    222,
-                                                                    127,
-                                                                    43),
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    246,
-                                                                    120,
-                                                                    82),
+                                                                Colors.blue,
+                                                                Colors.blue,
                                                               ],
                                                               begin: Alignment
                                                                   .centerLeft,
