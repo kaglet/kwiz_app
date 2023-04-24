@@ -269,7 +269,6 @@ class _AddQuestionsState extends State<AddQuestions> {
     );
   }
 
-// coverage:ignore-end
   Quiz createQuizFromContainers(List<QAContainer> qaContainers) {
     // convert each qaContainer to questionObj data that can be added to a list
     int i = 1;
@@ -300,3 +299,5 @@ class _AddQuestionsState extends State<AddQuestions> {
     return quiz;
   }
 }
+
+// coverage:ignore-end
