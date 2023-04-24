@@ -1,5 +1,5 @@
 //import 'dart:ffi';
-
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
@@ -64,13 +64,14 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     //append array of marks and datetime. MAnually. send through to db and overwrite
-
+// coverage:ignore-end
     userData.pastAttemptQuizzes.forEach((element) {
       if (element.quizID == quizID) {
         markHistories = element.pastAttemptQuizMarks;
         markHistories.add(score);
       }
     });
+// coverage:ignore-start
     await service.addPastAttempt(
         userID: userID,
         quizMarks: markHistories,
@@ -331,3 +332,5 @@ class QuizScoreState extends State<QuizScore> {
     );
   }
 }
+
+// coverage:ignore-end

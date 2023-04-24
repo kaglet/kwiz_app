@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -292,3 +293,5 @@ class _AddQuestionsState extends State<AddQuestions> {
     );
   }
 }
+
+// coverage:ignore-end

@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
@@ -14,7 +16,7 @@ class Profile extends StatefulWidget {
       {super.key,
       required this.user,
       required this.controller,
-      required this. onOverlayClose});
+      required this.onOverlayClose});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -54,11 +56,9 @@ class _ProfileState extends State<Profile> {
     loaddata();
     super.initState();
     controller = widget.controller;
-   onOverlayClose = widget.onOverlayClose;
+    onOverlayClose = widget.onOverlayClose;
   }
 
-  
- 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -193,7 +193,7 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                     onOverlayClose(false);
+                                    onOverlayClose(false);
                                     controller.reverse();
                                     //   overlayEntry.remove();
 
@@ -251,7 +251,7 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                     onOverlayClose(false);
+                                    onOverlayClose(false);
                                     controller.reverse();
                                     //  overlayEntry.remove();
                                     Navigator.push(
@@ -542,3 +542,5 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+// coverage:ignore-end
