@@ -1,6 +1,7 @@
 // coverage:ignore-start
 
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/classes/time_helper.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/profile.dart';
@@ -151,7 +152,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     width: 200.0,
                                     height: 70.0,
                                     child: Text(
-                                      'Welcome back ${currentUser!.userName}!',
+                                      'Good ${TimeHelper.getTimeOfTheDay(DateTime.now())} ${currentUser!.userName}!',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 28.0,
@@ -221,8 +222,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                               begin: Alignment.topLeft,
                                               end: Alignment.bottomRight,
                                               colors: [
-                                                Color.fromARGB(255, 230, 131, 44),
-                                                Color.fromARGB(255, 244, 112, 72),
+                                                Color.fromARGB(
+                                                    255, 230, 131, 44),
+                                                Color.fromARGB(
+                                                    255, 244, 112, 72),
                                               ],
                                             ),
                                             borderRadius:
@@ -231,10 +234,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                               elevation: 0,
-                                              backgroundColor: Colors.transparent,
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
-                                                      BorderRadius.circular(50)),
+                                                      BorderRadius.circular(
+                                                          50)),
                                               textStyle: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 10,
@@ -243,11 +248,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                             ),
                                             //This event takes us to the take_quiz screen
                                             onPressed: () {
-                                              randNum = random
-                                                  .nextInt(allQuizzesLength + 1);
-                                              textControllerTitle.text = quizzes!
-                                                  .elementAt(randNum)
-                                                  .quizName;
+                                              randNum = random.nextInt(
+                                                  allQuizzesLength + 1);
+                                              textControllerTitle.text =
+                                                  quizzes!
+                                                      .elementAt(randNum)
+                                                      .quizName;
                                               textControllerCat.text = quizzes!
                                                   .elementAt(randNum)
                                                   .quizCategory;

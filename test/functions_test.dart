@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kwiz_v2/classes/time_helper.dart';
 import 'package:kwiz_v2/models/questions.dart';
 import 'package:kwiz_v2/models/quizzes.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -7,7 +8,33 @@ import 'package:kwiz_v2/pages/take_quiz.dart';
 import 'package:kwiz_v2/services/database.dart';
 
 void main() {
-  test('description', () => expect(1, 1));
+  group('Timehelper', () {
+    test('should return Night', () {
+      DateTime currentTime = DateTime(2023, 1, 1, 2);
+      String timeOfDay = TimeHelper.getTimeOfTheDay(currentTime);
+
+      expect(timeOfDay, 'Night');
+    });
+    test('should return Evening', () {
+      DateTime currentTime = DateTime(2023, 1, 1, 19);
+      String timeOfDay = TimeHelper.getTimeOfTheDay(currentTime);
+
+      expect(timeOfDay, 'Evening');
+    });
+    test('should return Afternoon', () {
+      DateTime currentTime = DateTime(2023, 1, 1, 13);
+      String timeOfDay = TimeHelper.getTimeOfTheDay(currentTime);
+
+      expect(timeOfDay, 'Afternoon');
+    });
+    test('should return Morning', () {
+      DateTime currentTime = DateTime(2023, 1, 1, 8);
+      String timeOfDay = TimeHelper.getTimeOfTheDay(currentTime);
+
+      expect(timeOfDay, 'Morning');
+    });
+  });
+
   // group('Take quiz', () {
   //   test('Populate questions', () {
   //     DatabaseService service = DatabaseService();
