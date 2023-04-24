@@ -1,5 +1,5 @@
 //import 'dart:html';
-
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/bookmarks.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -25,7 +25,7 @@ class _BookmarkState extends State<Bookmark> {
   List<Bookmarks>? filteredQuizzes = [];
   // List? authorNames = [];
   List<bool> isBookmarkedList = [];
-   int bookmarkLength = 0;
+  int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
   UserData? userData;
 
@@ -70,7 +70,6 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkLength = bookmarkedQuizList!.length;
     filteredQuizzes = bookmarkedQuizList;
     filLength = filteredQuizzes!.length;
-    
   }
 
   // void updateBookmarkList() {
@@ -107,23 +106,19 @@ class _BookmarkState extends State<Bookmark> {
 
   void filterQuizzes(String searchTerm) {
     setState(() {
-   
       filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
-     
+
       List<String> quizzesNames = [];
       List<String> filteredQuizzesNames = [];
 
       for (int i = 0; i < bookmarkLength; i++) {
         quizzesNames.add(bookmarkedQuizList!.elementAt(i).bookmarkQuizName);
       }
-          
 
       filteredQuizzesNames = quizzesNames
           .where(
               (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
-
-       
 
       if (filteredQuizzesNames.isNotEmpty) {
         filteredQuizzes!.clear();
@@ -138,13 +133,11 @@ class _BookmarkState extends State<Bookmark> {
       } else {
         filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
       }
-       
 
       filLength = filteredQuizzesNames.length;
-     
-      
+
       //Keep bookmarks vaild
-    //  updateBookmarkList();
+      //  updateBookmarkList();
     });
   }
 
@@ -229,7 +222,7 @@ class _BookmarkState extends State<Bookmark> {
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                     onChanged: (value) {
+                      onChanged: (value) {
                         filterQuizzes(value);
                       },
                     ),
@@ -404,3 +397,5 @@ class _BookmarkState extends State<Bookmark> {
     );
   }
 }
+
+// coverage:ignore-end

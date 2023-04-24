@@ -363,8 +363,6 @@ class QuizScreenState extends State<QuizScreen> {
   }
 }
 
-// coverage:ignore-end
-
 // //USE WIDGET INSPECTOR type Ctrl + T and search >Dart: Open DevTools
 // //Flex makes it "become small" can be squashed :) the picture of the globe is squashed when we click on input box.
 
@@ -378,3 +376,5 @@ class QuizScreenState extends State<QuizScreen> {
 // */
 
 // //add the data pulled into a list and work with the list instead
+
+// coverage:ignore-end

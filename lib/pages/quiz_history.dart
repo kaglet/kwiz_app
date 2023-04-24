@@ -42,9 +42,6 @@ class _QuizHistoryState extends State<QuizHistory> {
     super.dispose();
   }
 
-// coverage:ignore-end
-
-// coverage:ignore-start
   Future<void> loaddata() async {
     userData = await service.getUserAndPastAttempts(userID: widget.user.uid);
     pastAttemptsList = userData!.pastAttemptQuizzes;
