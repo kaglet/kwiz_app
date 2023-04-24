@@ -44,9 +44,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     });
   }
 
-  // int catLength = 0;
-  // int filLength = 0;
-
   // loads data from DB
   Future<void> loadData() async {
     if (categoryName == 'All') {

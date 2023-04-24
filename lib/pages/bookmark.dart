@@ -1,6 +1,7 @@
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/bookmarks.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
 import '../services/database.dart';
@@ -19,22 +20,22 @@ class Bookmark extends StatefulWidget {
 class _BookmarkState extends State<Bookmark> {
   late String categoryName;
   DatabaseService service = DatabaseService();
-  List? bookmarkedQuiz = [];
-  List? bookmarkedQuizList = [];
-  List? _displayedItems = [];
+  // List? bookmarkedQuiz = [];
+  List<Bookmarks>? bookmarkedQuizList = [];
+  List<Bookmarks>? filteredQuizzes = [];
   // List? authorNames = [];
   List<bool> isBookmarkedList = [];
-  int bookmarkLength = 0;
+   int bookmarkLength = 0;
   int bookmarkedQuizListLength = 0;
   UserData? userData;
-  int catLength = 0;
-  int fillLength = 0;
+
+  int filLength = 0;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _displayedItems = bookmarkedQuiz;
+    // filteredQuizzes = bookmarkedQuiz;
     _startLoading();
     loadData().then((value) {
       setState(() {});
@@ -58,25 +59,26 @@ class _BookmarkState extends State<Bookmark> {
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
 
-    for (int i = 0; i < bookmarkedQuizListLength; i++) {
-      bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
-      //authorNames!.add(bookmarkedQuizList?[i].bookmarkQuizAuthor.toString());
-      /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
-      quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
-      quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
-      dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
-    }
-    bookmarkLength = bookmarkedQuiz!.length;
-    _displayedItems = bookmarkedQuiz;
-    fillLength = _displayedItems!.length;
+    // for (int i = 0; i < bookmarkedQuizListLength; i++) {
+    //   bookmarkedQuiz!.add(bookmarkedQuizList?[i].bookmarkQuizName.toString());
+    //   //authorNames!.add(bookmarkedQuizList?[i].bookmarkQuizAuthor.toString());
+    //   /*marks!.add(pastAttemptsObject?[i].pastAttemptQuizMarks);
+    //   quizID!.add(pastAttemptsObject?[i].pastAttemptQuizID.toString());
+    //   quizName!.add(pastAttemptsObject?[i].pastAttemptQuizName.toString());
+    //   dates!.add(pastAttemptsObject?[i].pastAttemptQuizDatesAttempted); */
+    // }
+    bookmarkLength = bookmarkedQuizList!.length;
+    filteredQuizzes = bookmarkedQuizList;
+    filLength = filteredQuizzes!.length;
+    
   }
 
   void updateBookmarkList() {
-    isBookmarkedList = List.filled(fillLength, false);
+    isBookmarkedList = List.filled(filLength, false);
 
-    for (int i = 0; i < fillLength; i++) {
+    for (int i = 0; i < filLength; i++) {
       for (int j = 0; j < bookmarkedQuizListLength; j++) {
-        if (_displayedItems!.elementAt(i).quizID ==
+        if (filteredQuizzes!.elementAt(i).quizID ==
             bookmarkedQuizList!.elementAt(j).quizID) {
           isBookmarkedList[i] = true;
         }
@@ -94,12 +96,55 @@ class _BookmarkState extends State<Bookmark> {
   final TextEditingController _searchController = TextEditingController();
 
 //This method is used to control the search bar
-  void _onSearchTextChanged(String text) {
+  // void filterQuizzes(String text) {
+  //   setState(() {
+  //     filteredQuizzes = bookmarkedQuiz!
+  //         .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+  //         .toList();
+  //     filLength = filteredQuizzes!.length;
+  //   });
+  // }
+
+  void filterQuizzes(String searchTerm) {
     setState(() {
-      _displayedItems = bookmarkedQuiz!
-          .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+   
+      filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
+     
+      List<String> quizzesNames = [];
+      List<String> filteredQuizzesNames = [];
+
+      for (int i = 0; i < bookmarkLength; i++) {
+        quizzesNames.add(bookmarkedQuizList!.elementAt(i).bookmarkQuizName);
+      }
+          
+
+      filteredQuizzesNames = quizzesNames
+          .where(
+              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
-      fillLength = _displayedItems!.length;
+
+       
+
+      if (filteredQuizzesNames.isNotEmpty) {
+        filteredQuizzes!.clear();
+        for (int j = 0; j < filteredQuizzesNames.length; j++) {
+          for (int k = 0; k < bookmarkLength; k++) {
+            if (filteredQuizzesNames[j] ==
+                bookmarkedQuizList!.elementAt(k).bookmarkQuizName) {
+              filteredQuizzes!.add(bookmarkedQuizList!.elementAt(k));
+            }
+          }
+        }
+      } else {
+        filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
+      }
+       
+
+      filLength = filteredQuizzesNames.length;
+     
+      
+      //Keep bookmarks vaild
+    //  updateBookmarkList();
     });
   }
 
@@ -167,7 +212,9 @@ class _BookmarkState extends State<Bookmark> {
                           icon: const Icon(Icons.search),
                           color: const Color.fromRGBO(192, 192, 192,
                               1), // set the search icon color to a light grey
-                          onPressed: () {},
+                          onPressed: () {
+                            filterQuizzes(_searchController.text);
+                          },
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
@@ -182,7 +229,9 @@ class _BookmarkState extends State<Bookmark> {
                           borderRadius: BorderRadius.circular(25.0),
                         ),
                       ),
-                      onChanged: _onSearchTextChanged,
+                     onChanged: (value) {
+                        filterQuizzes(value);
+                      },
                     ),
                   ),
                   Expanded(
@@ -191,12 +240,12 @@ class _BookmarkState extends State<Bookmark> {
                         Container(
                           decoration: const BoxDecoration(),
                         ),
-                        _displayedItems == null && _isLoading
+                        filteredQuizzes == null && _isLoading
                             ? const Center(
                                 child: CircularProgressIndicator(),
                               )
                             : ListView.builder(
-                                itemCount: fillLength,
+                                itemCount: filLength,
                                 itemBuilder: (context, index) {
                                   final List<Color> blueAndOrangeShades = [
                                     Colors.orange.shade400,
@@ -233,7 +282,9 @@ class _BookmarkState extends State<Bookmark> {
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                          _displayedItems?[index],
+                                          filteredQuizzes!
+                                              .elementAt(index)
+                                              .bookmarkQuizName,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -247,11 +298,11 @@ class _BookmarkState extends State<Bookmark> {
                                             removeBookmark(index);
                                             // Refresh the list of displayed items
                                             setState(() {
-                                              _displayedItems!.removeAt(index);
+                                              filteredQuizzes!.removeAt(index);
                                               bookmarkedQuizList!
                                                   .removeAt(index);
-                                              fillLength =
-                                                  _displayedItems!.length;
+                                              filLength =
+                                                  filteredQuizzes!.length;
                                             });
                                           },
                                           color: Colors.white,
@@ -262,27 +313,26 @@ class _BookmarkState extends State<Bookmark> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '${bookmarkedQuizList!.elementAt(index).bookmarkQuizAuthor}   |',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                        
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${bookmarkedQuizList!.elementAt(index).bookmarkQuizCategory}   |',
+                                                '${filteredQuizzes!.elementAt(index).bookmarkQuizAuthor}   |',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
                                                   fontFamily: 'Nunito',
                                                 ),
                                               ),
-                                               const SizedBox(width: 8),
+                                              const SizedBox(width: 8),
                                               Text(
-                                                '${bookmarkedQuizList!.elementAt(index).bookmarkQuizDateCreated}',
-                                                style: TextStyle(
+                                                '${filteredQuizzes!.elementAt(index).bookmarkQuizCategory}   |',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                '${filteredQuizzes!.elementAt(index).bookmarkQuizDateCreated}',
+                                                style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
                                                   fontFamily: 'Nunito',
@@ -310,12 +360,14 @@ class _BookmarkState extends State<Bookmark> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                    builder: (context) => StartQuiz(
-                                                        user: widget.user,
-                                                        chosenQuiz:
-                                                            bookmarkedQuizList?[
-                                                                    index]
-                                                                .quizID),
+                                                    builder: (context) =>
+                                                        StartQuiz(
+                                                            user: widget.user,
+                                                            chosenQuiz:
+                                                                filteredQuizzes!
+                                                                    .elementAt(
+                                                                        index)
+                                                                    .quizID),
                                                   ));
                                             },
                                             style: ElevatedButton.styleFrom(
