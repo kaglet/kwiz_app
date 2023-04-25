@@ -82,7 +82,6 @@ class _ProfileState extends State<Profile> {
                   IconButton(
                     icon: const Icon(Icons.close),
                     onPressed: () {
-                    
                       // overlayEntry.remove();
                     }, // call the callback function here
                   ),
@@ -123,7 +122,7 @@ class _ProfileState extends State<Profile> {
                 end: Alignment.bottomRight,
                 colors: [
                   Color.fromARGB(255, 27, 57, 82),
-              Color.fromARGB(255, 5, 12, 31),
+                  Color.fromARGB(255, 5, 12, 31),
                 ],
               ),
             ),
@@ -170,16 +169,17 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            // populate current users name and last name
                             Text(
-                                '${currentUser!.firstName} ${currentUser!.lastName}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 1.0,
-                                  fontFamily: 'Nunito',
-                                ),
+                              '${currentUser!.firstName} ${currentUser!.lastName}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.0,
+                                fontFamily: 'Nunito',
                               ),
+                            ),
                             const SizedBox(
                               height: 10.0,
                             ),
@@ -353,7 +353,8 @@ class _ProfileState extends State<Profile> {
                                                   colors: [
                                                     Color.fromARGB(
                                                         255, 27, 57, 82),
-                                                    Color.fromARGB(255, 11, 26, 68),
+                                                    Color.fromARGB(
+                                                        255, 11, 26, 68),
                                                   ],
                                                 ),
                                                 borderRadius:
@@ -500,7 +501,7 @@ class _ProfileState extends State<Profile> {
                                                       )
                                                     ],
                                                   ),
-                                                     const SizedBox(height: 10.0),
+                                                  const SizedBox(height: 10.0),
                                                 ],
                                               ),
                                             ),
