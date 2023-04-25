@@ -7,6 +7,7 @@ import '../models/user.dart';
 import '../services/database.dart';
 
 class QuizAttempts extends StatefulWidget {
+  // receive data on user and chosen quiz from quiz history page
   final OurUser user;
   final PastAttempt chosenQuiz;
   const QuizAttempts({super.key, required this.user, required this.chosenQuiz});
@@ -67,6 +68,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
+                  // With a list view builder populate all attempts for a quiz
                   ListView.builder(
                     itemCount: fillLength,
                     itemBuilder: (context, index) {
@@ -86,6 +88,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Column(children: <Widget>[
+                              // show mark and date taken per past attempt
                               Text('Attempt Number ${index + 1}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -128,7 +131,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.normal),
                   ),
-                  //This event takes us to the take_quiz screen
+                  // This event takes us to the take_quiz screen to reattempt a quiz
                   onPressed: () {
                     Navigator.push(
                       context,
