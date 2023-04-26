@@ -72,18 +72,18 @@ class _BookmarkState extends State<Bookmark> {
     filLength = filteredQuizzes!.length;
   }
 
-  // void updateBookmarkList() {
-  //   isBookmarkedList = List.filled(filLength, false);
+  void updateBookmarkList() {
+    isBookmarkedList = List.filled(filLength, false);
 
-  //   for (int i = 0; i < filLength; i++) {
-  //     for (int j = 0; j < bookmarkedQuizListLength; j++) {
-  //       if (filteredQuizzes!.elementAt(i).quizID ==
-  //           bookmarkedQuizList!.elementAt(j).quizID) {
-  //         isBookmarkedList[i] = true;
-  //       }
-  //     }
-  //   }
-  // }
+    for (int i = 0; i < filLength; i++) {
+      for (int j = 0; j < bookmarkedQuizListLength; j++) {
+        if (filteredQuizzes!.elementAt(i).quizID ==
+            bookmarkedQuizList!.elementAt(j).quizID) {
+          isBookmarkedList[i] = true;
+        }
+      }
+    }
+  }
 
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 2000));
@@ -137,7 +137,7 @@ class _BookmarkState extends State<Bookmark> {
       filLength = filteredQuizzesNames.length;
 
       //Keep bookmarks vaild
-      //  updateBookmarkList();
+        updateBookmarkList();
     });
   }
 
