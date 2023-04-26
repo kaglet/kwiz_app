@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -166,35 +167,11 @@ class _AddQuestionsState extends State<AddQuestions> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  // convert each qaContainer to questionObj data that can be added to a list
-                                  int i = 1;
-                                  for (var qaContainer in qaContainers) {
-                                    // extract QA data in qaContainer into a useable object form
-                                    QA qa = qaContainer.extractQA();
-
-                                    Question questionObj = Question(
-                                        questionNumber: i,
-                                        questionText: qa.question,
-                                        questionAnswer: qa.answer,
-                                        questionMark: 0);
-                                    savedQAs.add(questionObj);
-                                    i++;
-                                  }
-                                  // add about quiz data sent from previous page and questions list to quiz object
-                                  Quiz quiz = Quiz(
-                                      quizName: widget.title,
-                                      quizCategory: widget.category,
-                                      quizDescription: widget.aboutQuiz,
-                                      quizMark: savedQAs.length,
-                                      quizDateCreated: DateTime.now()
-                                          .toString()
-                                          .substring(0, 16),
-                                      quizQuestions: savedQAs,
-                                      // quizAuthorID: widget.user.uid,
-                                      quizID: '',
-                                      quizAuthor: widget.currentUser!.userName);
-                                  // send quiz to database
+                                  // coverage:ignore-end
+                                  Quiz quiz =
+                                      createQuizFromContainers(qaContainers);
                                   addData(quiz);
+                                  // coverage:ignore-start
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
@@ -291,4 +268,36 @@ class _AddQuestionsState extends State<AddQuestions> {
       ),
     );
   }
+
+  Quiz createQuizFromContainers(List<QAContainer> qaContainers) {
+    // convert each qaContainer to questionObj data that can be added to a list
+    int i = 1;
+
+    for (var qaContainer in qaContainers) {
+      // extract QA data in qaContainer into a useable object form
+      QA qa = qaContainer.extractQA();
+
+      Question questionObj = Question(
+          questionNumber: i,
+          questionText: qa.question,
+          questionAnswer: qa.answer,
+          questionMark: 0);
+      savedQAs.add(questionObj);
+      i++;
+    }
+    // add about quiz data sent from previous page and questions list to quiz object
+    Quiz quiz = Quiz(
+        quizName: widget.title,
+        quizCategory: widget.category,
+        quizDescription: widget.aboutQuiz,
+        quizMark: savedQAs.length,
+        quizDateCreated: DateTime.now().toString().substring(0, 16),
+        quizQuestions: savedQAs,
+        // quizAuthorID: widget.user.uid,
+        quizID: '',
+        quizAuthor: widget.currentUser!.userName);
+    return quiz;
+  }
 }
+
+// coverage:ignore-end

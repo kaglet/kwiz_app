@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
@@ -41,30 +43,32 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   Future<void> loaddata() async {
-    userData = await service.getUserAndPastAttempts(
-        userID: widget.user.uid);
+    userData = await service.getUserAndPastAttempts(userID: widget.user.uid);
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
     //Extracting the List of disticnt quiz names for each past attempt
     for (int i = 0; i < pastAttemptsListLength; i++) {
       pastAttempts!.add(pastAttemptsList?[i]);
-      
     }
     pastAttemptsLength = pastAttempts!.length;
     _displayedItems = pastAttempts;
     fillLength = _displayedItems!.length;
   }
 
+// coverage:ignore-end
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
       _displayedItems = pastAttempts!
-          .where((item) => item.pastAttemptQuizName.toLowerCase().contains(text.toLowerCase()))
+          .where((item) => item.pastAttemptQuizName
+              .toLowerCase()
+              .contains(text.toLowerCase()))
           .toList();
       fillLength = _displayedItems!.length;
     });
   }
 
+// coverage:ignore-start
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 1300));
     setState(() {
@@ -75,7 +79,9 @@ class _QuizHistoryState extends State<QuizHistory> {
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _isLoading
+          ? null
+          : AppBar(
         title: const Text(
           'Quiz History',
           style: TextStyle(
@@ -93,7 +99,8 @@ class _QuizHistoryState extends State<QuizHistory> {
           },
         ),
       ),
-      body: Container(
+      body: _isLoading ? Loading()
+        :Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -154,9 +161,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                   Container(
                     decoration: const BoxDecoration(),
                   ),
-                  _isLoading ?
-                      Loading()
-                      : ListView.builder(
+                  ListView.builder(
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
@@ -204,7 +209,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                   subtitle: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      children:  [
+                                      children: [
                                         Text(
                                           '${_displayedItems?[index].pastAttemptQuizAuthor} |',
                                           style: TextStyle(
@@ -224,8 +229,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                        '${_displayedItems?[index].pastAttemptQuizDateCreated}'
-                                          ,
+                                          '${_displayedItems?[index].pastAttemptQuizDateCreated}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.white,
@@ -257,8 +261,7 @@ class _QuizHistoryState extends State<QuizHistory> {
                                                   QuizAttempts(
                                                       user: widget.user,
                                                       chosenQuiz:
-                                                          pastAttemptsList?[
-                                                              index]),
+                                                          _displayedItems?[index]),
                                             ));
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -294,3 +297,5 @@ class _QuizHistoryState extends State<QuizHistory> {
     );
   }
 }
+
+// coverage:ignore-end

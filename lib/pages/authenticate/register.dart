@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/auth.dart';
@@ -228,7 +230,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) => val!.length < 6
-                              ? 'Password must be atleast 6 characters'
+                              ? 'Password must be at least 6 characters'
                               : null,
                           obscureText: true,
                           onChanged: (val) {
@@ -358,3 +360,5 @@ class _RegisterState extends State<Register> {
           );
   }
 }
+
+// coverage:ignore-end

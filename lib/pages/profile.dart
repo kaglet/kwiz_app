@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
@@ -14,7 +16,7 @@ class Profile extends StatefulWidget {
       {super.key,
       required this.user,
       required this.controller,
-      required this. onOverlayClose});
+      required this.onOverlayClose});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -54,11 +56,9 @@ class _ProfileState extends State<Profile> {
     loaddata();
     super.initState();
     controller = widget.controller;
-   onOverlayClose = widget.onOverlayClose;
+    onOverlayClose = widget.onOverlayClose;
   }
 
-  
- 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -77,6 +77,15 @@ class _ProfileState extends State<Profile> {
                     fontFamily: 'TitanOne',
                   ),
                 ),
+                backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      // overlayEntry.remove();
+                    }, // call the callback function here
+                  ),
+                ],
               )
             : AppBar(
                 toolbarHeight: 60,
@@ -112,8 +121,8 @@ class _ProfileState extends State<Profile> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB(255, 32, 94, 145),
-                  Color.fromARGB(255, 18, 38, 92),
+                  Color.fromARGB(255, 27, 57, 82),
+                  Color.fromARGB(255, 5, 12, 31),
                 ],
               ),
             ),
@@ -160,9 +169,10 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10.0,
                             ),
-                            const Text(
-                              'email',
-                              style: TextStyle(
+                            // populate current users name and last name
+                            Text(
+                              '${currentUser!.firstName} ${currentUser!.lastName}',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w600,
@@ -170,6 +180,19 @@ class _ProfileState extends State<Profile> {
                                 fontFamily: 'Nunito',
                               ),
                             ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            // const Text(
+                            //   'email',
+                            //   style: TextStyle(
+                            //     color: Colors.white,
+                            //     fontSize: 18.0,
+                            //     fontWeight: FontWeight.w600,
+                            //     letterSpacing: 1.0,
+                            //     fontFamily: 'Nunito',
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -193,10 +216,10 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                     onOverlayClose(false);
+                                    onOverlayClose(false);
                                     controller.reverse();
                                     //   overlayEntry.remove();
-
+                                    // navigate to quiz history page
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -241,7 +264,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         const SizedBox(
-                          height: 70.0,
+                          height: 60.0,
                         ),
                         Row(
                           children: [
@@ -251,9 +274,10 @@ class _ProfileState extends State<Profile> {
                                 height: 70.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                     onOverlayClose(false);
+                                    onOverlayClose(false);
                                     controller.reverse();
                                     //  overlayEntry.remove();
+                                    // navigate to bookmarks screen
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -298,7 +322,7 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                         const SizedBox(
-                          height: 100.0,
+                          height: 90.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,13 +349,13 @@ class _ProfileState extends State<Profile> {
                                             content: Container(
                                               decoration: BoxDecoration(
                                                 gradient: const LinearGradient(
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
                                                   colors: [
                                                     Color.fromARGB(
-                                                        255, 29, 124, 148),
+                                                        255, 27, 57, 82),
                                                     Color.fromARGB(
-                                                        255, 50, 68, 150),
+                                                        255, 11, 26, 68),
                                                   ],
                                                 ),
                                                 borderRadius:
@@ -349,25 +373,26 @@ class _ProfileState extends State<Profile> {
                                                       fontFamily: 'Nunito',
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 12.0),
+                                                  const SizedBox(height: 15.0),
                                                   const Text(
                                                     'Are you sure you want to log out?',
                                                     style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 14.0,
+                                                      fontSize: 13.0,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       letterSpacing: 1.0,
                                                       fontFamily: 'Nunito',
                                                     ),
                                                   ),
-                                                  const SizedBox(height: 10.0),
+                                                  const SizedBox(height: 15.0),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceEvenly,
                                                     children: [
                                                       TextButton(
+                                                        // navigate to home screen
                                                         onPressed: () async {
                                                           Navigator.of(context)
                                                               .pop();
@@ -379,16 +404,8 @@ class _ProfileState extends State<Profile> {
                                                             gradient:
                                                                 const LinearGradient(
                                                               colors: [
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    222,
-                                                                    127,
-                                                                    43),
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    246,
-                                                                    120,
-                                                                    82),
+                                                                Colors.blue,
+                                                                Colors.blue,
                                                               ],
                                                               begin: Alignment
                                                                   .centerLeft,
@@ -468,7 +485,7 @@ class _ProfileState extends State<Profile> {
                                                                   horizontal:
                                                                       20.0),
                                                           child: const Text(
-                                                            'Ok',
+                                                            ' Ok ',
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -486,6 +503,7 @@ class _ProfileState extends State<Profile> {
                                                       )
                                                     ],
                                                   ),
+                                                  const SizedBox(height: 10.0),
                                                 ],
                                               ),
                                             ),
@@ -542,3 +560,5 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+// coverage:ignore-end

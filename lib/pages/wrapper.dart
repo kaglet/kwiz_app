@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/pages/authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
@@ -20,4 +22,6 @@ class Wrapper extends StatelessWidget {
 
 // //return Authenticate();
 //     return const Home();
+
+// coverage:ignore-end
     

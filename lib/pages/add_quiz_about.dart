@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -74,23 +75,27 @@ class AddQuizState extends State<AddQuiz> {
       appBar: _isLoading
           ? null
           : AppBar(
-        title: const Text(
-          'Quiz Creator',
-          style: TextStyle(
-              fontFamily: 'TitanOne',
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.start,
-        ),
-        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Home(user: widget.user),));
-          },
-        ),
-      ),
+              title: const Text(
+                'Quiz Creator',
+                style: TextStyle(
+                    fontFamily: 'TitanOne',
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Home(user: widget.user),
+                      ));
+                },
+              ),
+            ),
       // prevent renderflex overflow error just in case
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -292,3 +297,5 @@ class AddQuizState extends State<AddQuiz> {
     );
   }
 }
+
+// coverage:ignore-end

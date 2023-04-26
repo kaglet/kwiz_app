@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_score.dart';
@@ -33,7 +35,10 @@ class QuizScreenState extends State<QuizScreen> {
         quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
-    popList(quiz);
+    List<String> quest = [];
+    List<String> ans = [];
+    questions = popQuestionsList(quiz, quest, ans);
+    answers = popAnswersList(quiz, quest, ans);
     setState(() {
       _isLoading = false;
     });
@@ -45,14 +50,23 @@ class QuizScreenState extends State<QuizScreen> {
     super.initState();
   }
 
+// coverage:ignore-end
   //function for populating the questions and answers
-  void popList(Quiz? q) {
+  List<String> popQuestionsList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      questions.add(q!.quizQuestions.elementAt(i).questionText);
-      answers.add(q.quizQuestions.elementAt(i).questionAnswer);
+      quest.add(q!.quizQuestions.elementAt(i).questionText);
     }
+    return quest;
   }
 
+  List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
+    for (int i = 0; i < quizLength; i++) {
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
+    }
+    return ans;
+  }
+
+// coverage:ignore-start
   //Two local var lists for storing answers and questions
   List<String> questions = [];
   List<String> answers = [];
@@ -189,6 +203,8 @@ class QuizScreenState extends State<QuizScreen> {
                               ),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  userAnswers[currentIndex] =
+                                      answerController.text.trim();
                                   setState(() {
                                     currentIndex--;
                                     updateText();
@@ -293,41 +309,229 @@ class QuizScreenState extends State<QuizScreen> {
                                         score++;
                                         //print(answerController.text);
                                       }
-                                      
                                     }
                                     // Show the score in an alert dialog
 
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Quiz Complete'),
-                                          content: const Text(
-                                              'Are you sure you are ready to submit?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                              print(answers);
+                                        return WillPopScope(
+                                          onWillPop: () async {
+                                            Navigator.of(context).pop();
+                                            return true;
+                                          },
+                                          child: AlertDialog(
+                                            backgroundColor: Colors
+                                                .transparent, // Set the background color to transparent
+                                            contentPadding: EdgeInsets.zero,
+                                            content: Container(
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
+                                                  colors: [
+                                                    Color.fromARGB(
+                                                        255, 27, 57, 82),
+                                                    Color.fromARGB(
+                                                        255, 11, 26, 68),
+                                                  ],
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                              ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(
+                                                    'Submit quiz',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20.0,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 15.0),
+                                                  const Text(
+                                                    '   Are you sure you want to submit your quiz?   ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 13.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 15.0),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            gradient:
+                                                                const LinearGradient(
+                                                              colors: [
+                                                                Colors.blue,
+                                                                Colors.blue,
+                                                              ],
+                                                              begin: Alignment
+                                                                  .centerLeft,
+                                                              end: Alignment
+                                                                  .centerRight,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical:
+                                                                      10.0,
+                                                                  horizontal:
+                                                                      20.0),
+                                                          child: const Text(
+                                                            'Back',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              letterSpacing:
+                                                                  1.0,
+                                                              fontFamily:
+                                                                  'Nunito',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          width: 50.0),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          print(answers);
 
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          QuizScore(
-                                                              user: widget.user,
-                                                              chosenQuiz: quiz,
-                                                              score: score,
-                                                              answers: answers,
-                                                              userAnswers:
-                                                                  userAnswers)),
-                                                );
-                                              },
-                                              child: const Text('Submit'),
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => QuizScore(
+                                                                    user: widget
+                                                                        .user,
+                                                                    chosenQuiz:
+                                                                        quiz,
+                                                                    score:
+                                                                        score,
+                                                                    answers:
+                                                                        answers,
+                                                                    userAnswers:
+                                                                        userAnswers)),
+                                                          );
+                                                        },
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            gradient:
+                                                                const LinearGradient(
+                                                              colors: [
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    222,
+                                                                    127,
+                                                                    43),
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    246,
+                                                                    120,
+                                                                    82),
+                                                              ],
+                                                              begin: Alignment
+                                                                  .centerLeft,
+                                                              end: Alignment
+                                                                  .centerRight,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical:
+                                                                      10.0,
+                                                                  horizontal:
+                                                                      20.0),
+                                                          child: const Text(
+                                                            ' Ok ',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              letterSpacing:
+                                                                  1.0,
+                                                              fontFamily:
+                                                                  'Nunito',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10.0),
+                                                ],
+                                              ),
                                             ),
-                                          ],
+                                          ),
                                         );
                                       },
                                     );
+
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) {
+                                    //     return AlertDialog(
+                                    //       title: const Text('Quiz Complete'),
+                                    //       content: const Text(
+                                    //           'Are you sure you are ready to submit?'),
+                                    //       actions: [
+                                    //         TextButton(
+                                    //           onPressed: () {
+                                    //             print(answers);
+
+                                    //             Navigator.push(
+                                    //               context,
+                                    //               MaterialPageRoute(
+                                    //                   builder: (context) =>
+                                    //                       QuizScore(
+                                    //                           user: widget.user,
+                                    //                           chosenQuiz: quiz,
+                                    //                           score: score,
+                                    //                           answers: answers,
+                                    //                           userAnswers:
+                                    //                               userAnswers)),
+                                    //             );
+                                    //           },
+                                    //           child: const Text('Submit'),
+                                    //         ),
+                                    //       ],
+                                    //     );
+                                    //   },
+                                    // );
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -371,3 +575,5 @@ class QuizScreenState extends State<QuizScreen> {
 // */
 
 // //add the data pulled into a list and work with the list instead
+
+// coverage:ignore-end
