@@ -18,6 +18,7 @@ const UserCollection = 'users';
 const QuizCollection = 'quizzes';
 
 class MockDataService extends Mock implements DatabaseService {
+  
   @override
   Future<List?> getCategories() async {
     final firestore = FakeFirebaseFirestore();
@@ -379,5 +380,6 @@ class MockDataService extends Mock implements DatabaseService {
 
     return user;
   }
+
 }
 // coverage:ignore-end
