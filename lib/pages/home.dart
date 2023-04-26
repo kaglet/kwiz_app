@@ -249,7 +249,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                             //This event takes us to the take_quiz screen
                                             onPressed: () {
                                               randNum = random.nextInt(
-                                                  allQuizzesLength + 1);
+                                                  allQuizzesLength);
                                               textControllerTitle.text =
                                                   quizzes!
                                                       .elementAt(randNum)
