@@ -1,3 +1,5 @@
+// coverage:ignore-start
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
@@ -12,11 +14,13 @@ class bm extends StatefulWidget {
   final List? chosenQuizDatesCreated;
   final String chosenQuizName; */
   final Bookmarks chosenQuiz;
-  const bm({super.key, /*required this.chosenQuizID,
+  const bm(
+      {super.key,
+      /*required this.chosenQuizID,
                                 required this.chosenQuizName,
                                 required this.chosenQuizMarks,
                                 required this.chosenQuizDatesCreated,*/
-                                required this.chosenQuiz});
+      required this.chosenQuiz});
   @override
   // ignore: library_private_types_in_public_api
   _bmState createState() => _bmState();
@@ -52,8 +56,7 @@ class _bmState extends State<bm> {
     // quizDatesCreated = widget.chosenQuizDatesCreated;
     // quizName = widget.chosenQuizName;
     bookmark = widget.chosenQuiz;
-    
-    
+
     _displayedItems = categories;
     loaddata().then((value) {
       setState(() {});
@@ -80,8 +83,8 @@ class _bmState extends State<bm> {
   Widget build(BuildContext contetx) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(
-           bookmark.bookmarkQuizName +' Attempts' ,
+        title: Text(
+          bookmark.bookmarkQuizName + ' Attempts',
           style: TextStyle(
               fontFamily: 'TitanOne',
               fontSize: 30,
@@ -193,7 +196,8 @@ class _bmState extends State<bm> {
                                   child: Column(children: <Widget>[
                                     //Text('Attempt Number ${index+1}'),
                                     //Text('Score: ${bookmark.pastAttemptQuizMarks[index]}' ),
-                                    Text('Quiz Name: ${bookmark.bookmarkQuizDateCreated}')
+                                    Text(
+                                        'Quiz Name: ${bookmark.bookmarkQuizDateCreated}')
                                   ]),
                                 ),
                               ),
@@ -209,3 +213,5 @@ class _bmState extends State<bm> {
     );
   }
 }
+
+// coverage:ignore-end

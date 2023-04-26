@@ -22,22 +22,16 @@ class ViewCategoriesState extends State<ViewCategories> {
   int catLength = 0;
   List? _displayedItems = [];
   int fillLength = 0;
-  late bool _isLoading;
+  late bool _isLoading = true;
 
   final TextEditingController _controller = TextEditingController();
 //Loading Data from the database
   Future<void> loaddata() async {
-    setState(() {
-      _isLoading = true;
-    });
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
     _displayedItems = categories;
     fillLength = _displayedItems!.length;
-    setState(() {
-      _isLoading = false;
-    });
   }
 
 //This ensures that category tiles are populated and that we can search for a category
@@ -45,6 +39,7 @@ class ViewCategoriesState extends State<ViewCategories> {
   void initState() {
     super.initState();
     _displayedItems = categories;
+    _startLoading();
     loaddata().then((value) {
       setState(() {});
     });
@@ -58,12 +53,21 @@ class ViewCategoriesState extends State<ViewCategories> {
   }
 
 //This method is used to control the search bar
+// coverage:ignore-end
   void _onSearchTextChanged(String text) {
     setState(() {
       _displayedItems = categories!
           .where((item) => item.toLowerCase().contains(text.toLowerCase()))
           .toList();
       fillLength = _displayedItems!.length;
+    });
+  }
+
+// coverage:ignore-start
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1300));
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -74,82 +78,84 @@ class ViewCategoriesState extends State<ViewCategories> {
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: Color.fromARGB(255, 27, 57, 82),
-      appBar: AppBar(
-        title: const Text(
-          'Catalogue',
-          style: TextStyle(
-              fontFamily: 'TitanOne',
-              fontSize: 45,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.start,
-        ),
-        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-            //Might need to do navigator.push because might lose user data
-          },
-        ),
-      ),
+      appBar: _isLoading
+          ? null
+          : AppBar(
+              title: const Text(
+                'Catalogue',
+                style: TextStyle(
+                    fontFamily: 'TitanOne',
+                    fontSize: 45,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                onPressed: () {
+                  Navigator.pop(context);
+                  //Might need to do navigator.push because might lose user data
+                },
+              ),
+            ),
       resizeToAvoidBottomInset: false,
       //This condition diplays a circular progress indicator that will appear untill all categories are displayed
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromARGB(255, 27, 57, 82),
-                Color.fromARGB(255, 5, 12, 31),
-              ],
-            ),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  //This text field was modified such that it functions as a search bar
-                  child: TextField(
-                    controller: _controller,
-                    onChanged: _onSearchTextChanged,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 45, 64, 96),
-                      hintText: 'Search Catalogue',
-                      hintStyle: const TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white,
-                        fontFamily: 'Nunito',
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(
-                          Icons.search,
-                          size: 30,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                        borderSide:
-                            const BorderSide(width: 50, color: Colors.white),
-                      ),
-                    ),
+      body: _isLoading
+          ? Loading()
+          : SafeArea(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromARGB(255, 27, 57, 82),
+                      Color.fromARGB(255, 5, 12, 31),
+                    ],
                   ),
                 ),
-              ),
-              Expanded(
-                child: _isLoading
-                    ? Loading()
-                    : Padding(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 15, 8, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        //This text field was modified such that it functions as a search bar
+                        child: TextField(
+                          controller: _controller,
+                          onChanged: _onSearchTextChanged,
+                          style: const TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color.fromARGB(255, 45, 64, 96),
+                            hintText: 'Search Catalogue',
+                            hintStyle: const TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                              fontFamily: 'Nunito',
+                            ),
+                            suffixIcon: IconButton(
+                              icon: const Icon(
+                                Icons.search,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                              borderSide: const BorderSide(
+                                  width: 50, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                         //This GridView diplays all available categories as tiles
                         child: GridView.builder(
@@ -219,11 +225,11 @@ class ViewCategoriesState extends State<ViewCategories> {
                               );
                             }),
                       ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

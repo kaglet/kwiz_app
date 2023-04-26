@@ -87,6 +87,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+// coverage:ignore-end
   void updateBookmarkList() {
     isBookmarkedList = List.filled(filLength, false);
 
@@ -100,7 +101,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     }
   }
 
-// coverage:ignore-end
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
   void filterQuizzes(String searchTerm) {
@@ -151,9 +151,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar:  filteredQuizzes == null && _isLoading
-      //     ? null
-      appBar: AppBar(
+      appBar:  filteredQuizzes == null && _isLoading
+          ? null
+        : AppBar(
         title: const Text(
           'View Quizzes',
           style: TextStyle(
@@ -182,11 +182,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
           ),
         ],
       ),
-      // body:  filteredQuizzes == null &&  _isLoading
-      //     ? const Center(
-      //         child: CircularProgressIndicator(),
-      //       )
-      body: Container(
+      body:  filteredQuizzes == null &&  _isLoading
+          ? Loading()
+        : Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

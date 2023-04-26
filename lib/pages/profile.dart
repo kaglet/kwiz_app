@@ -169,6 +169,7 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            // populate current users name and last name
                             Text(
                               '${currentUser!.firstName} ${currentUser!.lastName}',
                               style: const TextStyle(
@@ -218,7 +219,7 @@ class _ProfileState extends State<Profile> {
                                     onOverlayClose(false);
                                     controller.reverse();
                                     //   overlayEntry.remove();
-
+                                    // navigate to quiz history page
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -276,6 +277,7 @@ class _ProfileState extends State<Profile> {
                                     onOverlayClose(false);
                                     controller.reverse();
                                     //  overlayEntry.remove();
+                                    // navigate to bookmarks screen
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -390,6 +392,7 @@ class _ProfileState extends State<Profile> {
                                                             .spaceEvenly,
                                                     children: [
                                                       TextButton(
+                                                        // navigate to home screen
                                                         onPressed: () async {
                                                           Navigator.of(context)
                                                               .pop();

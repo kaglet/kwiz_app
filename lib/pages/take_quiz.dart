@@ -35,7 +35,10 @@ class QuizScreenState extends State<QuizScreen> {
         quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
-    popList(quiz);
+    List<String> quest = [];
+    List<String> ans = [];
+    questions = popQuestionsList(quiz, quest, ans);
+    answers = popAnswersList(quiz, quest, ans);
     setState(() {
       _isLoading = false;
     });
@@ -49,11 +52,18 @@ class QuizScreenState extends State<QuizScreen> {
 
 // coverage:ignore-end
   //function for populating the questions and answers
-  void popList(Quiz? q) {
+  List<String> popQuestionsList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      questions.add(q!.quizQuestions.elementAt(i).questionText);
-      answers.add(q.quizQuestions.elementAt(i).questionAnswer);
+      quest.add(q!.quizQuestions.elementAt(i).questionText);
     }
+    return quest;
+  }
+
+  List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
+    for (int i = 0; i < quizLength; i++) {
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
+    }
+    return ans;
   }
 
 // coverage:ignore-start
@@ -552,8 +562,6 @@ class QuizScreenState extends State<QuizScreen> {
   }
 }
 
-// coverage:ignore-end
-
 // //USE WIDGET INSPECTOR type Ctrl + T and search >Dart: Open DevTools
 // //Flex makes it "become small" can be squashed :) the picture of the globe is squashed when we click on input box.
 
@@ -567,3 +575,5 @@ class QuizScreenState extends State<QuizScreen> {
 // */
 
 // //add the data pulled into a list and work with the list instead
+
+// coverage:ignore-end

@@ -1,5 +1,5 @@
 //import 'dart:html';
-
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/bookmarks.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -86,7 +86,7 @@ class _BookmarkState extends State<Bookmark> {
   // }
 
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       _isLoading = false;
     });
@@ -103,7 +103,7 @@ class _BookmarkState extends State<Bookmark> {
   //     filLength = filteredQuizzes!.length;
   //   });
   // }
-
+// coverage:ignore-end
   void filterQuizzes(String searchTerm) {
     setState(() {
       filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
@@ -141,6 +141,7 @@ class _BookmarkState extends State<Bookmark> {
     });
   }
 
+// coverage:ignore-start
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
@@ -165,9 +166,7 @@ class _BookmarkState extends State<Bookmark> {
               ),
             ),
       body: _isLoading
-          ? Loading() /*const Center(
-              child: CircularProgressIndicator(),
-            )*/
+          ? Loading()
           : Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
@@ -397,3 +396,5 @@ class _BookmarkState extends State<Bookmark> {
     );
   }
 }
+
+// coverage:ignore-end
