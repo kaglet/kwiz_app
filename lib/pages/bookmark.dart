@@ -40,6 +40,7 @@ class _BookmarkState extends State<Bookmark> {
     loadData().then((value) {
       setState(() {});
     });
+  
   }
 
   @override
@@ -106,6 +107,7 @@ class _BookmarkState extends State<Bookmark> {
 // coverage:ignore-end
   void filterQuizzes(String searchTerm) {
     setState(() {
+      print(bookmarkedQuizList);
       filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
 
       List<String> quizzesNames = [];
@@ -137,7 +139,7 @@ class _BookmarkState extends State<Bookmark> {
       filLength = filteredQuizzesNames.length;
 
       //Keep bookmarks vaild
-        updateBookmarkList();
+      //  updateBookmarkList();
     });
   }
 
@@ -289,12 +291,14 @@ class _BookmarkState extends State<Bookmark> {
                                             // Remove the selected bookmark from the list
                                             removeBookmark(index);
                                             // Refresh the list of displayed items
+                                            
                                             setState(() {
-                                              filteredQuizzes!.removeAt(index);
+                                             // filteredQuizzes!.removeAt(index);
                                               bookmarkedQuizList!
                                                   .removeAt(index);
+                                                  print(bookmarkedQuizList!.length);
                                               filLength =
-                                                  filteredQuizzes!.length;
+                                                   bookmarkedQuizList!.length;
                                             });
                                           },
                                           color: Colors.white,
