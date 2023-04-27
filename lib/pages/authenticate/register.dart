@@ -296,18 +296,20 @@ class _RegisterState extends State<Register> {
                                             loading = false;
                                             error = 'Please supply valid email';
                                           });
-                                        } else {
-                                          OurUser ourUser =
-                                              OurUser(uid: user.uID);
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Home(
-                                                user: ourUser,
-                                              ),
-                                            ),
-                                          );
-                                        }
+                                        } 
+                                        // this fixed it by commenting it out
+                                        // else {
+                                        //   OurUser ourUser =
+                                        //       OurUser(uid: user.uID);
+                                        //   Navigator.pushReplacement(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) => Home(
+                                        //         user: ourUser,
+                                        //       ),
+                                        //     ),
+                                        //   );
+                                        // }
                                       }
                                     },
                                   ),
