@@ -134,393 +134,405 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            child: SafeArea(
-              child: _isLoading
-                  ? Loading()
-                  //after data is loaded this displays
-                  : Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 6,
-                                  child: SizedBox(
-                                    width: 200.0,
-                                    height: 70.0,
-                                    child: Text(
-                                      'Good ${TimeHelper.getTimeOfTheDay(DateTime.now())} ${currentUser!.userName}!',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28.0,
-                                        fontWeight: FontWeight.normal,
-                                        letterSpacing: 2.0,
-                                        fontFamily: 'TitanOne',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setOverlayShowing(true);
-                                      showOverlay(context);
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.only(right: 16.0),
-                                      child: Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 40.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ]),
-                          Container(
-                            decoration: const BoxDecoration(
-                                color: Color.fromRGBO(46, 46, 50, 0)),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 30.0),
-                            child: Column(
-                              children: <Widget>[
-                                const SizedBox(
-                                  height: 30.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      child: const Center(
-                                        child: Text(
-                                          'Surprise me!',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 25.0,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1.0,
-                                            fontFamily: 'Nunito',
-                                          ),
+            child: SingleChildScrollView(
+              child: SafeArea(
+                child: _isLoading
+                    ? Loading()
+                    //after data is loaded this displays
+                    : Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 6,
+                                    child: SizedBox(
+                                      width: 200.0,
+                                      height: 70.0,
+                                      child: Text(
+                                        'Good ${TimeHelper.getTimeOfTheDay(DateTime.now())} ${currentUser!.userName}!',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 28.0,
+                                          fontWeight: FontWeight.normal,
+                                          letterSpacing: 2.0,
+                                          fontFamily: 'TitanOne',
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 62.0,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setOverlayShowing(true);
+                                        showOverlay(context);
+                                      },
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(right: 16.0),
+                                        child: Icon(
+                                          Icons.person,
+                                          color: Colors.white,
+                                          size: 40.0,
+                                        ),
+                                      ),
                                     ),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 95,
-                                        height: 30,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            gradient: const LinearGradient(
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                              colors: [
-                                                Color.fromARGB(
-                                                    255, 230, 131, 44),
-                                                Color.fromARGB(
-                                                    255, 244, 112, 72),
-                                              ],
+                                  ),
+                                ]),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(46, 46, 50, 0)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30.0, vertical: 30.0),
+                              child: Column(
+                                children: <Widget>[
+                                  const SizedBox(
+                                    height: 30.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: const Center(
+                                          child: Text(
+                                            'Surprise me!',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 25.0,
+                                              fontWeight: FontWeight.w600,
+                                              letterSpacing: 1.0,
+                                              fontFamily: 'Nunito',
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(9),
                                           ),
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50)),
-                                              textStyle: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontStyle: FontStyle.normal),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Expanded(
+                                        flex: 3,
+                                        child: SizedBox(
+                                          width: 95,
+                                          height: 30,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color.fromARGB(
+                                                      255, 230, 131, 44),
+                                                  Color.fromARGB(
+                                                      255, 244, 112, 72),
+                                                ],
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(9),
                                             ),
-                                            //This event takes us to the take_quiz screen
-                                            onPressed: () {
-                                              randNum = random.nextInt(
-                                                  allQuizzesLength);
-                                              textControllerTitle.text =
-                                                  quizzes!
-                                                      .elementAt(randNum)
-                                                      .quizName;
-                                              textControllerCat.text = quizzes!
-                                                  .elementAt(randNum)
-                                                  .quizCategory;
-                                            },
-                                            child: const Text(
-                                              'Randomize',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Nunito',
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50)),
+                                                textStyle: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FontStyle.normal),
+                                              ),
+                                              //This event takes us to the take_quiz screen
+                                              onPressed: () {
+                                                randNum = random
+                                                    .nextInt(allQuizzesLength);
+                                                textControllerTitle.text =
+                                                    quizzes!
+                                                        .elementAt(randNum)
+                                                        .quizName;
+                                                textControllerCat.text =
+                                                    quizzes!
+                                                        .elementAt(randNum)
+                                                        .quizCategory;
+                                              },
+                                              child: const Text(
+                                                'Randomize',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Nunito',
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: IntrinsicHeight(
-                                        child: SizedBox(
-                                          height:
-                                              180, // set a fixed height for the container
-                                          child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: const Color.fromARGB(
-                                                  255, 45, 64, 96),
-                                            ),
-                                            padding: const EdgeInsets.fromLTRB(
-                                                15, 10, 15, 0),
-                                            child: SizedBox(
-                                              height:
-                                                  200, // set a fixed height for the SingleChildScrollView
-                                              child: SingleChildScrollView(
-                                                physics:
-                                                    const AlwaysScrollableScrollPhysics(),
-                                                child: Column(
-                                                  children: [
-                                                    TextField(
-                                                      controller:
-                                                          textControllerTitle,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          fontFamily: 'Nunito',
-                                                          fontSize: 22,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .underline),
-                                                      maxLines:
-                                                          null, // set maxLines to null or a higher value
-                                                      textInputAction:
-                                                          TextInputAction
-                                                              .newline, // enable line breaks
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 5, 0, 0),
-                                                      //This widget displays the quiz's information
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: IntrinsicHeight(
+                                          child: SizedBox(
+                                            height:
+                                                180, // set a fixed height for the container
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                color: const Color.fromARGB(
+                                                    255, 45, 64, 96),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      15, 10, 15, 0),
+                                              child: SizedBox(
+                                                height:
+                                                    200, // set a fixed height for the SingleChildScrollView
+                                                child: SingleChildScrollView(
+                                                  physics:
+                                                      const AlwaysScrollableScrollPhysics(),
+                                                  child: Column(
+                                                    children: [
+                                                      TextField(
+                                                        controller:
+                                                            textControllerTitle,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'Nunito',
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.white,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline),
+                                                        maxLines:
+                                                            null, // set maxLines to null or a higher value
+                                                        textInputAction:
+                                                            TextInputAction
+                                                                .newline, // enable line breaks
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                0, 5, 0, 0),
+                                                        //This widget displays the quiz's information
 
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .baseline,
-                                                        textBaseline:
-                                                            TextBaseline
-                                                                .alphabetic,
-                                                        children: [
-                                                          const Text(
-                                                            'Category:',
-                                                            style: TextStyle(
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      230,
-                                                                      131,
-                                                                      44),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              fontSize: 20,
-                                                              fontFamily:
-                                                                  'Nunito',
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 10),
-                                                          Expanded(
-                                                            child: TextField(
-                                                              controller:
-                                                                  textControllerCat,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                              maxLines: null,
-                                                              textInputAction:
-                                                                  TextInputAction
-                                                                      .newline,
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontFamily:
-                                                                    'Nunito',
-                                                                fontSize: 20,
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .baseline,
+                                                          textBaseline:
+                                                              TextBaseline
+                                                                  .alphabetic,
+                                                          children: [
+                                                            const Text(
+                                                              'Category:',
+                                                              style: TextStyle(
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        230,
+                                                                        131,
+                                                                        44),
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w400,
-                                                                color: Colors
-                                                                    .white,
+                                                                fontSize: 20,
+                                                                fontFamily:
+                                                                    'Nunito',
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: double.infinity,
-                                                      height: 30,
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            begin: Alignment
-                                                                .topLeft,
-                                                            end: Alignment
-                                                                .bottomRight,
-                                                            colors: [
-                                                              Color.fromARGB(
-                                                                  230,
-                                                                  230,
-                                                                  131,
-                                                                  44),
-                                                              Color.fromARGB(
-                                                                  230,
-                                                                  244,
-                                                                  112,
-                                                                  72),
-                                                            ],
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
+                                                            const SizedBox(
+                                                                width: 10),
+                                                            Expanded(
+                                                              child: TextField(
+                                                                controller:
+                                                                    textControllerCat,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                maxLines: null,
+                                                                textInputAction:
+                                                                    TextInputAction
+                                                                        .newline,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontFamily:
+                                                                      'Nunito',
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        child: ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                            elevation: 0,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            shape: RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            50)),
-                                                            textStyle: const TextStyle(
+                                                      ),
+                                                      SizedBox(
+                                                        width: double.infinity,
+                                                        height: 30,
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            gradient:
+                                                                const LinearGradient(
+                                                              begin: Alignment
+                                                                  .topLeft,
+                                                              end: Alignment
+                                                                  .bottomRight,
+                                                              colors: [
+                                                                Color.fromARGB(
+                                                                    230,
+                                                                    230,
+                                                                    131,
+                                                                    44),
+                                                                Color.fromARGB(
+                                                                    230,
+                                                                    244,
+                                                                    112,
+                                                                    72),
+                                                              ],
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                          ),
+                                                          child: ElevatedButton(
+                                                            style:
+                                                                ElevatedButton
+                                                                    .styleFrom(
+                                                              elevation: 0,
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50)),
+                                                              textStyle: const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontStyle:
+                                                                      FontStyle
+                                                                          .normal),
+                                                            ),
+                                                            //This event takes us to the take_quiz screen
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => StartQuiz(
+                                                                      user: widget
+                                                                          .user,
+                                                                      chosenQuiz: quizzes!
+                                                                          .elementAt(
+                                                                              randNum)
+                                                                          .quizID),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: const Text(
+                                                              'Start',
+                                                              style: TextStyle(
                                                                 color: Colors
                                                                     .white,
-                                                                fontSize: 20,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontStyle:
-                                                                    FontStyle
-                                                                        .normal),
-                                                          ),
-                                                          //This event takes us to the take_quiz screen
-                                                          onPressed: () {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder: (context) => StartQuiz(
-                                                                    user: widget
-                                                                        .user,
-                                                                    chosenQuiz: quizzes!
-                                                                        .elementAt(
-                                                                            randNum)
-                                                                        .quizID),
+                                                                fontFamily:
+                                                                    'Nunito',
                                                               ),
-                                                            );
-                                                          },
-                                                          child: const Text(
-                                                            'Start',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  'Nunito',
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    )
-                                                  ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 40.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: SizedBox(
-                                        height: 120.0,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ViewCategories(
-                                                          user: widget.user)),
-                                            );
-                                          },
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.0),
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 40.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 120.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ViewCategories(
+                                                            user: widget.user)),
+                                              );
+                                            },
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(40.0),
-                                                gradient: const LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [
-                                                    Color.fromARGB(
-                                                        255, 230, 131, 44),
-                                                    Color.fromARGB(
-                                                        255, 244, 112, 72),
-                                                  ],
-                                                ),
                                               ),
-                                              child: const Center(
-                                                child: Text(
-                                                  'Browse our quizzes',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    letterSpacing: 1.0,
-                                                    fontFamily: 'Nunito',
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          40.0),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color.fromARGB(
+                                                          255, 230, 131, 44),
+                                                      Color.fromARGB(
+                                                          255, 244, 112, 72),
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'Browse our quizzes',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -528,57 +540,61 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 40.0,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: SizedBox(
-                                        height: 120.0,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => AddQuiz(
-                                                        user: widget.user,
-                                                      )),
-                                            );
-                                          },
-                                          child: Card(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(40.0),
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 40.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 120.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AddQuiz(
+                                                          user: widget.user,
+                                                        )),
+                                              );
+                                            },
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(40.0),
-                                                gradient: const LinearGradient(
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                  colors: [
-                                                    Color.fromARGB(
-                                                        255, 230, 131, 44),
-                                                    Color.fromARGB(
-                                                        255, 244, 112, 72),
-                                                  ],
-                                                ),
                                               ),
-                                              child: const Center(
-                                                child: Text(
-                                                  'Add custom quiz',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 25.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    letterSpacing: 1.0,
-                                                    fontFamily: 'Nunito',
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          40.0),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color.fromARGB(
+                                                          255, 230, 131, 44),
+                                                      Color.fromARGB(
+                                                          255, 244, 112, 72),
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'Add custom quiz',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -586,15 +602,15 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+              ),
             ),
           ),
         ),
