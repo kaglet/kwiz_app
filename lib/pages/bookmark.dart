@@ -38,6 +38,7 @@ class _BookmarkState extends State<Bookmark> {
     loadData().then((value) {
       setState(() {});
     });
+  
   }
 
   @override
@@ -74,11 +75,19 @@ class _BookmarkState extends State<Bookmark> {
   }
 
   void updateBookmarkList() {
+<<<<<<< HEAD
     isBookmarkedList = List.filled(fillLength, false);
 
     for (int i = 0; i < fillLength; i++) {
       for (int j = 0; j < bookmarkedQuizListLength; j++) {
         if (_displayedItems!.elementAt(i).quizID ==
+=======
+    isBookmarkedList = List.filled(filLength, false);
+
+    for (int i = 0; i < filLength; i++) {
+      for (int j = 0; j < bookmarkedQuizListLength; j++) {
+        if (filteredQuizzes!.elementAt(i).quizID ==
+>>>>>>> 71f38e3e8cf9329eba71e13d55f95a19a0093952
             bookmarkedQuizList!.elementAt(j).quizID) {
           isBookmarkedList[i] = true;
         }
@@ -98,8 +107,24 @@ class _BookmarkState extends State<Bookmark> {
 //This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
+<<<<<<< HEAD
       _displayedItems = bookmarkedQuiz!
           .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+=======
+      print(bookmarkedQuizList);
+      filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
+
+      List<String> quizzesNames = [];
+      List<String> filteredQuizzesNames = [];
+
+      for (int i = 0; i < bookmarkLength; i++) {
+        quizzesNames.add(bookmarkedQuizList!.elementAt(i).bookmarkQuizName);
+      }
+
+      filteredQuizzesNames = quizzesNames
+          .where(
+              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+>>>>>>> 71f38e3e8cf9329eba71e13d55f95a19a0093952
           .toList();
       fillLength = _displayedItems!.length;
 
@@ -281,6 +306,7 @@ class _BookmarkState extends State<Bookmark> {
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
+<<<<<<< HEAD
                                       ],
                                     ),
                                   ),
@@ -321,6 +347,24 @@ class _BookmarkState extends State<Bookmark> {
                                         'Start Quiz',
                                         style: TextStyle(
                                           fontWeight: FontWeight.normal,
+=======
+                                        leading: IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          onPressed: () {
+                                            // Remove the selected bookmark from the list
+                                            removeBookmark(index);
+                                            // Refresh the list of displayed items
+                                            
+                                            setState(() {
+                                             // filteredQuizzes!.removeAt(index);
+                                              bookmarkedQuizList!
+                                                  .removeAt(index);
+                                                  print(bookmarkedQuizList!.length);
+                                              filLength =
+                                                   bookmarkedQuizList!.length;
+                                            });
+                                          },
+>>>>>>> 71f38e3e8cf9329eba71e13d55f95a19a0093952
                                           color: Colors.white,
                                           fontFamily: 'Nunito',
                                         ),

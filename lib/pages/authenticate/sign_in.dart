@@ -36,7 +36,6 @@ class _SignInState extends State<SignIn> {
               // backgroundColor: Color.fromARGB(255, 27, 57, 82),
               elevation: 0.0,
               title: Center(
-                
                 child: Text(
                   'KWIZ',
                   style: TextStyle(
