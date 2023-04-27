@@ -102,6 +102,7 @@ class _BookmarkState extends State<Bookmark> {
           .where((item) => item.toLowerCase().contains(text.toLowerCase()))
           .toList();
       fillLength = _displayedItems!.length;
+
     });
   }
 
@@ -206,6 +207,8 @@ class _BookmarkState extends State<Bookmark> {
                               Colors.orange.shade600,
                               Colors.orange.shade700,
                             ];
+
+                            final quiz = _displayedItems![index];
       
                             final Color color1 = blueAndOrangeShades[
                                 index % blueAndOrangeShades.length];
@@ -234,7 +237,7 @@ class _BookmarkState extends State<Bookmark> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                    _displayedItems?[index],
+                                    quiz,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       color: Colors.white,
@@ -248,8 +251,8 @@ class _BookmarkState extends State<Bookmark> {
                                         removeBookmark(index);
                                         // Refresh the list of displayed items
                                         setState(() {
-                                          _displayedItems!.removeAt(index);
-                                          bookmarkedQuizList!.removeAt(index);
+                                          _displayedItems!.remove(quiz);
+                                          bookmarkedQuizList!.remove(quiz);
                                           fillLength = _displayedItems!.length;
                                         });
                                       },
