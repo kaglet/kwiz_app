@@ -232,15 +232,16 @@ class MockDataService extends Mock implements DatabaseService {
       List<int> pastAttemptQuizMarks =
           List<int>.from(docSnapshot['pastAttemptQuizMarks']);
       PastAttempt pastAttempt = PastAttempt(
-          quizID: docSnapshot['quizID'],
-          pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
-          pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
-          pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
-          pastAttemptQuizDescription: docSnapshot['pastAttemptQuizDescription'],
-          pastAttemptQuizDateCreated: docSnapshot['pastAttemptQuizDateCreated'],
-          pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-          pastAttemptQuizMarks: pastAttemptQuizMarks,
-          pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
+        quizID: docSnapshot['quizID'],
+        pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
+        pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
+        pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
+        pastAttemptQuizDescription: docSnapshot['pastAttemptQuizDescription'],
+        pastAttemptQuizDateCreated: docSnapshot['pastAttemptQuizDateCreated'],
+        pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
+        pastAttemptQuizMarks: pastAttemptQuizMarks,
+        pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted,
+      );
       pastAttempts.add(pastAttempt);
     }
 
