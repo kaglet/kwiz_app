@@ -113,7 +113,33 @@ class DatabaseService {
     }
     return quizzes;
   }
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //--------------------------
+  //
+  ////-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //get all Quizzes
+  //This method gets all the quizzes from the Quiz Collection and retruns them as a list of Quiz objects
+  Future<List<UserData>?> getAllUsers() async {
+    List<UserData> users = [];
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+    //gets all docs from collection
+    QuerySnapshot collectionSnapshot = await userCollection.get();
+    //loops through each document and creates quiz object and adds to quiz list
+    for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+      var docSnapshot = collectionSnapshot.docs[i];
+     
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+    }
+    return users;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //get all Quiz and Questions

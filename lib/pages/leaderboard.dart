@@ -23,7 +23,8 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   DatabaseService service = DatabaseService();
 
-  List<Quiz>? filteredQuizzes;
+  List<UserData>? filteredQuizzes;
+   List<UserData>? users;
 
   int filLength = 0;
   UserData? userData;
@@ -43,11 +44,15 @@ class _LeaderboardState extends State<Leaderboard> {
   // loads data from DB
   Future<void> loadData() async {
 
-    filLength = 10;
+    
 
     //Bookmarks
-    userData =
-        await service.getUserAndBookmarks(userID: widget.user.uid); //user.uid
+    users =
+        await service.getAllUsers(); //user.uid
+
+        filteredQuizzes = users;
+        print(filteredQuizzes);
+        filLength = users!.length;
 
     //Bookmark Logic
 
@@ -239,7 +244,9 @@ class _LeaderboardState extends State<Leaderboard> {
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                         'Username',
+                                        filteredQuizzes!
+                                              .elementAt(index)
+                                              .userName,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
                                             color: Colors.orange,
