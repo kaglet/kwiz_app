@@ -24,7 +24,7 @@ class _LeaderboardState extends State<Leaderboard> {
   DatabaseService service = DatabaseService();
 
   List<UserData>? filteredQuizzes;
-   List<UserData>? users;
+  List<UserData>? users;
 
   int filLength = 0;
   UserData? userData;
@@ -44,14 +44,11 @@ class _LeaderboardState extends State<Leaderboard> {
   // loads data from DB
   Future<void> loadData() async {
 
-    
-
-    //Bookmarks
     users =
         await service.getAllUsers(); //user.uid
 
         filteredQuizzes = users;
-        print(filteredQuizzes);
+        print(users!.elementAt(0).userName);
         filLength = users!.length;
 
     //Bookmark Logic

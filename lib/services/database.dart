@@ -124,9 +124,11 @@ class DatabaseService {
     late List<Bookmarks> bookmarks = [];
     //gets all docs from collection
     QuerySnapshot collectionSnapshot = await userCollection.get();
+    
     //loops through each document and creates quiz object and adds to quiz list
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
       var docSnapshot = collectionSnapshot.docs[i];
+     
      
       UserData user = UserData(
           //uid: docSnapshot['QuizName'],
@@ -136,7 +138,12 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
+
+        users.add(user);
+         print("hi");
+    print(users.elementAt(i).userName);
     }
+    
     return users;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
