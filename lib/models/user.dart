@@ -1,3 +1,4 @@
+import '../models/rating.dart';
 import '../models/bookmarks.dart';
 import '../models/pastAttempt.dart';
 
@@ -14,12 +15,14 @@ class UserData {
   final String lastName;
   late final List<Bookmarks> bookmarkedQuizzes;
   late final List<PastAttempt> pastAttemptQuizzes;
+  late final List<Rating> ratings;
 
-  UserData(
-      {required this.uID,
-      required this.userName,
-      required this.firstName,
-      required this.lastName,
-      required this.bookmarkedQuizzes,
-      required this.pastAttemptQuizzes});
+  UserData({
+    required this.uID,
+    required this.userName,
+    required this.firstName,
+    required this.lastName,
+    required this.bookmarkedQuizzes,
+    required this.pastAttemptQuizzes,
+  });
 }

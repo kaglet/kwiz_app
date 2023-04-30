@@ -103,12 +103,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   // return static home screen with navigation functionality //
 
   UserData? currentUser = UserData(
-      uID: ' ',
-      userName: ' ',
-      firstName: ' ',
-      lastName: ' ',
-      bookmarkedQuizzes: [],
-      pastAttemptQuizzes: []);
+    uID: ' ',
+    userName: ' ',
+    firstName: ' ',
+    lastName: ' ',
+    bookmarkedQuizzes: [],
+    pastAttemptQuizzes: [],
+  );
   late bool _isLoading;
 
   TextEditingController textControllerTitle = TextEditingController();

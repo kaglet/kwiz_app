@@ -5,6 +5,7 @@ import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
+import '../models/rating.dart';
 
 class DatabaseService {
   //Quiz Collection Name
@@ -236,17 +237,16 @@ class DatabaseService {
         List<int> pastAttemptQuizMarks =
             List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
-            quizID: docSnapshot['quizID'],
-            pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
-            pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
-            pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
-            pastAttemptQuizDescription:
-                docSnapshot['pastAttemptQuizDescription'],
-            pastAttemptQuizDateCreated:
-                docSnapshot['pastAttemptQuizDateCreated'],
-            pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-            pastAttemptQuizMarks: pastAttemptQuizMarks,
-            pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
+          quizID: docSnapshot['quizID'],
+          pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
+          pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
+          pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
+          pastAttemptQuizDescription: docSnapshot['pastAttemptQuizDescription'],
+          pastAttemptQuizDateCreated: docSnapshot['pastAttemptQuizDateCreated'],
+          pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
+          pastAttemptQuizMarks: pastAttemptQuizMarks,
+          pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted,
+        );
 
         pastAttempts.add(pastAttempt);
       }
@@ -422,4 +422,28 @@ class DatabaseService {
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+  Future<void> createRating(
+      {String? userID, String? quizID, int? rating}) async {
+    await userCollection.doc(userID).collection('Ratings').doc(quizID).set({
+      'Rating': rating,
+    });
+  }
+
+  Future<void> updateRating(
+      {String? userID, String? quizID, int? rating}) async {
+    await userCollection.doc(userID).collection('Ratings').doc(quizID).update({
+      'Rating': rating,
+    });
+  }
+
+  Future<bool> ratingAlreadyExists({String? userID, String? quizID}) async {
+    DocumentSnapshot docSnapshot = await userCollection
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    return docSnapshot.exists;
+  }
 }
