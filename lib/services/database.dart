@@ -140,7 +140,8 @@ class DatabaseService {
             questionNumber: docSnapshot['QuestionNumber'],
             questionText: docSnapshot['QuestionText'],
             questionAnswer: docSnapshot['QuestionAnswer'],
-            questionMark: 0);
+            questionMark: 0,
+            questionType: "shortAnswer");
 
         questions.add(question);
       }
@@ -353,7 +354,8 @@ class DatabaseService {
       {String? userID,
       Quiz? quiz,
       int? quizMark,
-      String? quizDateAttempted, required String quizAuthor}) async {
+      String? quizDateAttempted,
+      required String quizAuthor}) async {
     await userCollection
         .doc(userID)
         .collection('Past Attempts')

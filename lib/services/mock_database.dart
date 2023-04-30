@@ -111,7 +111,8 @@ class MockDataService extends Mock implements DatabaseService {
           questionNumber: docSnapshot['QuestionNumber'],
           questionText: docSnapshot['QuestionText'],
           questionAnswer: docSnapshot['QuestionAnswer'],
-          questionMark: 0);
+          questionMark: 0,
+          questionType: "shortAnswer");
 
       questions.add(question);
     }
@@ -171,7 +172,8 @@ class MockDataService extends Mock implements DatabaseService {
           questionNumber: docSnapshot['QuestionNumber'],
           questionText: docSnapshot['QuestionText'],
           questionAnswer: docSnapshot['QuestionAnswer'],
-          questionMark: 0);
+          questionMark: 0,
+          questionType: "shortAnswer");
 
       questions.add(question);
     }

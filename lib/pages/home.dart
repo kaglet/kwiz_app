@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/classes/time_helper.dart';
+import 'package:kwiz_v2/models/questions.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/add_quiz_about.dart';
 import 'package:kwiz_v2/pages/profile.dart';
@@ -49,6 +50,40 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   // loads data from DB
   Future<void> loadData() async {
+    // List<Question> quizQuestions = [
+    //   Question(
+    //       questionNumber: 1,
+    //       questionText: "What is the capital of France?",
+    //       questionAnswer: "Paris",
+    //       questionMark: 5,
+    //       questionType: "normal"),
+    //   MultipleAnswerQuestion(
+    //       questionNumber: 2,
+    //       questionText: "What is the largest animal on earth?",
+    //       questionAnswer: "Blue Whale",
+    //       questionMark: 10,
+    //       questionType: "multiple choice",
+    //       answerOptions: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"])
+    // ];
+
+    // Quiz exampleQuiz = Quiz(
+    //     quizName: "General Knowledge Quiz",
+    //     quizCategory: "Trivia",
+    //     quizDescription: "A quiz to test your general knowledge",
+    //     quizMark: 22,
+    //     quizDateCreated: "2022-04-30",
+    //     quizQuestions: quizQuestions,
+    //     quizID: "1234567890",
+    //     quizAuthor: "John Doe");
+
+    // for (var question in exampleQuiz.quizQuestions) {
+    //   if (question is MultipleAnswerQuestion) {
+    //     print(question.answerOptions);
+    //   } else {
+    //     print("No answer options for this question.");
+    //   }
+    // }
+
     setState(() {
       _isLoading = true;
     });
