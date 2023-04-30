@@ -13,6 +13,8 @@ import 'package:kwiz_v2/shared/loading.dart';
 import '../models/quizzes.dart';
 import '../services/auth.dart';
 import 'dart:math';
+
+import 'leaderboard.dart';
 // import 'add_quiz_about.dart';
 
 class Home extends StatefulWidget {
@@ -360,7 +362,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                             null, // set maxLines to null or a higher value
                                                         textInputAction:
                                                             TextInputAction
-                                                                .newline, // enable line breaks
+                                                                .newline, 
+                                                           enabled: false,// enable line breaks
                                                       ),
                                                       Padding(
                                                         padding:
@@ -418,6 +421,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                                   color: Colors
                                                                       .white,
                                                                 ),
+                                                                enabled: false,
                                                               ),
                                                             ),
                                                           ],
@@ -517,15 +521,76 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       )
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 40.0,
+                                         const SizedBox(
+                                    height: 30.0,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
-                                          height: 120.0,
+                                          height: 100.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Leaderboard(
+                                                            user: widget.user)),
+                                              );
+                                            },
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(40.0),
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          40.0),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color.fromARGB(
+                                                          255, 230, 131, 44),
+                                                      Color.fromARGB(
+                                                          255, 244, 112, 72),
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'View Leaderboard',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height:30.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 100.0,
                                           child: GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -579,14 +644,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 40.0,
+                                    height: 30.0,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
-                                          height: 120.0,
+                                          height: 100.0,
                                           child: GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -650,6 +715,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ),
         ),
+        // Add grey effect when popup is showing
         if (isOverlayShowing)
           Container(
             color: Colors.grey.withOpacity(0.5),
