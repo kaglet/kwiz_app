@@ -1,5 +1,6 @@
 // coverage:ignore-start
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/start_quiz.dart';
@@ -52,6 +53,8 @@ class _LeaderboardState extends State<Leaderboard> {
         print(users!.elementAt(0).userName);
         usersLength = users!.length;
         filLength = usersLength;
+        //maxSort(filteredUsers!);
+        bubbleSortDescending(filteredUsers!);
 
     //Bookmark Logic
 
@@ -101,6 +104,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
       //Keep bookmarks vaild
     });
+    bubbleSortDescending(filteredUsers!);
   }
 
   // coverage:ignore-start
@@ -126,6 +130,42 @@ class _LeaderboardState extends State<Leaderboard> {
 
       return double.parse(wSum.toStringAsFixed(2));
   }
+
+  void maxSort(List<UserData> arr) {
+  int n = arr.length;
+  for (int i = n - 1; i > 0; i--) {
+    int maxPos = i;
+
+    for (int j = i + 1; j < n; j++) {
+      if (/*arr[j] > arr[maxPos]*/ weightedScore(j) > weightedScore(maxPos)) {
+        maxPos = j;
+      }
+    }
+
+    UserData temp = arr[maxPos];
+    arr[maxPos] = arr[i];
+    arr[i] = temp;
+  }
+  //print(arr[0].userName);
+}
+
+void bubbleSortDescending(List<UserData> arr) {
+  int n = arr.length;
+
+  for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - i - 1; j++) {
+      if (/*arr[j] < arr[j + 1]*/ weightedScore(j) < weightedScore(j + 1)) {
+        // swap arr[j] and arr[j+1]
+        UserData temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {
