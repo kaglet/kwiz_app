@@ -280,6 +280,8 @@ class _RegisterState extends State<Register> {
                                         firstName: firstNameInput,
                                         userName: userNameInput,
                                         lastName: lastNameInput,
+                                        totalScore: '0',
+                                        totalQuizzes: 0,
                                         bookmarkedQuizzes: [],
                                         pastAttemptQuizzes: [],
                                       );

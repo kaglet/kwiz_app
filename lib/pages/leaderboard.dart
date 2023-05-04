@@ -23,10 +23,11 @@ class Leaderboard extends StatefulWidget {
 class _LeaderboardState extends State<Leaderboard> {
   DatabaseService service = DatabaseService();
 
-  List<UserData>? filteredQuizzes;
+  List<UserData>? filteredUsers;
   List<UserData>? users;
 
   int filLength = 0;
+  int usersLength = 0;
   UserData? userData;
   List<bool> isBookmarkedList = [];
   bool _isLoading = true;
@@ -47,9 +48,10 @@ class _LeaderboardState extends State<Leaderboard> {
     users =
         await service.getAllUsers(); //user.uid
 
-        filteredQuizzes = users;
+        filteredUsers = users;
         print(users!.elementAt(0).userName);
-        filLength = users!.length;
+        usersLength = users!.length;
+        filLength = usersLength;
 
     //Bookmark Logic
 
@@ -61,40 +63,45 @@ class _LeaderboardState extends State<Leaderboard> {
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
-  // void filterQuizzes(String searchTerm) {
-  //   setState(() {
-  //     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-  //     List<String> quizzesNames = [];
-  //     List<String> filteredQuizzesNames = [];
+  void filterQuizzes(String searchTerm) {
+     setState(() {
+      //  filteredUsers = List<UserData>.from(users!);
+      //  List<String> quizzesNames = [];
+      //  List<String> filteredQuizzesNames = [];
 
-  //     for (int i = 0; i < catLength; i++) {
-  //       quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
-  //     }
+    //   for (int i = 0; i < usersLength; i++) {
+    //     quizzesNames.add(users!.elementAt(i).userName);
+    //   }
 
-  //     filteredQuizzesNames = quizzesNames
-  //         .where(
-  //             (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
-  //         .toList();
+    //   filteredQuizzesNames = quizzesNames
+    //       .where(
+    //           (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+    //       .toList();
 
-  //     if (filteredQuizzesNames.isNotEmpty) {
-  //       filteredQuizzes!.clear();
-  //       for (int j = 0; j < filteredQuizzesNames.length; j++) {
-  //         for (int k = 0; k < catLength; k++) {
-  //           if (filteredQuizzesNames[j] ==
-  //               categoryQuiz!.elementAt(k).quizName) {
-  //             filteredQuizzes!.add(categoryQuiz!.elementAt(k));
-  //           }
-  //         }
-  //       }
-  //     } else {
-  //       filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-  //     }
+    //   if (filteredQuizzesNames.isNotEmpty) {
+    //     filteredUsers!.clear();
+    //     for (int j = 0; j < filteredQuizzesNames.length; j++) {
+    //       for (int k = 0; k < usersLength; k++) {
+    //         if (filteredQuizzesNames[j] ==
+    //             users!.elementAt(k).userName) {
+    //           filteredUsers!.add(users!.elementAt(k));
+    //         }
+    //       }
+    //     }
+    //   } else {
+    //     filteredUsers = List<UserData>.from(users!);
+    //   }
+    filteredUsers = users!
+          .where((item) => item.userName
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()))
+          .toList();
 
-  //     filLength = filteredQuizzesNames.length;
+      filLength = filteredUsers!.length;
 
-  //     //Keep bookmarks vaild
-  //   });
-  // }
+      //Keep bookmarks vaild
+    });
+  }
 
   // coverage:ignore-start
 
@@ -108,7 +115,7 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: filteredQuizzes == null && _isLoading
+      appBar: filteredUsers == null && _isLoading
           ? null
           : AppBar(
               title: const Text(
@@ -127,7 +134,7 @@ class _LeaderboardState extends State<Leaderboard> {
                 },
               ),
             ),
-      body: filteredQuizzes == null && _isLoading
+      body: filteredUsers == null && _isLoading
           ? Loading()
           : Container(
               decoration: const BoxDecoration(
@@ -167,7 +174,7 @@ class _LeaderboardState extends State<Leaderboard> {
                           color: const Color.fromRGBO(192, 192, 192,
                               1), // set the search icon color to a light grey
                           onPressed: () {
-                        //    filterQuizzes(_searchController.text);
+                            filterQuizzes(_searchController.text);
                           },
                         ),
                         enabledBorder: OutlineInputBorder(
@@ -184,7 +191,7 @@ class _LeaderboardState extends State<Leaderboard> {
                         ),
                       ),
                       onChanged: (value) {
-                       // filterQuizzes(value);
+                        filterQuizzes(value);
                       },
                     ),
                   ),
@@ -194,7 +201,7 @@ class _LeaderboardState extends State<Leaderboard> {
                         Container(
                           decoration: const BoxDecoration(),
                         ),
-                        filteredQuizzes == null && _isLoading
+                        filteredUsers == null && _isLoading
                             ? Loading()
                             : ListView.builder(
                                 itemCount: filLength,
@@ -241,7 +248,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                        filteredQuizzes!
+                                        filteredUsers!
                                               .elementAt(index)
                                               .userName,
                                           style: const TextStyle(
@@ -265,7 +272,9 @@ class _LeaderboardState extends State<Leaderboard> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                'score|',
+                                                filteredUsers!
+                                              .elementAt(index)
+                                              .totalScore,
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -274,7 +283,9 @@ class _LeaderboardState extends State<Leaderboard> {
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                'num quizzes  |',
+                                                filteredUsers!
+                                              .elementAt(index)
+                                              .totalQuizzes.toString(),
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -320,8 +331,10 @@ class _LeaderboardState extends State<Leaderboard> {
                                                    elevation: 0,
                                                     
                                             ),
-                                            child: const Text(
-                                              '56.98',
+                                            child:  Text(
+                                              filteredUsers!
+                                              .elementAt(index)
+                                              .totalScore,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.orange,

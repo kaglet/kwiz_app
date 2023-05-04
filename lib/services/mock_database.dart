@@ -217,6 +217,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);
@@ -283,6 +285,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);
@@ -343,6 +347,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);
@@ -413,6 +419,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);
@@ -458,6 +466,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);
@@ -487,6 +497,8 @@ class MockDataService extends Mock implements DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         uID: docSnapshot.id);

@@ -120,6 +120,8 @@ void main() {
         userName: "TestDummy",
         firstName: "Test",
         lastName: "Dummy",
+        totalScore: ' ',
+        totalQuizzes: 0,
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: []);
 
