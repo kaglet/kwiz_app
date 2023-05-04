@@ -45,12 +45,25 @@ class DatabaseService {
   //This private method is called by the addQuizWithQuestions method and adds one question to the database at a time
   Future<void> _addQuestionDocument(
       {String? quizID, Question? question}) async {
-    quizCollection.doc(quizID).collection('Questions').add({
-      'QuestionAnswer': question!.questionAnswer,
-      // 'QuestionMark': Question!.QuestionMark,
-      'QuestionNumber': question.questionNumber,
-      'QuestionText': question.questionText,
-    });
+        if (question is MultipleAnswerQuestion) {          
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          'QuestionAnswerOptions': question.answerOptions,
+          });
+        } else {
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          });
+        }
+    
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -171,14 +184,31 @@ class DatabaseService {
           await quizCollection.doc(quizID).collection('Questions').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
-        Question question = Question(
+        if (docSnapshot['QuestionType']=="ranking" || 
+            docSnapshot['QuestionType']=="dropdown" ||
+            docSnapshot['QuestionType']=="multipleChoice"){
+            List<String> QuestionAnswerOptions =
+            List<String>.from(docSnapshot['QuestionAnswerOptions']);
+            MultipleAnswerQuestion question = MultipleAnswerQuestion(
             questionNumber: docSnapshot['QuestionNumber'],
             questionText: docSnapshot['QuestionText'],
             questionAnswer: docSnapshot['QuestionAnswer'],
             questionMark: 0,
-            questionType: "shortAnswer");
-
-        questions.add(question);
+            questionType: docSnapshot['QuestionType'],
+            answerOptions: QuestionAnswerOptions);
+            questions.add(question);
+          }
+          else
+          {
+            Question question = Question(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType']);
+            questions.add(question);
+          }       
+        
       }
 
       quiz.quizQuestions
