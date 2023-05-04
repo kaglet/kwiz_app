@@ -112,6 +112,21 @@ class _LeaderboardState extends State<Leaderboard> {
     });
   }
 
+    double weightedScore(int index)  {
+    double wSum = 0;
+
+    double score = double.parse(filteredUsers!.elementAt(index).totalScore);
+     int quizzes = filteredUsers!.elementAt(index).totalQuizzes;
+
+     if (quizzes == 0){
+      return 0;
+     }
+
+     wSum = score / quizzes;
+
+      return double.parse(wSum.toStringAsFixed(2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -332,9 +347,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     
                                             ),
                                             child:  Text(
-                                              filteredUsers!
-                                              .elementAt(index)
-                                              .totalScore,
+                                              weightedScore(index).toString(),
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.orange,

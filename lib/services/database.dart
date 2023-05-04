@@ -489,6 +489,9 @@ class DatabaseService {
       'FirstName': userInstance.firstName,
       'LastName': userInstance.lastName,
       'Username': userInstance.userName,
+      'TotalScore' : '0',
+      'TotalQuizzes' : 0,
+
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
