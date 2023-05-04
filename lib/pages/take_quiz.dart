@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_score.dart';
 import 'package:kwiz_v2/shared/loading.dart';
+import '../models/questions.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
 
@@ -30,7 +31,18 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
-    quiz = await service.getQuizAndQuestions(quizID: widget.qID);
+    quiz = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
+    for (var question in quiz!.quizQuestions) {
+      if (question is MultipleAnswerQuestion) {
+        if (question.questionType == "multipleChoice"){
+          print(question.questionNumber);
+          print(question.answerOptions);
+          print(question.questionType);    
+        }
+      } 
+    }
+
+    //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
     quizLength =
         quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
@@ -82,12 +94,16 @@ class QuizScreenState extends State<QuizScreen> {
   // Index of the current question
   int currentIndex = 0;
 
+  String currentQuestionType = "";
+
   @override
   Widget build(BuildContext context) {
     void updateText() {
       answerController.text = userAnswers[currentIndex];
     }
 
+    currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
+    print(currentQuestionType);   
     //load before data comes then display ui after data is recieved
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -156,38 +172,154 @@ class QuizScreenState extends State<QuizScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
-                      Text(
-                        questions[currentIndex],
-                        style: const TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontFamily: 'Nunito',
+                      if (currentQuestionType == "shortAnswer")
+                        Column(
+                          children: [
+                            Text(
+                              questions[currentIndex],
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+
+                            // Input field for the answer
+                            TextField(
+                              controller: answerController,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Type your answer here',
+                                hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 126, 125, 125),
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+                          ],
                         ),
+                      
+                      if (currentQuestionType == "trueOrFalse")
+                        Column(
+                          children: [
+                            Text(
+                              questions[currentIndex],
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      answerController.text = 'True';
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.green,
+                                  ),
+                                  child: const Text(
+                                    'True',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      answerController.text = 'False';
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                  ),
+                                  child: const Text(
+                                    'False',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 32.0),
+                          ],
+                        ),
+
+                      if (currentQuestionType == "multipleChoice") 
+                        Column(
+                          children: [
+                            // Display the question number and question text
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                            Text(
+                              'Question ${currentIndex + 1} of ${questions.length}',
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
+                            Text(
+                              questions[currentIndex],
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+
+                            // Display the answer options
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: quiz!.quizQuestions[currentIndex].questionAnwerOptions,    //HERE HOW TO GET ANSWEROPTION LIST????
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    title: Text(
+                                      answerOptions[index],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // Handle the selected answer
+                                      setState(() {
+                                        answerController.text = answerOptions[index];
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 32.0),
+                          ],
                       ),
-                      const SizedBox(height: 32.0),
+                    
 
-                      // Input field for the answer
-
-                      TextField(
-                        controller: answerController,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Nunito',
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: 'Type your answer here',
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(255, 126, 125, 125),
-                            fontFamily: 'Nunito',
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 32.0),
-
+                    
                       // Buttons for moving to the previous/next question
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -500,38 +632,6 @@ class QuizScreenState extends State<QuizScreen> {
                                         );
                                       },
                                     );
-
-                                    // showDialog(
-                                    //   context: context,
-                                    //   builder: (BuildContext context) {
-                                    //     return AlertDialog(
-                                    //       title: const Text('Quiz Complete'),
-                                    //       content: const Text(
-                                    //           'Are you sure you are ready to submit?'),
-                                    //       actions: [
-                                    //         TextButton(
-                                    //           onPressed: () {
-                                    //             print(answers);
-
-                                    //             Navigator.push(
-                                    //               context,
-                                    //               MaterialPageRoute(
-                                    //                   builder: (context) =>
-                                    //                       QuizScore(
-                                    //                           user: widget.user,
-                                    //                           chosenQuiz: quiz,
-                                    //                           score: score,
-                                    //                           answers: answers,
-                                    //                           userAnswers:
-                                    //                               userAnswers)),
-                                    //             );
-                                    //           },
-                                    //           child: const Text('Submit'),
-                                    //         ),
-                                    //       ],
-                                    //     );
-                                    //   },
-                                    // );
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -557,7 +657,7 @@ class QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
-      ),
+        ),
     );
   }
 }
