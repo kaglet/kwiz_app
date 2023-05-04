@@ -10,26 +10,22 @@ import 'home.dart';
 // import 'start_quiz.dart';
 import '../services/database.dart';
 
-class ViewQuizzes extends StatefulWidget {
+class Leaderboard extends StatefulWidget {
   final OurUser user;
-  final String chosenCategory;
-  const ViewQuizzes(
-      {super.key, required this.chosenCategory, required this.user});
+  const Leaderboard(
+      {super.key, required this.user});
 
   @override
   // ignore: library_private_types_in_public_api
-  _ViewQuizzesState createState() => _ViewQuizzesState();
+  _LeaderboardState createState() => _LeaderboardState();
 }
 
-class _ViewQuizzesState extends State<ViewQuizzes> {
-  late String categoryName;
+class _LeaderboardState extends State<Leaderboard> {
   DatabaseService service = DatabaseService();
-  List<Quiz>? categoryQuiz;
-  List<Quiz>? filteredQuizzes;
-  List<Bookmarks>? bookmarkedQuizList = [];
-  int bookmarkLength = 0;
-  int bookmarkedQuizListLength = 0;
-  int catLength = 0;
+
+  List<UserData>? filteredQuizzes;
+  List<UserData>? users;
+
   int filLength = 0;
   UserData? userData;
   List<bool> isBookmarkedList = [];
@@ -39,7 +35,6 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   @override
   void initState() {
     super.initState();
-    categoryName = widget.chosenCategory;
     _startLoading();
     loadData().then((value) {
       setState(() {});
@@ -48,96 +43,58 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
   // loads data from DB
   Future<void> loadData() async {
-    if (categoryName == 'All') {
-      categoryQuiz = await service.getAllQuizzes();
-    } else {
-      categoryQuiz = await service.getQuizByCategory(category: categoryName);
-    }
 
-    catLength = categoryQuiz!.length;
-    filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-    filLength = filteredQuizzes!.length;
+    users =
+        await service.getAllUsers(); //user.uid
 
-    //Bookmarks
-    userData =
-        await service.getUserAndBookmarks(userID: widget.user.uid); //user.uid
-    bookmarkedQuizList = userData!.bookmarkedQuizzes;
-    bookmarkedQuizListLength = bookmarkedQuizList!.length;
+        filteredQuizzes = users;
+        print(users!.elementAt(0).userName);
+        filLength = users!.length;
 
     //Bookmark Logic
-    updateBookmarkList();
+
   }
 
-  Future<void> bookmarkItem(int index) async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
-    await service.addBookmarks(
-        userID: widget.user.uid, quiz: filteredQuizzes![index]);
-    // setState(() {
-    //   _isLoading = false;
-    // });
-  }
 
-  Future<void> removeBookmark(int index) async {
-    await service.deleteBookmarks(
-        userID: widget.user.uid,
-        quizID: filteredQuizzes!.elementAt(index).quizID);
 
-    //Navigator.popUntil(context, (route) => route.isFirst);
-  }
-
-// coverage:ignore-end
-  void updateBookmarkList() {
-    isBookmarkedList = List.filled(filLength, false);
-
-    for (int i = 0; i < filLength; i++) {
-      for (int j = 0; j < bookmarkedQuizListLength; j++) {
-        if (filteredQuizzes!.elementAt(i).quizID ==
-            bookmarkedQuizList!.elementAt(j).quizID) {
-          isBookmarkedList[i] = true;
-        }
-      }
-    }
-  }
+  
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
 // it is moved to normal lists first as this caused issues
-  void filterQuizzes(String searchTerm) {
-    setState(() {
-      filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      List<String> quizzesNames = [];
-      List<String> filteredQuizzesNames = [];
+  // void filterQuizzes(String searchTerm) {
+  //   setState(() {
+  //     filteredQuizzes = List<Quiz>.from(categoryQuiz!);
+  //     List<String> quizzesNames = [];
+  //     List<String> filteredQuizzesNames = [];
 
-      for (int i = 0; i < catLength; i++) {
-        quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
-      }
+  //     for (int i = 0; i < catLength; i++) {
+  //       quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
+  //     }
 
-      filteredQuizzesNames = quizzesNames
-          .where(
-              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
-          .toList();
+  //     filteredQuizzesNames = quizzesNames
+  //         .where(
+  //             (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+  //         .toList();
 
-      if (filteredQuizzesNames.isNotEmpty) {
-        filteredQuizzes!.clear();
-        for (int j = 0; j < filteredQuizzesNames.length; j++) {
-          for (int k = 0; k < catLength; k++) {
-            if (filteredQuizzesNames[j] ==
-                categoryQuiz!.elementAt(k).quizName) {
-              filteredQuizzes!.add(categoryQuiz!.elementAt(k));
-            }
-          }
-        }
-      } else {
-        filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      }
+  //     if (filteredQuizzesNames.isNotEmpty) {
+  //       filteredQuizzes!.clear();
+  //       for (int j = 0; j < filteredQuizzesNames.length; j++) {
+  //         for (int k = 0; k < catLength; k++) {
+  //           if (filteredQuizzesNames[j] ==
+  //               categoryQuiz!.elementAt(k).quizName) {
+  //             filteredQuizzes!.add(categoryQuiz!.elementAt(k));
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       filteredQuizzes = List<Quiz>.from(categoryQuiz!);
+  //     }
 
-      filLength = filteredQuizzesNames.length;
+  //     filLength = filteredQuizzesNames.length;
 
-      //Keep bookmarks vaild
-      updateBookmarkList();
-    });
-  }
+  //     //Keep bookmarks vaild
+  //   });
+  // }
 
   // coverage:ignore-start
 
@@ -155,7 +112,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
           ? null
           : AppBar(
               title: const Text(
-                'View Quizzes',
+                'Leaderboard',
                 style: TextStyle(
                   fontSize: 30.0,
                   fontWeight: FontWeight.normal,
@@ -164,7 +121,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                 ),
               ),
               leading: IconButton(
-                icon: const Icon(Icons.category),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -198,7 +155,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                         filled: true,
                         fillColor: const Color.fromARGB(255, 45, 64,
                             96), // set the background color to a darker grey
-                        hintText: 'Search quizzes',
+                        hintText: 'Find a user',
                         hintStyle: const TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
@@ -210,7 +167,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                           color: const Color.fromRGBO(192, 192, 192,
                               1), // set the search icon color to a light grey
                           onPressed: () {
-                            filterQuizzes(_searchController.text);
+                        //    filterQuizzes(_searchController.text);
                           },
                         ),
                         enabledBorder: OutlineInputBorder(
@@ -227,7 +184,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                         ),
                       ),
                       onChanged: (value) {
-                        filterQuizzes(value);
+                       // filterQuizzes(value);
                       },
                     ),
                   ),
@@ -242,11 +199,18 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                             : ListView.builder(
                                 itemCount: filLength,
                                 itemBuilder: (context, index) {
+                                  // final List<Color> blueAndOrangeShades = [
+                                  //   Colors.orange.shade400,
+                                  //   Colors.orange.shade500,
+                                  //   Colors.orange.shade600,
+                                  //   Colors.orange.shade700,
+                                  // ];
+
                                   final List<Color> blueAndOrangeShades = [
-                                    Colors.orange.shade400,
-                                    Colors.orange.shade500,
-                                    Colors.orange.shade600,
-                                    Colors.orange.shade700,
+                                    Colors.blueGrey.shade400,
+                                    Colors.blueGrey.shade500,
+                                    Colors.blueGrey.shade600,
+                                    Colors.blueGrey.shade700,
                                   ];
 
                                   final Color color1 = blueAndOrangeShades[
@@ -277,38 +241,22 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                       ),
                                       child: ListTile(
                                         title: Text(
-                                          filteredQuizzes!
+                                        filteredQuizzes!
                                               .elementAt(index)
-                                              .quizName,
+                                              .userName,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.normal,
-                                            color: Colors.white,
+                                            color: Colors.orange,
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            // handle bookmark button press
-
-                                            setState(() {
-                                              isBookmarkedList[index] =
-                                                  !isBookmarkedList[index];
-
-                                              if (isBookmarkedList[index] ==
-                                                  true) {
-                                                bookmarkItem(index);
-                                              } else {
-                                                removeBookmark(index);
-                                              }
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isBookmarkedList[index]
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_border,
-                                            color: isBookmarkedList[index]
-                                                ? Colors.blue
-                                                : Colors.white,
+                                        leading: Text(
+                                          index.toString(),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontFamily: 'Nunito',
                                           ),
                                         ),
                                         textColor: Colors.white,
@@ -317,7 +265,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
+                                                'score|',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -326,7 +274,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                '${filteredQuizzes!.elementAt(index).quizCategory}   |',
+                                                'num quizzes  |',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -335,7 +283,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                               ),
                                               const SizedBox(width: 8),
                                               Text(
-                                                '${filteredQuizzes!.elementAt(index).quizDateCreated}',
+                                                'mark',
                                                 style: const TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   color: Colors.white,
@@ -348,7 +296,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                         trailing: Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(20),
+                                                BorderRadius.circular(15),
                                             gradient: LinearGradient(
                                               colors: [
                                                 color1,
@@ -360,37 +308,29 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                             ),
                                           ),
                                           child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StartQuiz(
-                                                    user: widget.user,
-                                                    chosenQuiz: filteredQuizzes!
-                                                        .elementAt(index)
-                                                        .quizID,
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                                            onPressed: null,
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   Colors.transparent,
-                                              elevation: 0,
+                                
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(20),
+                                                    BorderRadius.circular(15),
                                               ),
+                                                   elevation: 0,
+                                                    
                                             ),
                                             child: const Text(
-                                              'Start Quiz',
+                                              '56.98',
                                               style: TextStyle(
                                                 fontWeight: FontWeight.normal,
-                                                color: Colors.white,
+                                                color: Colors.orange,
                                                 fontFamily: 'Nunito',
                                               ),
+                                                  
                                             ),
+                                            
+                                            
                                           ),
                                         ),
                                       ),

@@ -276,12 +276,13 @@ class _RegisterState extends State<Register> {
                                     ),
                                     onPressed: () async {
                                       UserData user = UserData(
-                                          uID: null,
-                                          firstName: firstNameInput,
-                                          userName: userNameInput,
-                                          lastName: lastNameInput,
-                                          bookmarkedQuizzes: [],
-                                          pastAttemptQuizzes: []);
+                                        uID: null,
+                                        firstName: firstNameInput,
+                                        userName: userNameInput,
+                                        lastName: lastNameInput,
+                                        bookmarkedQuizzes: [],
+                                        pastAttemptQuizzes: [],
+                                      );
 
                                       if (_formkey.currentState!.validate()) {
                                         setState(() {
@@ -296,7 +297,7 @@ class _RegisterState extends State<Register> {
                                             loading = false;
                                             error = 'Please supply valid email';
                                           });
-                                        } 
+                                        }
                                         // this fixed it by commenting it out
                                         // else {
                                         //   OurUser ourUser =

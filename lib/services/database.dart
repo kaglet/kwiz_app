@@ -5,6 +5,7 @@ import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
+import '../models/rating.dart';
 
 class DatabaseService {
   //Quiz Collection Name
@@ -44,12 +45,25 @@ class DatabaseService {
   //This private method is called by the addQuizWithQuestions method and adds one question to the database at a time
   Future<void> _addQuestionDocument(
       {String? quizID, Question? question}) async {
-    quizCollection.doc(quizID).collection('Questions').add({
-      'QuestionAnswer': question!.questionAnswer,
-      // 'QuestionMark': Question!.QuestionMark,
-      'QuestionNumber': question.questionNumber,
-      'QuestionText': question.questionText,
-    });
+        if (question is MultipleAnswerQuestion) {          
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          'QuestionAnswerOptions': question.answerOptions,
+          });
+        } else {
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          });
+        }
+    
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -112,7 +126,40 @@ class DatabaseService {
     }
     return quizzes;
   }
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //--------------------------
+  //
+  ////-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //get all Quizzes
+  //This method gets all the quizzes from the Quiz Collection and retruns them as a list of Quiz objects
+  Future<List<UserData>?> getAllUsers() async {
+    List<UserData> users = [];
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+    //gets all docs from collection
+    QuerySnapshot collectionSnapshot = await userCollection.get();
+    
+    //loops through each document and creates quiz object and adds to quiz list
+    for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+      var docSnapshot = collectionSnapshot.docs[i];
+     
+     
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+
+        users.add(user);
+         print("hi");
+    print(users.elementAt(i).userName);
+    }
+    
+    return users;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //get all Quiz and Questions
@@ -136,13 +183,31 @@ class DatabaseService {
           await quizCollection.doc(quizID).collection('Questions').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
-        Question question = Question(
+        if (docSnapshot['QuestionType']=="ranking" || 
+            docSnapshot['QuestionType']=="dropdown" ||
+            docSnapshot['QuestionType']=="multipleChoice"){
+            List<String> QuestionAnswerOptions =
+            List<String>.from(docSnapshot['QuestionAnswerOptions']);
+            MultipleAnswerQuestion question = MultipleAnswerQuestion(
             questionNumber: docSnapshot['QuestionNumber'],
             questionText: docSnapshot['QuestionText'],
             questionAnswer: docSnapshot['QuestionAnswer'],
-            questionMark: 0);
-
-        questions.add(question);
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType'],
+            answerOptions: QuestionAnswerOptions);
+            questions.add(question);
+          }
+          else
+          {
+            Question question = Question(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType']);
+            questions.add(question);
+          }       
+        
       }
 
       quiz.quizQuestions
@@ -235,17 +300,16 @@ class DatabaseService {
         List<int> pastAttemptQuizMarks =
             List<int>.from(docSnapshot['pastAttemptQuizMarks']);
         PastAttempt pastAttempt = PastAttempt(
-            quizID: docSnapshot['quizID'],
-            pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
-            pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
-            pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
-            pastAttemptQuizDescription:
-                docSnapshot['pastAttemptQuizDescription'],
-            pastAttemptQuizDateCreated:
-                docSnapshot['pastAttemptQuizDateCreated'],
-            pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
-            pastAttemptQuizMarks: pastAttemptQuizMarks,
-            pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted);
+          quizID: docSnapshot['quizID'],
+          pastAttemptQuizAuthor: docSnapshot['pastAttemptQuizAuthor'],
+          pastAttemptQuizName: docSnapshot['pastAttemptQuizName'],
+          pastAttemptQuizCategory: docSnapshot['pastAttemptQuizCategory'],
+          pastAttemptQuizDescription: docSnapshot['pastAttemptQuizDescription'],
+          pastAttemptQuizDateCreated: docSnapshot['pastAttemptQuizDateCreated'],
+          pastAttemptQuizMark: docSnapshot['pastAttemptQuizMark'],
+          pastAttemptQuizMarks: pastAttemptQuizMarks,
+          pastAttemptQuizDatesAttempted: pastAttemptQuizDatesAttempted,
+        );
 
         pastAttempts.add(pastAttempt);
       }
@@ -353,7 +417,8 @@ class DatabaseService {
       {String? userID,
       Quiz? quiz,
       int? quizMark,
-      String? quizDateAttempted, required String quizAuthor}) async {
+      String? quizDateAttempted,
+      required String quizAuthor}) async {
     await userCollection
         .doc(userID)
         .collection('Past Attempts')
@@ -420,4 +485,28 @@ class DatabaseService {
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+  Future<void> createRating(
+      {String? userID, String? quizID, int? rating}) async {
+    await userCollection.doc(userID).collection('Ratings').doc(quizID).set({
+      'Rating': rating,
+    });
+  }
+
+  Future<void> updateRating(
+      {String? userID, String? quizID, int? rating}) async {
+    await userCollection.doc(userID).collection('Ratings').doc(quizID).update({
+      'Rating': rating,
+    });
+  }
+
+  Future<bool> ratingAlreadyExists({String? userID, String? quizID}) async {
+    DocumentSnapshot docSnapshot = await userCollection
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    return docSnapshot.exists;
+  }
 }

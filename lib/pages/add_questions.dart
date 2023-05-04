@@ -281,7 +281,8 @@ class _AddQuestionsState extends State<AddQuestions> {
           questionNumber: i,
           questionText: qa.question,
           questionAnswer: qa.answer,
-          questionMark: 0);
+          questionMark: 0,
+          questionType: "shortAnswer");
       savedQAs.add(questionObj);
       i++;
     }
