@@ -3,6 +3,7 @@ import 'qa_obj.dart';
 
 class QAContainer extends StatefulWidget {
   Function delete;
+  String qaType;
   @override
   final Key? key;
 
@@ -11,7 +12,11 @@ class QAContainer extends StatefulWidget {
   final _answerController = TextEditingController();
   int? number;
 
-  QAContainer({required this.delete, required this.key, int? number})
+  QAContainer(
+      {required this.delete,
+      required this.qaType,
+      required this.key,
+      int? number})
       : super(key: key) {
     // set the optional parameter if no value is provided
     this.number = number ?? 0;
@@ -39,89 +44,38 @@ class _QAContainerState extends State<QAContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: () {
-                  // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
-                  // pass in the current widget's unique key to delete the current widget
-                  widget.delete(widget.key);
-                },
-                icon: const Icon(Icons.delete, color: Colors.white),
-              ),
-            ],
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromARGB(255, 45, 64, 96),
-                  Color.fromARGB(255, 45, 64, 96),
-                ],
-              ),
-            ),
-            child: SizedBox(
-                height: 100,
-                child: TextField(
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Nunito',
-                  ),
-                  // assign controller to this question textfield
-                  controller: widget._questionController,
-                  minLines: 3,
-                  maxLines: 3,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    alignLabelWithHint: true,
-                    labelText: 'Question ${widget.number}',
-                    labelStyle: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                    hintText: 'Question ${widget.number}',
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(5),
-                      ),
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                  ),
-                )),
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromARGB(255, 45, 64, 96),
-                  Color.fromARGB(255, 45, 64, 96),
-                ],
-              ),
-            ),
-            child: Row(
+    if (widget.qaType == 'shortAnswer') {
+      // return short answer qa container
+      SingleChildScrollView scrollview = SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(
+                IconButton(
+                  onPressed: () {
+                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // pass in the current widget's unique key to delete the current widget
+                    widget.delete(widget.key);
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                ),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 45, 64, 96),
+                    Color.fromARGB(255, 45, 64, 96),
+                  ],
+                ),
+              ),
+              child: SizedBox(
+                  height: 100,
                   child: TextField(
                     style: const TextStyle(
                       color: Colors.white,
@@ -129,43 +83,101 @@ class _QAContainerState extends State<QAContainer> {
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Nunito',
                     ),
-                    // assign controller to this answer textfield
-                    controller: widget._answerController,
-                    minLines: 1,
-                    maxLines: 1,
+                    // assign controller to this question textfield
+                    controller: widget._questionController,
+                    minLines: 3,
+                    maxLines: 3,
                     keyboardType: TextInputType.multiline,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: 'Answer',
-                      labelStyle: TextStyle(
+                      labelText: 'Question ${widget.number}',
+                      labelStyle: const TextStyle(
                         color: Colors.grey,
                       ),
-                      hintText: 'Answer',
-                      hintStyle: TextStyle(
+                      hintText: 'Question ${widget.number}',
+                      hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(5),
                         ),
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )),
             ),
-          ),
-          const SizedBox(
-            height: 20.0,
-          )
-        ],
-      ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 45, 64, 96),
+                    Color.fromARGB(255, 45, 64, 96),
+                  ],
+                ),
+              ),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: TextField(
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Nunito',
+                      ),
+                      // assign controller to this answer textfield
+                      controller: widget._answerController,
+                      minLines: 1,
+                      maxLines: 1,
+                      keyboardType: TextInputType.multiline,
+                      decoration: const InputDecoration(
+                        alignLabelWithHint: true,
+                        labelText: 'Answer',
+                        labelStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        hintText: 'Answer',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20.0,
+            )
+          ],
+        ),
+      );
+      return scrollview;
+    }
+    return SingleChildScrollView(
+      child: Text('None'),
     );
   }
 }

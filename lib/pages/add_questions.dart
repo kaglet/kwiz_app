@@ -225,7 +225,9 @@ class _AddQuestionsState extends State<AddQuestions> {
                               onPressed: () {
                                 setState(() {
                                   final uniqueKey = UniqueKey();
+                                  String qaType = 'shortAnswer';
                                   qaContainers.add(QAContainer(
+                                      qaType: 'shortAnswer',
                                       // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
                                       // a key is passed in as a parameterwhich  is the unique key of the widget
                                       delete: (key) {
