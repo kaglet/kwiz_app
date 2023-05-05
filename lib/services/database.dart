@@ -45,12 +45,25 @@ class DatabaseService {
   //This private method is called by the addQuizWithQuestions method and adds one question to the database at a time
   Future<void> _addQuestionDocument(
       {String? quizID, Question? question}) async {
-    quizCollection.doc(quizID).collection('Questions').add({
-      'QuestionAnswer': question!.questionAnswer,
-      // 'QuestionMark': Question!.QuestionMark,
-      'QuestionNumber': question.questionNumber,
-      'QuestionText': question.questionText,
-    });
+        if (question is MultipleAnswerQuestion) {          
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          'QuestionAnswerOptions': question.answerOptions,
+          });
+        } else {
+          quizCollection.doc(quizID).collection('Questions').add({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          });
+        }
+    
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -113,7 +126,41 @@ class DatabaseService {
     }
     return quizzes;
   }
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //--------------------------
+  //
+  ////-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //get all Quizzes
+  //This method gets all the quizzes from the Quiz Collection and retruns them as a list of Quiz objects
+  Future<List<UserData>?> getAllUsers() async {
+    List<UserData> users = [];
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+    //gets all docs from collection
+    QuerySnapshot collectionSnapshot = await userCollection.get();
+    
+    //loops through each document and creates quiz object and adds to quiz list
+    for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+      var docSnapshot = collectionSnapshot.docs[i];
+     
+     
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          totalScore: docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          uID: docSnapshot.id);
+
+        users.add(user);
+        
+    }
+    
+    return users;
+  }
+  //-------------------------------------------------------------------------------------------------------------------------------
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //get all Quiz and Questions
@@ -137,14 +184,31 @@ class DatabaseService {
           await quizCollection.doc(quizID).collection('Questions').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
-        Question question = Question(
+        if (docSnapshot['QuestionType']=="ranking" || 
+            docSnapshot['QuestionType']=="dropdown" ||
+            docSnapshot['QuestionType']=="multipleChoice"){
+            List<String> QuestionAnswerOptions =
+            List<String>.from(docSnapshot['QuestionAnswerOptions']);
+            MultipleAnswerQuestion question = MultipleAnswerQuestion(
             questionNumber: docSnapshot['QuestionNumber'],
             questionText: docSnapshot['QuestionText'],
             questionAnswer: docSnapshot['QuestionAnswer'],
             questionMark: 0,
-            questionType: "shortAnswer");
-
-        questions.add(question);
+            questionType: docSnapshot['QuestionType'],
+            answerOptions: QuestionAnswerOptions);
+            questions.add(question);
+          }
+          else
+          {
+            Question question = Question(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType']);
+            questions.add(question);
+          }       
+        
       }
 
       quiz.quizQuestions
@@ -224,6 +288,8 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
+          totalScore:  docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -277,6 +343,8 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
+          totalScore: docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -404,6 +472,8 @@ class DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: []);
 
@@ -419,6 +489,9 @@ class DatabaseService {
       'FirstName': userInstance.firstName,
       'LastName': userInstance.lastName,
       'Username': userInstance.userName,
+      'TotalScore' : '0',
+      'TotalQuizzes' : 0,
+
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------

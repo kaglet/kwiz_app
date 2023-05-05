@@ -32,6 +32,8 @@ class AddQuizState extends State<AddQuiz> {
     userName: ' ',
     firstName: ' ',
     lastName: ' ',
+    totalScore: ' ',
+    totalQuizzes: 0,
     bookmarkedQuizzes: [],
     pastAttemptQuizzes: [],
   );

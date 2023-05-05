@@ -13,6 +13,8 @@ import 'package:kwiz_v2/shared/loading.dart';
 import '../models/quizzes.dart';
 import '../services/auth.dart';
 import 'dart:math';
+
+import 'leaderboard.dart';
 // import 'add_quiz_about.dart';
 
 class Home extends StatefulWidget {
@@ -50,43 +52,85 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   // loads data from DB
   Future<void> loadData() async {
-    // List<Question> quizQuestions = [
-    //   Question(
-    //       questionNumber: 1,
-    //       questionText: "What is the capital of France?",
-    //       questionAnswer: "Paris",
-    //       questionMark: 5,
-    //       questionType: "normal"),
-    //   MultipleAnswerQuestion(
-    //       questionNumber: 2,
-    //       questionText: "What is the largest animal on earth?",
-    //       questionAnswer: "Blue Whale",
-    //       questionMark: 10,
-    //       questionType: "multiple choice",
-    //       answerOptions: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"])
-    // ];
+//     List<Question> quizQuestions = [
+//   Question(
+//     questionNumber: 1,
+//     questionText: "What is the capital of France?",
+//     questionAnswer: "Paris",
+//     questionMark: 0,
+//     questionType: "shortAnswer"
+//   ),
+//   Question(
+//     questionNumber: 2,
+//     questionText: "The Earth is flat. True or False?",
+//     questionAnswer: "False",
+//     questionMark: 0,
+//     questionType: "trueOrFalse"
+//   ),
+//   Question(
+//     questionNumber: 3,
+//     questionText: "The longest river in the world is the **?",
+//     questionAnswer: "Nile",
+//     questionMark: 0,
+//     questionType: "fillInTheBlank"
+//   ),
+//   MultipleAnswerQuestion(
+//     questionNumber: 4,
+//     questionText: "What is the largest animal on earth?",
+//     questionAnswer: "Blue Whale",
+//     questionMark: 0,
+//     questionType: "multipleChoice",
+//     answerOptions: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"]
+//   ), 
+//   MultipleAnswerQuestion(
+//     questionNumber: 5,
+//     questionText: "Which of the following is a programming languages?",
+//     questionAnswer: "Java",
+//     questionMark: 0,
+//     questionType: "dropdown",
+//     answerOptions: ["Java", "Snkae", "Diamond","Webdev"]
+//   ),
+//   MultipleAnswerQuestion(
+//     questionNumber: 6,
+//     questionText: "Rank the following countries by population (largest to smallest).",
+//     questionAnswer: "China,India,United States,Indonesia",
+//     questionMark: 0,
+//     questionType: "ranking",
+//     answerOptions: ["China", "India", "United States", "Indonesia"]
+//   )
+// ];
 
-    // Quiz exampleQuiz = Quiz(
-    //     quizName: "General Knowledge Quiz",
-    //     quizCategory: "Trivia",
-    //     quizDescription: "A quiz to test your general knowledge",
-    //     quizMark: 22,
-    //     quizDateCreated: "2022-04-30",
-    //     quizQuestions: quizQuestions,
-    //     quizID: "1234567890",
-    //     quizAuthor: "John Doe");
+// Quiz exampleQuizAdd = Quiz(
+//   quizName: "General Knowledge Quiz",
+//   quizCategory: "Trivia",
+//   quizDescription: "A quiz to test your general knowledge",
+//   quizMark: 0,
+//   quizDateCreated:  DateTime.now().toString(),
+//   quizQuestions: quizQuestions,
+//   quizID: "",
+//   quizAuthor: "John Doe"
+// );   
 
-    // for (var question in exampleQuiz.quizQuestions) {
-    //   if (question is MultipleAnswerQuestion) {
-    //     print(question.answerOptions);
-    //   } else {
-    //     print("No answer options for this question.");
-    //   }
-    // }
+    // Quiz? exampleQuizGet;
 
     setState(() {
       _isLoading = true;
     });
+    //
+    // service.addQuizWithQuestions(exampleQuizAdd);
+    //Nc7dCXdZF6Y44clloxEZ
+    // exampleQuizGet = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
+    // for (var question in exampleQuizGet!.quizQuestions) {
+    //   if (question is MultipleAnswerQuestion) {
+    //     print(question.questionNumber);
+    //     print(question.answerOptions);
+    //     print(question.questionType);
+    //   } else {
+    //     print(question.questionNumber);
+    //     print(question.questionAnswer);
+    //     print(question.questionType);
+    //   }
+    // }
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength + 1);
@@ -107,6 +151,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     userName: ' ',
     firstName: ' ',
     lastName: ' ',
+    totalScore: ' ',
+    totalQuizzes: 0,
     bookmarkedQuizzes: [],
     pastAttemptQuizzes: [],
   );
@@ -360,7 +406,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                             null, // set maxLines to null or a higher value
                                                         textInputAction:
                                                             TextInputAction
-                                                                .newline, // enable line breaks
+                                                                .newline, 
+                                                           enabled: false,// enable line breaks
                                                       ),
                                                       Padding(
                                                         padding:
@@ -418,6 +465,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                                   color: Colors
                                                                       .white,
                                                                 ),
+                                                                enabled: false,
                                                               ),
                                                             ),
                                                           ],
@@ -517,15 +565,76 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       )
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 40.0,
+                                         const SizedBox(
+                                    height: 30.0,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
-                                          height: 120.0,
+                                          height: 100.0,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Leaderboard(
+                                                            user: widget.user)),
+                                              );
+                                            },
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(40.0),
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          40.0),
+                                                  gradient:
+                                                      const LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color.fromARGB(
+                                                          255, 230, 131, 44),
+                                                      Color.fromARGB(
+                                                          255, 244, 112, 72),
+                                                    ],
+                                                  ),
+                                                ),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'View Leaderboard',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 25.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height:30.0,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                          height: 100.0,
                                           child: GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -579,14 +688,14 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 40.0,
+                                    height: 30.0,
                                   ),
                                   Row(
                                     children: [
                                       Expanded(
                                         flex: 1,
                                         child: SizedBox(
-                                          height: 120.0,
+                                          height: 100.0,
                                           child: GestureDetector(
                                             onTap: () {
                                               Navigator.push(
@@ -650,6 +759,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ),
         ),
+        // Add grey effect when popup is showing
         if (isOverlayShowing)
           Container(
             color: Colors.grey.withOpacity(0.5),

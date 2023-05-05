@@ -105,34 +105,39 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 // it is moved to normal lists first as this caused issues
   void filterQuizzes(String searchTerm) {
     setState(() {
-      filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      List<String> quizzesNames = [];
-      List<String> filteredQuizzesNames = [];
+      // filteredQuizzes = List<Quiz>.from(categoryQuiz!);
+      // List<String> quizzesNames = [];
+      // List<String> filteredQuizzesNames = [];
 
-      for (int i = 0; i < catLength; i++) {
-        quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
-      }
+      // for (int i = 0; i < catLength; i++) {
+      //   quizzesNames.add(categoryQuiz!.elementAt(i).quizName);
+      // }
 
-      filteredQuizzesNames = quizzesNames
-          .where(
-              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+      // filteredQuizzesNames = quizzesNames
+      //     .where(
+      //         (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+      //     .toList();
+
+      // if (filteredQuizzesNames.isNotEmpty) {
+      //   filteredQuizzes!.clear();
+      //   for (int j = 0; j < filteredQuizzesNames.length; j++) {
+      //     for (int k = 0; k < catLength; k++) {
+      //       if (filteredQuizzesNames[j] ==
+      //           categoryQuiz!.elementAt(k).quizName) {
+      //         filteredQuizzes!.add(categoryQuiz!.elementAt(k));
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   filteredQuizzes = List<Quiz>.from(categoryQuiz!);
+      // }
+       filteredQuizzes = categoryQuiz!
+          .where((item) => item.quizName
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()))
           .toList();
 
-      if (filteredQuizzesNames.isNotEmpty) {
-        filteredQuizzes!.clear();
-        for (int j = 0; j < filteredQuizzesNames.length; j++) {
-          for (int k = 0; k < catLength; k++) {
-            if (filteredQuizzesNames[j] ==
-                categoryQuiz!.elementAt(k).quizName) {
-              filteredQuizzes!.add(categoryQuiz!.elementAt(k));
-            }
-          }
-        }
-      } else {
-        filteredQuizzes = List<Quiz>.from(categoryQuiz!);
-      }
-
-      filLength = filteredQuizzesNames.length;
+      filLength = filteredQuizzes!.length;
 
       //Keep bookmarks vaild
       updateBookmarkList();
