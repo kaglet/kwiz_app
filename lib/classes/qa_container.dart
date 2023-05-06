@@ -314,9 +314,7 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return dropdownContainer;
-    }
-
-    if (widget.qaType == 'fillInTheBlank') {
+    } else if (widget.qaType == 'fillInTheBlank') {
       // return short answer qa container
       SingleChildScrollView scrollview = SingleChildScrollView(
         child: Column(
@@ -499,7 +497,93 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return scrollview;
+    } else if (widget.qaType == 'multipleChoice') {
+      // return short answer qa container
+      SingleChildScrollView scrollview = SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // pass in the current widget's unique key to delete the current widget
+                    widget.delete(widget.key);
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                ),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 45, 64, 96),
+                    Color.fromARGB(255, 45, 64, 96),
+                  ],
+                ),
+              ),
+              child: SizedBox(
+                  height: 100,
+                  child: TextField(
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Nunito',
+                    ),
+                    // assign controller to this question textfield
+                    controller: widget._questionPreController,
+                    minLines: 3,
+                    maxLines: 3,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      alignLabelWithHint: true,
+                      labelText: 'Question ${widget.number}',
+                      labelStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Question ${widget.number}',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  )),
+            ),
+            Expanded(
+              flex: 1,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  // with each index return qaContainer at that index into listview with adjusted question number
+                  return Container(
+                    child: Text('Placeholder text'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+      return scrollview;
     }
+
     return SingleChildScrollView(
       child: Text('None'),
     );

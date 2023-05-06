@@ -225,7 +225,188 @@ class _AddQuestionsState extends State<AddQuestions> {
                               onPressed: () {
                                 setState(() {
                                   final uniqueKey = UniqueKey();
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return WillPopScope(
+                                        onWillPop: () async {
+                                          Navigator.of(context).pop();
+                                          return true;
+                                        },
+                                        child: AlertDialog(
+                                          backgroundColor: Colors
+                                              .transparent, // Set the background color to transparent
+                                          contentPadding: EdgeInsets.zero,
+                                          content: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color.fromARGB(
+                                                      255, 27, 57, 82),
+                                                  Color.fromARGB(
+                                                      255, 11, 26, 68),
+                                                ],
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(20.0),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Text(
+                                                  'Submit quiz',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0,
+                                                    letterSpacing: 1.0,
+                                                    fontFamily: 'Nunito',
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 15.0),
+                                                const Text(
+                                                  '   Are you sure you want to submit your quiz?   ',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1.0,
+                                                    fontFamily: 'Nunito',
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 15.0),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            colors: [
+                                                              Colors.blue,
+                                                              Colors.blue,
+                                                            ],
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 10.0,
+                                                                horizontal:
+                                                                    20.0),
+                                                        child: const Text(
+                                                          'Back',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            letterSpacing: 1.0,
+                                                            fontFamily:
+                                                                'Nunito',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 50.0),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        print('Hello world');
+
+                                                        // Navigator.push(
+                                                        //   context,
+                                                        //   MaterialPageRoute(
+                                                        //       builder: (context) => QuizScore(
+                                                        //           user: widget
+                                                        //               .user,
+                                                        //           chosenQuiz:
+                                                        //               quiz,
+                                                        //           score:
+                                                        //               score,
+                                                        //           answers:
+                                                        //               answers,
+                                                        //           userAnswers:
+                                                        //               userAnswers)),
+                                                        // );
+                                                      },
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          gradient:
+                                                              const LinearGradient(
+                                                            colors: [
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  222,
+                                                                  127,
+                                                                  43),
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  246,
+                                                                  120,
+                                                                  82),
+                                                            ],
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 10.0,
+                                                                horizontal:
+                                                                    20.0),
+                                                        child: const Text(
+                                                          ' Ok ',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            letterSpacing: 1.0,
+                                                            fontFamily:
+                                                                'Nunito',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 10.0),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+
                                   String qaType = 'trueOrFalse';
+
                                   qaContainers.add(QAContainer(
                                       qaType: qaType,
                                       // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
@@ -278,28 +459,26 @@ class _AddQuestionsState extends State<AddQuestions> {
     for (var qaContainer in qaContainers) {
       // extract QA data in qaContainer into a useable object form
       QA qa = qaContainer.extractQA();
-       if (qa is QAMultiple) { 
+      if (qa is QAMultiple) {
         MultipleAnswerQuestion questionObj = MultipleAnswerQuestion(
-          questionNumber: i, 
-          questionText: qa.question, 
-          questionAnswer: qa.answer, 
-          questionMark: 0, 
-          questionType: qa.type, 
-          answerOptions: qa.answerOptions);
-          savedQAs.add(questionObj);
-          i++;        
-      }
-      else{
+            questionNumber: i,
+            questionText: qa.question,
+            questionAnswer: qa.answer,
+            questionMark: 0,
+            questionType: qa.type,
+            answerOptions: qa.answerOptions);
+        savedQAs.add(questionObj);
+        i++;
+      } else {
         Question questionObj = Question(
-          questionNumber: i,
-          questionText: qa.question,
-          questionAnswer: qa.answer,
-          questionMark: 0,
-          questionType: qa.type);
-      savedQAs.add(questionObj);
-      i++;        
+            questionNumber: i,
+            questionText: qa.question,
+            questionAnswer: qa.answer,
+            questionMark: 0,
+            questionType: qa.type);
+        savedQAs.add(questionObj);
+        i++;
       }
-      
     }
     // add about quiz data sent from previous page and questions list to quiz object
     Quiz quiz = Quiz(
