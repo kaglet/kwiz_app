@@ -278,15 +278,28 @@ class _AddQuestionsState extends State<AddQuestions> {
     for (var qaContainer in qaContainers) {
       // extract QA data in qaContainer into a useable object form
       QA qa = qaContainer.extractQA();
-
-      Question questionObj = Question(
+       if (qa is QAMultiple) { 
+        MultipleAnswerQuestion questionObj = MultipleAnswerQuestion(
+          questionNumber: i, 
+          questionText: qa.question, 
+          questionAnswer: qa.answer, 
+          questionMark: 0, 
+          questionType: qa.type, 
+          answerOptions: qa.answerOptions);
+          savedQAs.add(questionObj);
+          i++;        
+      }
+      else{
+        Question questionObj = Question(
           questionNumber: i,
           questionText: qa.question,
           questionAnswer: qa.answer,
           questionMark: 0,
-          questionType: "shortAnswer");
+          questionType: qa.type);
       savedQAs.add(questionObj);
-      i++;
+      i++;        
+      }
+      
     }
     // add about quiz data sent from previous page and questions list to quiz object
     Quiz quiz = Quiz(
