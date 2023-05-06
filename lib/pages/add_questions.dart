@@ -36,6 +36,9 @@ class _AddQuestionsState extends State<AddQuestions> {
   DatabaseService service = DatabaseService();
   int currentIndex = 0;
   bool _isLoading = false;
+  String? _selectedQuestionType;
+
+  List? questionOptions = ["trueOrFalse", "fillInTheBlank","shortAnswer","multipleChoice","dropdown","ranking"];
 
   // load before adding quiz with questions data to database, and complete loading once done, then navigate to next screen
   Future<void> addData(Quiz quiz) async {
@@ -224,7 +227,8 @@ class _AddQuestionsState extends State<AddQuestions> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  final uniqueKey = UniqueKey();
+                                  final uniqueKey = UniqueKey();                                 
+                                  _selectedQuestionType=null;
 
                                   showDialog(
                                     context: context,
@@ -235,8 +239,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                           return true;
                                         },
                                         child: AlertDialog(
-                                          backgroundColor: Colors
-                                              .transparent, // Set the background color to transparent
+                                          backgroundColor: Colors.transparent, // Set the background color to transparent
                                           contentPadding: EdgeInsets.zero,
                                           content: Container(
                                             decoration: BoxDecoration(
@@ -244,20 +247,17 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                 begin: Alignment.topLeft,
                                                 end: Alignment.bottomRight,
                                                 colors: [
-                                                  Color.fromARGB(
-                                                      255, 27, 57, 82),
-                                                  Color.fromARGB(
-                                                      255, 11, 26, 68),
+                                                  Color.fromARGB(255, 27, 57, 82),
+                                                  Color.fromARGB(255, 11, 26, 68),
                                                 ],
                                               ),
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
+                                              borderRadius: BorderRadius.circular(20.0),
                                             ),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 const Text(
-                                                  'Submit quiz',
+                                                  'Select Question Type',
                                                   style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20.0,
@@ -265,135 +265,107 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                     fontFamily: 'Nunito',
                                                   ),
                                                 ),
-                                                const SizedBox(height: 15.0),
-                                                const Text(
-                                                  '   Are you sure you want to submit your quiz?   ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 13.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    letterSpacing: 1.0,
-                                                    fontFamily: 'Nunito',
+                                                const SizedBox(height: 15.0),                              
+                                                DropdownButton(                                                               
+                                                  isExpanded: false,
+                                                  value: _selectedQuestionType,   
+                                                  onChanged: (newValue) {                
+                                                     setState(
+                                                      () {   
+                                                      _selectedQuestionType =newValue as String;                                              
+                                                      String qaType = _selectedQuestionType!;
+                                                          // String qaType = 'trueOrFalse';
+                                                          qaContainers.add(QAContainer(
+                                                            qaType: qaType,
+                                                            // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                                            // a key is passed in as a parameterwhich  is the unique key of the widget
+                                                            delete: (key) {
+                                                              setState(() {
+                                                                qaContainers.removeWhere(
+                                                                    (QAContainer) =>
+                                                                        QAContainer.key == key);
+                                                              });
+                                                            },
+                                                            key: uniqueKey));                                                           
+                                                            Navigator.of(context)
+                                                                .pop();                                                                                                  
+                                                    },
+                                                    );
+                                                  },                                                                                                
+                                                  hint: Text('Select Question Type', style: TextStyle(color: Colors.white)),
+                                                  items: questionOptions?.map((option) {                                                    
+                                                      String displayText = '';
+                                                      if (option == 'trueOrFalse') {
+                                                        displayText = 'True Or False';
+                                                      } else if (option == 'fillInTheBlank') {
+                                                        displayText = 'Fill in the Blank';
+                                                      } else if (option == 'shortAnswer') {
+                                                        displayText = 'Short Answer';
+                                                      } else if (option == 'multipleChoice') {
+                                                        displayText = 'Multiple Choice';
+                                                      } else if (option == 'ranking') {
+                                                        displayText = 'Ranking';
+                                                      } else if (option == 'dropdown') {
+                                                        displayText = 'Dropdown';
+                                                      }
+                                                    return DropdownMenuItem(
+                                                      value: option,
+                                                      child:
+                                                          Text(displayText, style: TextStyle(fontFamily: 'Nunito')),
+                                                    );
+                                                  }).toList(),
+                                                  
+                                                  icon: Icon(
+                                                    Icons.arrow_drop_down,
+                                                    size: 20.0,
                                                   ),
+                                                  iconEnabledColor: Colors.white, //Icon color
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito',
+                                                    color: Colors
+                                                        .white, //Font color //font size on dropdown button
+                                                  ),
+                                                  dropdownColor: Color.fromARGB(255, 45, 64, 96),
                                                 ),
                                                 const SizedBox(height: 15.0),
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            colors: [
-                                                              Colors.blue,
-                                                              Colors.blue,
-                                                            ],
-                                                            begin: Alignment
-                                                                .centerLeft,
-                                                            end: Alignment
-                                                                .centerRight,
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                                .pop();
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            gradient: const LinearGradient(
+                                                              colors: [
+                                                                Colors.blue,
+                                                                Colors.blue,
+                                                              ],
+                                                              begin: Alignment.centerLeft,
+                                                              end: Alignment.centerRight,
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(10.0),
                                                           ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 10.0,
-                                                                horizontal:
-                                                                    20.0),
-                                                        child: const Text(
-                                                          'Back',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            letterSpacing: 1.0,
-                                                            fontFamily:
-                                                                'Nunito',
+                                                          padding: const EdgeInsets.symmetric(
+                                                              vertical: 10.0, horizontal: 20.0),
+                                                          child: const Text(
+                                                            'Back',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 12.0,
+                                                              fontWeight: FontWeight.bold,
+                                                              letterSpacing: 1.0,
+                                                              fontFamily: 'Nunito',
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(width: 50.0),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        print('Hello world');
-
-                                                        // Navigator.push(
-                                                        //   context,
-                                                        //   MaterialPageRoute(
-                                                        //       builder: (context) => QuizScore(
-                                                        //           user: widget
-                                                        //               .user,
-                                                        //           chosenQuiz:
-                                                        //               quiz,
-                                                        //           score:
-                                                        //               score,
-                                                        //           answers:
-                                                        //               answers,
-                                                        //           userAnswers:
-                                                        //               userAnswers)),
-                                                        // );
-                                                      },
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          gradient:
-                                                              const LinearGradient(
-                                                            colors: [
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  222,
-                                                                  127,
-                                                                  43),
-                                                              Color.fromARGB(
-                                                                  255,
-                                                                  246,
-                                                                  120,
-                                                                  82),
-                                                            ],
-                                                            begin: Alignment
-                                                                .centerLeft,
-                                                            end: Alignment
-                                                                .centerRight,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                vertical: 10.0,
-                                                                horizontal:
-                                                                    20.0),
-                                                        child: const Text(
-                                                          ' Ok ',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12.0,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            letterSpacing: 1.0,
-                                                            fontFamily:
-                                                                'Nunito',
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
+                                                    const SizedBox(width: 50.0),                                                   
                                                   ],
                                                 ),
                                                 const SizedBox(height: 10.0),
@@ -405,20 +377,20 @@ class _AddQuestionsState extends State<AddQuestions> {
                                     },
                                   );
 
-                                  String qaType = 'trueOrFalse';
+                                  // String qaType = 'trueOrFalse';
 
-                                  qaContainers.add(QAContainer(
-                                      qaType: qaType,
-                                      // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                      // a key is passed in as a parameterwhich  is the unique key of the widget
-                                      delete: (key) {
-                                        setState(() {
-                                          qaContainers.removeWhere(
-                                              (QAContainer) =>
-                                                  QAContainer.key == key);
-                                        });
-                                      },
-                                      key: uniqueKey));
+                                  // qaContainers.add(QAContainer(
+                                  //     qaType: qaType,
+                                  //     // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                  //     // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  //     delete: (key) {
+                                  //       setState(() {
+                                  //         qaContainers.removeWhere(
+                                  //             (QAContainer) =>
+                                  //                 QAContainer.key == key);
+                                  //       });
+                                  //     },
+                                  //     key: uniqueKey));
                                 });
                               },
                               style: ElevatedButton.styleFrom(
