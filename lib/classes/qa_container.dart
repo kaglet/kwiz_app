@@ -12,6 +12,7 @@ class QAContainer extends StatefulWidget {
   final _questionPreController = TextEditingController();
   final _questionPostController = TextEditingController();
   final _answerController = TextEditingController();
+  String _selectedTruthValue = 'True';
   int? number;
 
   QAContainer(
@@ -36,9 +37,15 @@ class QAContainer extends StatefulWidget {
     if (qaType == 'fillInTheBlank') {
       return QA(
           question:
-              _questionPreController.text + "**" + _questionPostController.text,
+              _questionPreController.text + '**' + _questionPostController.text,
           answer: _answerController.text,
           type: 'fillInTheBlank');
+    }
+    if (qaType == 'trueOrFalse') {
+      return QA(
+          question: _questionController.text,
+          answer: _selectedTruthValue,
+          type: 'trueOrFalse');
     }
     if (qaType == 'multipleChoice') {
       return QAMultiple(
@@ -281,11 +288,11 @@ class _QAContainerState extends State<QAContainer> {
               child: Center(
                 child: DropdownButton(
                   isExpanded: true,
-                  value: _selectedTruthValue,
+                  value: widget._selectedTruthValue,
                   onChanged: (newValue) {
                     setState(
                       () {
-                        _selectedTruthValue = newValue as String;
+                        widget._selectedTruthValue = newValue as String;
                       },
                     );
                   },

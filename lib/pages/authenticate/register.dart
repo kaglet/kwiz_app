@@ -294,7 +294,7 @@ class _RegisterState extends State<Register> {
                                             await _auth.RegisterWithEandP(
                                                 email, password, user);
 
-                                        if (this.mounted && result == null) {
+                                        if (this.mounted || result == null) {
                                           setState(() {
                                             loading = false;
                                             error = 'Please supply valid email';
