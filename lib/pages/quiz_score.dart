@@ -183,8 +183,8 @@ class QuizScoreState extends State<QuizScore> {
           : SafeArea(
               child: SingleChildScrollView(
                 child: Container(
-                  width: screenWidth,
-                  height: screenHeight,
+                  width: screenWidth ,
+                  height: screenHeight+200,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(

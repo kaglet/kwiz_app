@@ -32,20 +32,48 @@ class QuizScreenState extends State<QuizScreen> {
       _isLoading = true;
     });
     quiz = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
+    print(quiz);
+    print(quizLength);
+    quizLength =
+        quiz!.quizQuestions.length; //this seemed to have fixed the null error?
+    userAnswers = List.filled(quizLength, '');
+    answerOptionsMC = List.filled(quizLength, []);
+
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
+        // if (question.questionType == "fillInTheBlank"){
+        //   //qParts = List.filled(2, '');
+        //   // for (int i = 0; i < 2; i++) {
+        //   //   qParts.add(questions[question.questionNumber].split("*")[i]);
+        //   // }
+        //   //questionParts = questions[currentIndex].split("**");
+        //   //print(qParts);
+        // }
         if (question.questionType == "multipleChoice"){
+          for (int i = 0; i < quizLength; i++){
+            answerOptionsMC[i] = question.answerOptions;
+          }
+          
           print(question.questionNumber);
           print(question.answerOptions);
           print(question.questionType);    
         }
+
+        if (question.questionType == "dropdown"){
+          answerOptionsDD = question.answerOptions;    
+        }
+
+        if (question.questionType == "ranking"){
+          answerOptionsR = (question.answerOptions);    
+        }
+
       } 
     }
 
+
     //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
-    quizLength =
-        quiz!.quizQuestions.length; //this seemed to have fixed the null error?
-    userAnswers = List.filled(quizLength, '');
+    
+    
     category = quiz!.quizCategory.toString();
     List<String> quest = [];
     List<String> ans = [];
@@ -95,6 +123,14 @@ class QuizScreenState extends State<QuizScreen> {
   int currentIndex = 0;
 
   String currentQuestionType = "";
+
+  //split list for fill in the blank questions
+  List<String> questionParts = [];
+
+  //lists for one instance of MC and dropdown and ranking  create list of list for multiple MC and dropdown later
+  List<List> answerOptionsMC = [];
+  List<String> answerOptionsDD = [];
+  List<String> answerOptionsR = [];
 
   @override
   Widget build(BuildContext context) {
@@ -149,13 +185,13 @@ class QuizScreenState extends State<QuizScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Flexible(
-                          flex: 1,
-                          fit: FlexFit.tight,
-                          child: Center(
-                              child: Image.asset(
-                            'assets/images/$category.gif',
-                          ))),
+                      // Flexible(
+                      //     flex: 1,
+                      //     fit: FlexFit.tight,
+                      //     child: Center(
+                      //         child: Image.asset(
+                      //       'assets/images/$category.gif',
+                      //     ))),
 
                       // Display the question number and question text
                       const SizedBox(
@@ -263,24 +299,234 @@ class QuizScreenState extends State<QuizScreen> {
                         ),
 
                       if (currentQuestionType == "multipleChoice") 
+                        SizedBox(
+                          height: 500,
+                          child: Column(
+                            children: [
+                              // Display the question number and question text
+                              const SizedBox(height: 16.0),
+                              Text(
+                                questions[currentIndex],
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+                        
+                              // Display the answer options
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: answerOptionsMC.length,    //HERE HOW TO GET ANSWEROPTION LIST????
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return ListTile(
+                                      title: Text(
+                                        answerOptionsMC[currentIndex][index],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Nunito',
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        // Handle the selected answer
+                                        setState(() {
+                                          answerController.text = answerOptionsMC[currentIndex][index];
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+                            ],
+                          ),
+                        ),
+
+                      if (currentQuestionType == "dropdown") 
+                        SizedBox(
+                          height: 500,
+                          child: Column(
+                            children: [
+                              // Display the question number and question text
+                              const SizedBox(height: 16.0),
+                              Text(
+                                questions[currentIndex],
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+                              
+                              // Display the dropdown button
+                              DropdownButtonFormField(
+                                value: answerController.text.isNotEmpty ? answerController.text : null,
+                                items: answerOptionsDD.map<DropdownMenuItem<String>>((String option) {
+                                  return DropdownMenuItem<String>(
+                                    value: option,
+                                    child: Text(
+                                      option,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  // Handle the selected answer
+                                  setState(() {
+                                    answerController.text = newValue ?? "";
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  hintText: 'Select an option',
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 10.0,
+                                    horizontal: 20.0,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+                            ],
+                          ),
+                        ),
+
+                      if (currentQuestionType == "ranking") 
+                        SizedBox(
+                          height: 500,
+                          child: Column(
+                            children: [
+                              // Display the question number and question text
+                              const SizedBox(height: 16.0),
+                              Text(
+                                questions[currentIndex],
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+                              
+                              // Display the answer options as draggable tiles
+                              Expanded(
+                                child: ReorderableListView(
+                                  onReorder: (oldIndex, newIndex) {
+                                    // Reorder the list of answer options
+                                    setState(() {
+                                      if (newIndex > oldIndex) {
+                                        newIndex -= 1;
+                                      }
+                                      final String item = answerOptionsR.removeAt(oldIndex);
+                                      answerOptionsR.insert(newIndex, item);
+                                    });
+                                  },
+                                  children: answerOptionsR
+                                    .map((option) => ListTile(
+                                      key: ValueKey(option), // Set a unique key for each ListTile
+                                      title: Text(
+                                        option,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'Nunito',
+                                        ),
+                                      ),
+                                      leading: Icon(
+                                        Icons.drag_handle,
+                                        color: Colors.white,
+                                      ),
+                                    ))
+                                    .toList(),
+                                ),
+                              ),
+                              const SizedBox(height: 32.0),
+
+                              ElevatedButton(
+                                onPressed: () {
+                                  print(answerOptionsR);
+                                  answerController.text = answerOptionsR.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(' ', '').replaceAll('\n', '');
+                                  print(answerController.text);
+                                  int diff = answerController.text.compareTo(answers[currentIndex]);
+                                  print("the difference: $diff");
+                                  setState(() {
+                                    //currentIndex--;
+                                    //updateText();
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 24),
+                                  backgroundColor: Colors
+                                      .transparent, // set the button background color to transparent
+                                  elevation: 0, // remove the button shadow
+                                ),
+                                child: const Text(
+                                  'Save Answer',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Nunito',
+                                  ),
+                                ),
+                              ),
+
+                              // Display the text field for adding new answer options
+                              // TextField(
+                              //   controller: answerController,
+                              //   onChanged: (value) {
+                              //     // Update the answer text every time the user types or edits the text field
+                              //     setState(() {
+                              //       answerController.text = value;
+                              //     });
+                              //   },
+                              //   onSubmitted: (value) {
+                              //     // Add the new answer option to the list of answer options
+                              //     setState(() {
+                              //       answerOptionsR.add(value);
+                              //       answerController.clear();
+                              //     });
+                              //   },
+                              //   decoration: InputDecoration(
+                              //     hintText: 'Add an answer option',
+                              //     hintStyle: const TextStyle(
+                              //       color: Colors.white,
+                              //       fontFamily: 'Nunito',
+                              //     ),
+                              //   ),
+                              //   style: const TextStyle(
+                              //     color: Colors.white,
+                              //     fontFamily: 'Nunito',
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ),
+
+                    
+                      if (currentQuestionType == "fillInTheBlank")
                         Column(
                           children: [
-                            // Display the question number and question text
-                            const SizedBox(
-                              height: 20.0,
-                            ),
                             Text(
-                              'Question ${currentIndex + 1} of ${questions.length}',
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                            Text(
-                              questions[currentIndex],
+                              questions[currentIndex].substring(0, questions[currentIndex].indexOf("**")),    //gets string before **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -289,36 +535,35 @@ class QuizScreenState extends State<QuizScreen> {
                               ),
                             ),
                             const SizedBox(height: 32.0),
-
-                            // Display the answer options
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: quiz!.quizQuestions[currentIndex].questionAnwerOptions,    //HERE HOW TO GET ANSWEROPTION LIST????
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListTile(
-                                    title: Text(
-                                      answerOptions[index],
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Nunito',
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      // Handle the selected answer
-                                      setState(() {
-                                        answerController.text = answerOptions[index];
-                                      });
-                                    },
-                                  );
-                                },
+                            TextField(
+                              controller: answerController,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Type your answer here',
+                                hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 126, 125, 125),
+                                  fontFamily: 'Nunito',
+                                ),
                               ),
                             ),
                             const SizedBox(height: 32.0),
-                          ],
+                            Text(
+                              questions[currentIndex].substring(questions[currentIndex].indexOf("**") + 2),   //gets string after **
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                          const SizedBox(height: 32.0),
+                        ],
                       ),
                     
-
-                    
+      
                       // Buttons for moving to the previous/next question
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -374,6 +619,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 onPressed: () {
                                   userAnswers[currentIndex] =
                                       answerController.text.trim();
+                                      print(userAnswers);
                                   setState(() {
                                     currentIndex++;
                                     updateText();
@@ -386,6 +632,7 @@ class QuizScreenState extends State<QuizScreen> {
                                       .transparent, // set the button background color to transparent
                                   elevation: 0, // remove the button shadow
                                 ),
+                                
                                 child: const Text(
                                   '  Next  ',
                                   style: TextStyle(
