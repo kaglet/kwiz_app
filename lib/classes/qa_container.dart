@@ -582,6 +582,7 @@ class _QAContainerState extends State<QAContainer> {
                 itemCount: userInputAnswers!.length,
                 itemBuilder: (context, index) {
                   // with each index return qaContainer at that index into listview with adjusted question number
+<<<<<<< HEAD
                   return Card(
                     child: Row(
                       children: [
@@ -597,8 +598,87 @@ class _QAContainerState extends State<QAContainer> {
                         ),
                       ],
                     ),
+=======
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(                    
+                        children: [                      
+                          Expanded(
+                            child: TextField(
+                              style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Nunito',
+                        ),
+
+                        // assign controller to this question textfield
+                        minLines: 1,
+                        maxLines: 1,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          labelText: 'Option ${index+1}',
+                          labelStyle: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          hintText: 'Option ${index+1}',
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        
+                              onChanged: (value) {
+                                setState(() {                                               
+                                  userInputAnswers![index] =
+                                      value; // Update the user input in the list
+                                  print(userInputAnswers);
+                                  print(index);
+                                });
+                              },
+                              // Add other properties to the TextField as needed
+                            ),
+                          ),
+                          IconButton(
+                             
+                          onPressed: _selectedDropdownValue == userInputAnswers![index] ?() {     
+                            setState(() {
+                                userInputAnswers!.removeAt(index); 
+                                print(userInputAnswers);                                                       
+                              
+                            });                       
+                            
+                          // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                          // pass in the current widget's unique key to delete the current widget
+                          // widget.delete(widget.key);
+                          }
+                          :null,
+                          
+                        icon: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      ],
+                      ),
+                    ],
+>>>>>>> d811acb2ca043f887cc8e61a54782a083b58650d
                   );
+                  
+                
                 },
+                
               ),
             ),
             DropdownButton(
@@ -648,6 +728,7 @@ class _QAContainerState extends State<QAContainer> {
                   ),
                   child: ElevatedButton(
                     onPressed: userInputAnswers!.length < 8
+<<<<<<< HEAD
                         ? () {
                             setState(() {
                               userInputAnswers!.add(
@@ -655,6 +736,14 @@ class _QAContainerState extends State<QAContainer> {
                             });
                           }
                         : null,
+=======
+                      ? () {
+                          setState(() {
+                            userInputAnswers!.add('Option ${userInputAnswers!.length + 1}');
+                          });
+                        }
+                      : null,
+>>>>>>> d811acb2ca043f887cc8e61a54782a083b58650d
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: Colors.transparent,
