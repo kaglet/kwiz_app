@@ -75,9 +75,10 @@ class _QAContainerState extends State<QAContainer> {
   //   super.dispose();
   // }
   String _selectedTruthValue = 'True';
-  String? _selectedDropdownValue = '';
+  String? _selectedDropdownValue;
   List? trueOrFalseOptions = ["True", "False"];
-  final List? userInputAnswers = [''];
+  final List? userInputAnswers = [];
+  final List? userInitializedAnswers = [''];
   @override
   Widget build(BuildContext context) {
     if (widget.qaType == 'shortAnswer') {
@@ -597,7 +598,8 @@ class _QAContainerState extends State<QAContainer> {
             DropdownButton(
               isExpanded: true,
               // this value must always match the value in the list it gets items from, from the start
-              value: _selectedDropdownValue ?? 'Default value',
+              value: _selectedDropdownValue,
+
               onChanged: (newValue) {
                 setState(
                   () {
@@ -605,14 +607,14 @@ class _QAContainerState extends State<QAContainer> {
                   },
                 );
               },
-              items: userInputAnswers != null && userInputAnswers!.isNotEmpty
-                  ? userInputAnswers!.map((option) {
-                      return DropdownMenuItem(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList()
-                  : [],
+              hint:
+                  Text('Select Answer', style: TextStyle(color: Colors.white)),
+              items: userInputAnswers!.map((option) {
+                return DropdownMenuItem(
+                  value: option,
+                  child: Text(option, style: TextStyle(fontFamily: 'Nunito')),
+                );
+              }).toList(),
               icon: Icon(
                 Icons.arrow_drop_down,
                 size: 20.0,
@@ -639,13 +641,14 @@ class _QAContainerState extends State<QAContainer> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // clear qaContainer widgets from screen
-                      setState(() {
-                        userInputAnswers!
-                            .add('Option ${userInputAnswers!.length + 1}');
-                      });
-                    },
+                    onPressed: userInputAnswers!.length < 8
+                        ? () {
+                            setState(() {
+                              userInputAnswers!.add(
+                                  'Answer ${userInputAnswers!.length + 1}');
+                            });
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: Colors.transparent,
