@@ -107,36 +107,44 @@ class _BookmarkState extends State<Bookmark> {
 // coverage:ignore-end
   void filterQuizzes(String searchTerm) {
     setState(() {
-      print(bookmarkedQuizList);
-      filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
+      // print(bookmarkedQuizList);
+      // filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
 
-      List<String> quizzesNames = [];
-      List<String> filteredQuizzesNames = [];
+      // List<String> quizzesNames = [];
+      // List<String> filteredQuizzesNames = [];
 
-      for (int i = 0; i < bookmarkLength; i++) {
-        quizzesNames.add(bookmarkedQuizList!.elementAt(i).bookmarkQuizName);
-      }
+      // for (int i = 0; i < bookmarkLength; i++) {
+      //   quizzesNames.add(bookmarkedQuizList!.elementAt(i).bookmarkQuizName);
+      // }
 
-      filteredQuizzesNames = quizzesNames
-          .where(
-              (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+      // filteredQuizzesNames = quizzesNames
+      //     .where(
+      //         (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
+      //     .toList();
+
+      // if (filteredQuizzesNames.isNotEmpty) {
+      //   filteredQuizzes!.clear();
+      //   for (int j = 0; j < filteredQuizzesNames.length; j++) {
+      //     for (int k = 0; k < bookmarkLength; k++) {
+      //       if (filteredQuizzesNames[j] ==
+      //           bookmarkedQuizList!.elementAt(k).bookmarkQuizName) {
+      //         filteredQuizzes!.add(bookmarkedQuizList!.elementAt(k));
+      //       }
+      //     }
+      //   }
+      // } else {
+      //   filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
+      // }
+
+      // filLength = filteredQuizzesNames.length;
+
+      filteredQuizzes = bookmarkedQuizList!
+          .where((item) => item.bookmarkQuizName
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()))
           .toList();
 
-      if (filteredQuizzesNames.isNotEmpty) {
-        filteredQuizzes!.clear();
-        for (int j = 0; j < filteredQuizzesNames.length; j++) {
-          for (int k = 0; k < bookmarkLength; k++) {
-            if (filteredQuizzesNames[j] ==
-                bookmarkedQuizList!.elementAt(k).bookmarkQuizName) {
-              filteredQuizzes!.add(bookmarkedQuizList!.elementAt(k));
-            }
-          }
-        }
-      } else {
-        filteredQuizzes = List<Bookmarks>.from(bookmarkedQuizList!);
-      }
-
-      filLength = filteredQuizzesNames.length;
+      filLength = filteredQuizzes!.length;
 
       //Keep bookmarks vaild
       //  updateBookmarkList();

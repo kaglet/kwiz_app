@@ -36,6 +36,9 @@ class _AddQuestionsState extends State<AddQuestions> {
   DatabaseService service = DatabaseService();
   int currentIndex = 0;
   bool _isLoading = false;
+  String? _selectedQuestionType;
+
+  List? questionOptions = ["trueOrFalse", "fillInTheBlank","shortAnswer","multipleChoice","dropdown","ranking"];
 
   // load before adding quiz with questions data to database, and complete loading once done, then navigate to next screen
   Future<void> addData(Quiz quiz) async {
@@ -224,18 +227,170 @@ class _AddQuestionsState extends State<AddQuestions> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  final uniqueKey = UniqueKey();
-                                  qaContainers.add(QAContainer(
-                                      // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                      // a key is passed in as a parameterwhich  is the unique key of the widget
-                                      delete: (key) {
-                                        setState(() {
-                                          qaContainers.removeWhere(
-                                              (QAContainer) =>
-                                                  QAContainer.key == key);
-                                        });
-                                      },
-                                      key: uniqueKey));
+                                  final uniqueKey = UniqueKey();                                 
+                                  _selectedQuestionType=null;
+
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return WillPopScope(
+                                        onWillPop: () async {
+                                          Navigator.of(context).pop();
+                                          return true;
+                                        },
+                                        child: AlertDialog(
+                                          backgroundColor: Colors.transparent, // Set the background color to transparent
+                                          contentPadding: EdgeInsets.zero,
+                                          content: Container(
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color.fromARGB(255, 27, 57, 82),
+                                                  Color.fromARGB(255, 11, 26, 68),
+                                                ],
+                                              ),
+                                              borderRadius: BorderRadius.circular(20.0),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                const Text(
+                                                  'Select Question Type',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0,
+                                                    letterSpacing: 1.0,
+                                                    fontFamily: 'Nunito',
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 15.0),                              
+                                                DropdownButton(                                                               
+                                                  isExpanded: false,
+                                                  value: _selectedQuestionType,   
+                                                  onChanged: (newValue) {                
+                                                     setState(
+                                                      () {   
+                                                      _selectedQuestionType =newValue as String;                                              
+                                                      String qaType = _selectedQuestionType!;
+                                                          // String qaType = 'trueOrFalse';
+                                                          qaContainers.add(QAContainer(
+                                                            qaType: qaType,
+                                                            // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                                            // a key is passed in as a parameterwhich  is the unique key of the widget
+                                                            delete: (key) {
+                                                              setState(() {
+                                                                qaContainers.removeWhere(
+                                                                    (QAContainer) =>
+                                                                        QAContainer.key == key);
+                                                              });
+                                                            },
+                                                            key: uniqueKey));                                                           
+                                                            Navigator.of(context)
+                                                                .pop();                                                                                                  
+                                                    },
+                                                    );
+                                                  },                                                                                                
+                                                  hint: Text('Select Question Type', style: TextStyle(color: Colors.white)),
+                                                  items: questionOptions?.map((option) {                                                    
+                                                      String displayText = '';
+                                                      if (option == 'trueOrFalse') {
+                                                        displayText = 'True Or False';
+                                                      } else if (option == 'fillInTheBlank') {
+                                                        displayText = 'Fill in the Blank';
+                                                      } else if (option == 'shortAnswer') {
+                                                        displayText = 'Short Answer';
+                                                      } else if (option == 'multipleChoice') {
+                                                        displayText = 'Multiple Choice';
+                                                      } else if (option == 'ranking') {
+                                                        displayText = 'Ranking';
+                                                      } else if (option == 'dropdown') {
+                                                        displayText = 'Dropdown';
+                                                      }
+                                                    return DropdownMenuItem(
+                                                      value: option,
+                                                      child:
+                                                          Text(displayText, style: TextStyle(fontFamily: 'Nunito')),
+                                                    );
+                                                  }).toList(),
+                                                  
+                                                  icon: Icon(
+                                                    Icons.arrow_drop_down,
+                                                    size: 20.0,
+                                                  ),
+                                                  iconEnabledColor: Colors.white, //Icon color
+                                                  style: TextStyle(
+                                                    fontFamily: 'Nunito',
+                                                    color: Colors
+                                                        .white, //Font color //font size on dropdown button
+                                                  ),
+                                                  dropdownColor: Color.fromARGB(255, 45, 64, 96),
+                                                ),
+                                                const SizedBox(height: 15.0),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: TextButton(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                                .pop();
+                                                        },
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            gradient: const LinearGradient(
+                                                              colors: [
+                                                                Colors.blue,
+                                                                Colors.blue,
+                                                              ],
+                                                              begin: Alignment.centerLeft,
+                                                              end: Alignment.centerRight,
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(10.0),
+                                                          ),
+                                                          padding: const EdgeInsets.symmetric(
+                                                              vertical: 10.0, horizontal: 20.0),
+                                                          child: const Text(
+                                                            'Back',
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 12.0,
+                                                              fontWeight: FontWeight.bold,
+                                                              letterSpacing: 1.0,
+                                                              fontFamily: 'Nunito',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 50.0),                                                   
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 10.0),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+
+                                  // String qaType = 'trueOrFalse';
+
+                                  // qaContainers.add(QAContainer(
+                                  //     qaType: qaType,
+                                  //     // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                  //     // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  //     delete: (key) {
+                                  //       setState(() {
+                                  //         qaContainers.removeWhere(
+                                  //             (QAContainer) =>
+                                  //                 QAContainer.key == key);
+                                  //       });
+                                  //     },
+                                  //     key: uniqueKey));
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -276,15 +431,26 @@ class _AddQuestionsState extends State<AddQuestions> {
     for (var qaContainer in qaContainers) {
       // extract QA data in qaContainer into a useable object form
       QA qa = qaContainer.extractQA();
-
-      Question questionObj = Question(
-          questionNumber: i,
-          questionText: qa.question,
-          questionAnswer: qa.answer,
-          questionMark: 0,
-          questionType: "shortAnswer");
-      savedQAs.add(questionObj);
-      i++;
+      if (qa is QAMultiple) {
+        MultipleAnswerQuestion questionObj = MultipleAnswerQuestion(
+            questionNumber: i,
+            questionText: qa.question,
+            questionAnswer: qa.answer,
+            questionMark: 0,
+            questionType: qa.type,
+            answerOptions: qa.answerOptions);
+        savedQAs.add(questionObj);
+        i++;
+      } else {
+        Question questionObj = Question(
+            questionNumber: i,
+            questionText: qa.question,
+            questionAnswer: qa.answer,
+            questionMark: 0,
+            questionType: qa.type);
+        savedQAs.add(questionObj);
+        i++;
+      }
     }
     // add about quiz data sent from previous page and questions list to quiz object
     Quiz quiz = Quiz(

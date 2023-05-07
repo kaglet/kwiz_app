@@ -148,13 +148,14 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
+          totalScore: docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
 
         users.add(user);
-         print("hi");
-    print(users.elementAt(i).userName);
+        
     }
     
     return users;
@@ -287,6 +288,8 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
+          totalScore:  docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -340,6 +343,8 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
+          totalScore: docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           uID: docSnapshot.id);
@@ -467,6 +472,8 @@ class DatabaseService {
         userName: docSnapshot['Username'],
         firstName: docSnapshot['FirstName'],
         lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: []);
 
@@ -482,6 +489,9 @@ class DatabaseService {
       'FirstName': userInstance.firstName,
       'LastName': userInstance.lastName,
       'Username': userInstance.userName,
+      'TotalScore' : '0',
+      'TotalQuizzes' : 0,
+
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------

@@ -151,6 +151,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     userName: ' ',
     firstName: ' ',
     lastName: ' ',
+    totalScore: ' ',
+    totalQuizzes: 0,
     bookmarkedQuizzes: [],
     pastAttemptQuizzes: [],
   );

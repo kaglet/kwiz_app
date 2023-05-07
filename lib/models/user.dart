@@ -13,6 +13,8 @@ class UserData {
   final String userName;
   final String firstName;
   final String lastName;
+  final int totalQuizzes;
+  final String totalScore;
   late final List<Bookmarks> bookmarkedQuizzes;
   late final List<PastAttempt> pastAttemptQuizzes;
   late final List<Rating> ratings;
@@ -22,7 +24,10 @@ class UserData {
     required this.userName,
     required this.firstName,
     required this.lastName,
+    required this.totalScore,
+    required this.totalQuizzes,
     required this.bookmarkedQuizzes,
     required this.pastAttemptQuizzes,
+    
   });
 }

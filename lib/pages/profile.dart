@@ -36,6 +36,8 @@ class _ProfileState extends State<Profile> {
     userName: ' ',
     firstName: ' ',
     lastName: ' ',
+    totalScore: ' ',
+    totalQuizzes: 0,
     bookmarkedQuizzes: [],
     pastAttemptQuizzes: [],
   );
