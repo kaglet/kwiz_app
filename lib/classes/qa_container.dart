@@ -75,10 +75,9 @@ class _QAContainerState extends State<QAContainer> {
   //   super.dispose();
   // }
   String _selectedTruthValue = 'True';
-  String _selectedDropdownValue = '';
+  String? _selectedDropdownValue = '';
   List? trueOrFalseOptions = ["True", "False"];
   final List? userInputAnswers = [''];
-  final List? userInitializedAnswers = [''];
   @override
   Widget build(BuildContext context) {
     if (widget.qaType == 'shortAnswer') {
@@ -597,7 +596,8 @@ class _QAContainerState extends State<QAContainer> {
             ),
             DropdownButton(
               isExpanded: true,
-              value: _selectedDropdownValue,
+              // this value must always match the value in the list it gets items from, from the start
+              value: _selectedDropdownValue ?? 'Default value',
               onChanged: (newValue) {
                 setState(
                   () {
@@ -605,12 +605,14 @@ class _QAContainerState extends State<QAContainer> {
                   },
                 );
               },
-              items: userInputAnswers?.map((option) {
-                return DropdownMenuItem(
-                  value: option,
-                  child: Text(option, style: TextStyle(fontFamily: 'Nunito')),
-                );
-              }).toList(),
+              items: userInputAnswers != null && userInputAnswers!.isNotEmpty
+                  ? userInputAnswers!.map((option) {
+                      return DropdownMenuItem(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList()
+                  : [],
               icon: Icon(
                 Icons.arrow_drop_down,
                 size: 20.0,
@@ -641,7 +643,7 @@ class _QAContainerState extends State<QAContainer> {
                       // clear qaContainer widgets from screen
                       setState(() {
                         userInputAnswers!
-                            .add('Answer ${userInputAnswers!.length + 1}');
+                            .add('Option ${userInputAnswers!.length + 1}');
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -677,3 +679,7 @@ class _QAContainerState extends State<QAContainer> {
     );
   }
 }
+
+// selected value by default is that but later it must change. 
+// Only on change of the dropdown itself must the value be set
+// 
