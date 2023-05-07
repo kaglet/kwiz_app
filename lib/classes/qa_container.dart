@@ -37,13 +37,13 @@ class QAContainer extends StatefulWidget {
     if (qaType == 'fillInTheBlank') {
       return QA(
           question:
-              _questionPreController.text + '**' + _questionPostController.text,
+             _questionPreController.text+'**'+_questionPostController.text,
           answer: _answerController.text,
           type: 'fillInTheBlank');
     }
     if (qaType == 'trueOrFalse') {
       return QA(
-          question: _questionController.text,
+          question:_questionController.text,
           answer: _selectedTruthValue,
           type: 'trueOrFalse');
     }
@@ -74,11 +74,8 @@ class _QAContainerState extends State<QAContainer> {
   //   widget._answerController.dispose();
   //   super.dispose();
   // }
-  String _selectedTruthValue = 'True';
-  String _selectedDropdownValue = '';
+  
   List? trueOrFalseOptions = ["True", "False"];
-  final List? userInputAnswers = [''];
-  final List? userInitializedAnswers = [''];
   @override
   Widget build(BuildContext context) {
     if (widget.qaType == 'shortAnswer') {
@@ -509,7 +506,7 @@ class _QAContainerState extends State<QAContainer> {
       return scrollview;
     } else if (widget.qaType == 'multipleChoice') {
       // return short answer qa container
-      SingleChildScrollView multipleChoiceContainer = SingleChildScrollView(
+      SingleChildScrollView scrollview = SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -575,101 +572,23 @@ class _QAContainerState extends State<QAContainer> {
                     ),
                   )),
             ),
-            SizedBox(
-              height: 100,
+            Expanded(
+              flex: 1,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: userInputAnswers!.length,
+                itemCount: 3,
                 itemBuilder: (context, index) {
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        userInputAnswers![index] =
-                            value; // Update the user input in the list
-                        print(userInputAnswers);
-                      });
-                    },
-                    // Add other properties to the TextField as needed
+                  return Container(
+                    child: Text('Placeholder text'),
                   );
                 },
               ),
             ),
-            DropdownButton(
-              isExpanded: true,
-              value: _selectedDropdownValue,
-              onChanged: (newValue) {
-                setState(
-                  () {
-                    _selectedDropdownValue = newValue as String;
-                  },
-                );
-              },
-              items: userInputAnswers?.map((option) {
-                return DropdownMenuItem(
-                  value: option,
-                  child: Text(option, style: TextStyle(fontFamily: 'Nunito')),
-                );
-              }).toList(),
-              icon: Icon(
-                Icons.arrow_drop_down,
-                size: 20.0,
-              ),
-              iconEnabledColor: Colors.white, //Icon color
-              style: TextStyle(
-                fontFamily: 'Nunito',
-                color: Colors.white, //Font color //font size on dropdown button
-              ),
-              dropdownColor: Color.fromARGB(255, 45, 64, 96),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 100,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.orange, Colors.deepOrange],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // clear qaContainer widgets from screen
-                      setState(() {
-                        userInputAnswers!
-                            .add('Answer ${userInputAnswers!.length + 1}');
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      padding: const EdgeInsets.all(0.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
-                      ),
-                    ),
-                    child: Text(
-                      'Add Option',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.0,
-            )
           ],
         ),
       );
-      return multipleChoiceContainer;
+      return scrollview;
     }
 
     return SingleChildScrollView(
