@@ -291,7 +291,7 @@ class AddQuizState extends State<AddQuiz> {
                             ],
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

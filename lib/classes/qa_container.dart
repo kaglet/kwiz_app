@@ -582,15 +582,21 @@ class _QAContainerState extends State<QAContainer> {
                 itemCount: userInputAnswers!.length,
                 itemBuilder: (context, index) {
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        userInputAnswers![index] =
-                            value; // Update the user input in the list
-                        print(userInputAnswers);
-                      });
-                    },
-                    // Add other properties to the TextField as needed
+                  return Card(
+                    child: Row(
+                      children: [
+                        TextField(
+                          onChanged: (value) {
+                            setState(() {
+                              userInputAnswers![index] =
+                                  value; // Update the user input in the list
+                              print(userInputAnswers);
+                            });
+                          },
+                          // Add other properties to the TextField as needed
+                        ),
+                      ],
+                    ),
                   );
                 },
               ),
