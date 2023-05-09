@@ -579,15 +579,17 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: userInputAnswers!.length,
+                itemCount: userInputAnswers!.length,                
                 itemBuilder: (context, index) {
+                  final key = UniqueKey();
                   // with each index return qaContainer at that index into listview with adjusted question number
                   return Column(
                     children: [
                       SizedBox(
                         height: 10.0,
                       ),
-                      Row(                    
+                      Row(   
+                        key: Key('option-${index.toString()}'),                 
                         children: [                      
                           Expanded(
                             child: TextField(
@@ -597,7 +599,6 @@ class _QAContainerState extends State<QAContainer> {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Nunito',
                         ),
-
                         // assign controller to this question textfield
                         minLines: 1,
                         maxLines: 1,
@@ -626,31 +627,42 @@ class _QAContainerState extends State<QAContainer> {
                         ),
                         
                               onChanged: (value) {
-                                setState(() {                                               
+                                setState(() {          
+                                  if (_selectedDropdownValue == userInputAnswers![index]){
+                                    _selectedDropdownValue =
+                                          value;
                                   userInputAnswers![index] =
-                                      value; // Update the user input in the list
-                                  print(userInputAnswers);
-                                  print(index);
+                                          value;
+                                  }else{
+                                    userInputAnswers![index] =
+                                          value; // Update the user input in the list
+                                      print(userInputAnswers);
+                                      print(index);
+                                  }                                     
+                                 
                                 });
                               },
                               // Add other properties to the TextField as needed
                             ),
                           ),
                           IconButton(
-                             
-                          onPressed: _selectedDropdownValue == userInputAnswers![index] ?() {     
-                            setState(() {
+                          onPressed: () {     
+                            setState(() {                              
+                              
+                              if (_selectedDropdownValue == userInputAnswers![index]){
+                                  print(userInputAnswers);
+                              }else{
                                 userInputAnswers!.removeAt(index); 
-                                print(userInputAnswers);                                                       
+                                                           
+                                print(userInputAnswers);
+                              }
                               
                             });                       
                             
                           // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
                           // pass in the current widget's unique key to delete the current widget
                           // widget.delete(widget.key);
-                          }
-                          :null,
-                          
+                          },
                         icon: const Icon(Icons.delete, color: Colors.white),
                       ),
                       ],
