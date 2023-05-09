@@ -13,13 +13,10 @@ class QAContainer extends StatefulWidget {
   final _questionPreController = TextEditingController();
   final _questionPostController = TextEditingController();
   final _answerController = TextEditingController();
-  final GlobalKey<_QAContainerState> _widgetStateKey =
-      GlobalKey<_QAContainerState>();
   String _selectedTruthValue = 'True';
   String? _selectedDropdownValue;
-  List? dropdownList = [];
+  final List? dropdownList = [];
   int? number;
-  List? storedListViewData;
 
   QAContainer(
       {required this.delete,
@@ -29,14 +26,6 @@ class QAContainer extends StatefulWidget {
       : super(key: key) {
     // set the optional parameter if no value is provided
     this.number = number ?? 0;
-  }
-
-  void updateList(List? list) {
-    _QAContainerState? widgetState = _widgetStateKey.currentState;
-    if (widgetState != null) {
-      widgetState
-          .updateListDataWithOldData(list); // Call a method of the state object
-    }
   }
 
   // for this  qaContainer which encapsulates data extract the question and answer data
@@ -71,7 +60,7 @@ class QAContainer extends StatefulWidget {
           answer: answer,
           type: 'multipleChoice',
           answerOptions: answerOptions);
-    }
+    } 
     if (qaType == 'dropdown') {
       String answer = _selectedDropdownValue!;
       List<String> answerOptions =
@@ -82,20 +71,19 @@ class QAContainer extends StatefulWidget {
           answer: answer,
           type: 'dropdown',
           answerOptions: answerOptions);
-    }
-    if (qaType == 'ranking') {
+    }if (qaType == 'ranking') {     
       List<String> answerOptions =
           dropdownList!.map((e) => e.toString()).toList();
       String answer = answerOptions.join(",");
       print(answer);
-
+        
       return QAMultiple(
           // answer option will come from all answerOptions controllers
           question: _questionController.text,
           answer: answer,
           type: 'ranking',
           answerOptions: answerOptions);
-    } else {
+    }else {
       return QA(
           question: _questionController.text,
           answer: _answerController.text,
@@ -108,45 +96,6 @@ class QAContainer extends StatefulWidget {
 }
 
 class _QAContainerState extends State<QAContainer> {
-  void updateListDataWithOldData(List? list) {
-    setState(() {
-      List<MultipleChoiceOption> newMultipleChoiceOptions = [];
-      for (int i = 0; i < list!.length; i++) {
-        final uniqueKey = UniqueKey();
-        newMultipleChoiceOptions.add(MultipleChoiceOption(
-          onChanged: (value, optionIndex) {
-            setState(() {
-              if (widget._selectedDropdownValue ==
-                  widget.dropdownList![optionIndex]) {
-                widget._selectedDropdownValue = value;
-              }
-              print(value);
-              widget.dropdownList![optionIndex] = value;
-              print(widget.dropdownList);
-            });
-          },
-          // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-          // a key is passed in as a parameterwhich  is the unique key of the widget
-          delete: (key, dropdownIndex) {
-            setState(() {
-              // print(widget.dropdownList![dropdownIndex]);
-              // print(widget._selectedDropdownValue);
-              if (!(widget.dropdownList![dropdownIndex] ==
-                  widget._selectedDropdownValue)) {
-                widget.dropdownList!.removeAt(dropdownIndex);
-                multipleChoiceOptions.removeWhere(
-                    (multipleChoiceOption) => multipleChoiceOption.key == key);
-              }
-            });
-          },
-          key: uniqueKey,
-          oldData: list[i],
-        ));
-        multipleChoiceOptions = newMultipleChoiceOptions;
-      }
-    });
-  }
-
   @override
   // void dispose() {
   //   // Dispose the controllers when the widget is disposed
@@ -657,10 +606,10 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,
+                itemCount: multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
                   multipleChoiceOptions.elementAt(index).number = index + 1;
-
+                  // with each index return qaContainer at that index into listview with adjusted question number
                   return multipleChoiceOptions.elementAt(index);
                 },
               ),
@@ -778,7 +727,7 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return multipleChoiceContainer;
-    } else if (widget.qaType == 'dropdown') {
+    }else if (widget.qaType == 'dropdown') {
       // return short answer qa container
       SingleChildScrollView dropdownContainer = SingleChildScrollView(
         child: Column(
@@ -850,7 +799,7 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,
+                itemCount: multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
                   multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
@@ -971,7 +920,8 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return dropdownContainer;
-    } else if (widget.qaType == 'ranking') {
+    }
+    else if (widget.qaType == 'ranking') {
       // return short answer qa container
       SingleChildScrollView rankingContainer = SingleChildScrollView(
         child: Column(
@@ -1043,14 +993,14 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,
+                itemCount: multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
                   multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
                   return multipleChoiceOptions.elementAt(index);
                 },
               ),
-            ),
+            ),           
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -1074,7 +1024,7 @@ class _QAContainerState extends State<QAContainer> {
                                   'Item ${widget.dropdownList!.length + 1}');
                               multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
-                                    setState(() {
+                                    setState(() {                                     
                                       print(value);
                                       widget.dropdownList![optionIndex] = value;
                                       print(widget.dropdownList);

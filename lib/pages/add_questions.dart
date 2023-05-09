@@ -37,7 +37,6 @@ class _AddQuestionsState extends State<AddQuestions> {
   int currentIndex = 0;
   bool _isLoading = false;
   String? _selectedQuestionType;
-  List? ListViewData;
 
   List? questionOptions = [
     "trueOrFalse",
@@ -216,17 +215,6 @@ class _AddQuestionsState extends State<AddQuestions> {
                           itemBuilder: (context, index) {
                             // with each index return qaContainer at that index into listview with adjusted question number
                             qaContainers.elementAt(index).number = index + 1;
-                            // pass stored listview data if the widget is not new, i.e. at the index in the storedListViewData list is filled
-                            // then the qaContainer can check what to use when returning its listview builder can use old data if it exists, return 2 different things in either scenario
-
-                            if (ListViewData!.elementAt(index) != null) {
-                              qaContainers.elementAt(index).storedListViewData =
-                                  ListViewData!.elementAt(index);
-                              // invoke a set state to refresh based off updated list of question
-                              // qaContainers.elementAt(index)
-                            }
-                            // must use list data to build itself if it is available
-                            // it is not invoked on the add, the listview rebuilds self if the list changes, it does start off with a list though
                             return qaContainers.elementAt(index);
                           },
                         ),
