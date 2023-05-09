@@ -60,7 +60,30 @@ class QAContainer extends StatefulWidget {
           answer: answer,
           type: 'multipleChoice',
           answerOptions: answerOptions);
-    } else {
+    } 
+    if (qaType == 'dropdown') {
+      String answer = _selectedDropdownValue!;
+      List<String> answerOptions =
+          dropdownList!.map((e) => e.toString()).toList();
+      return QAMultiple(
+          // answer option will come from all answerOptions controllers
+          question: _questionController.text,
+          answer: answer,
+          type: 'dropdown',
+          answerOptions: answerOptions);
+    }if (qaType == 'ranking') {     
+      List<String> answerOptions =
+          dropdownList!.map((e) => e.toString()).toList();
+      String answer = answerOptions.join(",");
+      print(answer);
+        
+      return QAMultiple(
+          // answer option will come from all answerOptions controllers
+          question: _questionController.text,
+          answer: answer,
+          type: 'ranking',
+          answerOptions: answerOptions);
+    }else {
       return QA(
           question: _questionController.text,
           answer: _answerController.text,
@@ -557,11 +580,11 @@ class _QAContainerState extends State<QAContainer> {
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: 'Question ${widget.number}',
+                      labelText: 'Multiple Choice Question ${widget.number}',
                       labelStyle: const TextStyle(
                         color: Colors.grey,
                       ),
-                      hintText: 'Question ${widget.number}',
+                      hintText: 'Multiple Choice Question ${widget.number}',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),
@@ -704,6 +727,357 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return multipleChoiceContainer;
+    }else if (widget.qaType == 'dropdown') {
+      // return short answer qa container
+      SingleChildScrollView dropdownContainer = SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // pass in the current widget's unique key to delete the current widget
+                    widget.delete(widget.key);
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                ),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 45, 64, 96),
+                    Color.fromARGB(255, 45, 64, 96),
+                  ],
+                ),
+              ),
+              child: SizedBox(
+                  height: 100,
+                  child: TextField(
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Nunito',
+                    ),
+                    // assign controller to this question textfield
+                    controller: widget._questionController,
+                    minLines: 3,
+                    maxLines: 3,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      alignLabelWithHint: true,
+                      labelText: 'Dropdown Question ${widget.number}',
+                      labelStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Dropdown Question ${widget.number}',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  )),
+            ),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: multipleChoiceOptions!.length,                
+                itemBuilder: (context, index) {
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
+                  // with each index return qaContainer at that index into listview with adjusted question number
+                  return multipleChoiceOptions.elementAt(index);
+                },
+              ),
+            ),
+            DropdownButton(
+              isExpanded: true,
+              // this value must always match the value in the list it gets items from, from the start
+              value: widget._selectedDropdownValue,
+
+              onChanged: (newValue) {
+                setState(
+                  () {
+                    widget._selectedDropdownValue = newValue as String;
+                    print(widget._selectedDropdownValue);
+                  },
+                );
+              },
+              hint:
+                  Text('Select Answer', style: TextStyle(color: Colors.white)),
+              items: widget.dropdownList!.map((option) {
+                return DropdownMenuItem(
+                  value: option,
+                  child: Text(option, style: TextStyle(fontFamily: 'Nunito')),
+                );
+              }).toList(),
+              icon: Icon(
+                Icons.arrow_drop_down,
+                size: 20.0,
+              ),
+              iconEnabledColor: Colors.white, //Icon color
+              style: TextStyle(
+                fontFamily: 'Nunito',
+                color: Colors.white, //Font color //font size on dropdown button
+              ),
+              dropdownColor: Color.fromARGB(255, 45, 64, 96),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.orange, Colors.deepOrange],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: widget.dropdownList!.length < 8
+                        ? () {
+                            setState(() {
+                              final uniqueKey = UniqueKey();
+                              widget.dropdownList!.add(
+                                  'Option ${widget.dropdownList!.length + 1}');
+                              multipleChoiceOptions.add(MultipleChoiceOption(
+                                  onChanged: (value, optionIndex) {
+                                    setState(() {
+                                      if (widget._selectedDropdownValue ==
+                                          widget.dropdownList![optionIndex]) {
+                                        widget._selectedDropdownValue = value;
+                                      }
+                                      print(value);
+                                      widget.dropdownList![optionIndex] = value;
+                                      print(widget.dropdownList);
+                                    });
+                                  },
+                                  // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                  // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  delete: (key, dropdownIndex) {
+                                    setState(() {
+                                      // print(widget.dropdownList![dropdownIndex]);
+                                      // print(widget._selectedDropdownValue);
+                                      if (!(widget
+                                              .dropdownList![dropdownIndex] ==
+                                          widget._selectedDropdownValue)) {
+                                        widget.dropdownList!
+                                            .removeAt(dropdownIndex);
+                                        multipleChoiceOptions.removeWhere(
+                                            (multipleChoiceOption) =>
+                                                multipleChoiceOption.key ==
+                                                key);
+                                      }
+                                    });
+                                  },
+                                  key: uniqueKey));
+                            });
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      padding: const EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                    ),
+                    child: Text(
+                      'Add Option',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20.0,
+            )
+          ],
+        ),
+      );
+      return dropdownContainer;
+    }
+    else if (widget.qaType == 'ranking') {
+      // return short answer qa container
+      SingleChildScrollView rankingContainer = SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // pass in the current widget's unique key to delete the current widget
+                    widget.delete(widget.key);
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.white),
+                ),
+              ],
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromARGB(255, 45, 64, 96),
+                    Color.fromARGB(255, 45, 64, 96),
+                  ],
+                ),
+              ),
+              child: SizedBox(
+                  height: 100,
+                  child: TextField(
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Nunito',
+                    ),
+                    // assign controller to this question textfield
+                    controller: widget._questionController,
+                    minLines: 3,
+                    maxLines: 3,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      alignLabelWithHint: true,
+                      labelText: 'Ranking Question ${widget.number}',
+                      labelStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Ranking Question ${widget.number}',
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                  )),
+            ),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: multipleChoiceOptions!.length,                
+                itemBuilder: (context, index) {
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
+                  // with each index return qaContainer at that index into listview with adjusted question number
+                  return multipleChoiceOptions.elementAt(index);
+                },
+              ),
+            ),           
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.orange, Colors.deepOrange],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: widget.dropdownList!.length < 8
+                        ? () {
+                            setState(() {
+                              final uniqueKey = UniqueKey();
+                              widget.dropdownList!.add(
+                                  'Item ${widget.dropdownList!.length + 1}');
+                              multipleChoiceOptions.add(MultipleChoiceOption(
+                                  onChanged: (value, optionIndex) {
+                                    setState(() {                                     
+                                      print(value);
+                                      widget.dropdownList![optionIndex] = value;
+                                      print(widget.dropdownList);
+                                    });
+                                  },
+                                  // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                  // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  delete: (key, dropdownIndex) {
+                                    setState(() {
+                                      // print(widget.dropdownList![dropdownIndex]);
+                                      // print(widget._selectedDropdownValue);
+                                      if (!(widget
+                                              .dropdownList![dropdownIndex] ==
+                                          widget._selectedDropdownValue)) {
+                                        widget.dropdownList!
+                                            .removeAt(dropdownIndex);
+                                        multipleChoiceOptions.removeWhere(
+                                            (multipleChoiceOption) =>
+                                                multipleChoiceOption.key ==
+                                                key);
+                                      }
+                                    });
+                                  },
+                                  key: uniqueKey));
+                            });
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      padding: const EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                      ),
+                    ),
+                    child: Text(
+                      'Add Item',
+                      style: TextStyle(
+                        fontSize: 10.0,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20.0,
+            )
+          ],
+        ),
+      );
+      return rankingContainer;
     }
 
     return SingleChildScrollView(
