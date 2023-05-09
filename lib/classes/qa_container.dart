@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/classes/multiple_choice_option.dart';
 import 'qa_obj.dart';
 
 class QAContainer extends StatefulWidget {
@@ -13,6 +14,8 @@ class QAContainer extends StatefulWidget {
   final _questionPostController = TextEditingController();
   final _answerController = TextEditingController();
   String _selectedTruthValue = 'True';
+  String? _selectedDropdownValue;
+  final List? dropdownList = [];
   int? number;
 
   QAContainer(
@@ -48,12 +51,15 @@ class QAContainer extends StatefulWidget {
           type: 'trueOrFalse');
     }
     if (qaType == 'multipleChoice') {
+      String answer = _selectedDropdownValue!;
+      List<String> answerOptions =
+          dropdownList!.map((e) => e.toString()).toList();
       return QAMultiple(
           // answer option will come from all answerOptions controllers
           question: _questionController.text,
-          answer: _answerController.text,
+          answer: answer,
           type: 'multipleChoice',
-          answerOptions: []);
+          answerOptions: answerOptions);
     } else {
       return QA(
           question: _questionController.text,
@@ -74,10 +80,8 @@ class _QAContainerState extends State<QAContainer> {
   //   widget._answerController.dispose();
   //   super.dispose();
   // }
-  String _selectedTruthValue = 'True';
-  String? _selectedDropdownValue;
+  List<MultipleChoiceOption> multipleChoiceOptions = [];
   List? trueOrFalseOptions = ["True", "False"];
-  final List? userInputAnswers = [];
   final List? userInitializedAnswers = [''];
   @override
   Widget build(BuildContext context) {
@@ -547,7 +551,7 @@ class _QAContainerState extends State<QAContainer> {
                       fontFamily: 'Nunito',
                     ),
                     // assign controller to this question textfield
-                    controller: widget._questionPreController,
+                    controller: widget._questionController,
                     minLines: 3,
                     maxLines: 3,
                     keyboardType: TextInputType.multiline,
@@ -579,117 +583,30 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: userInputAnswers!.length,                
+                itemCount: multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
-                  final key = UniqueKey();
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Row(   
-                        key: Key('option-${index.toString()}'),                 
-                        children: [                      
-                          Expanded(
-                            child: TextField(
-                              style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Nunito',
-                        ),
-                        // assign controller to this question textfield
-                        minLines: 1,
-                        maxLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          alignLabelWithHint: true,
-                          labelText: 'Option ${index+1}',
-                          labelStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                          hintText: 'Option ${index+1}',
-                          hintStyle: const TextStyle(
-                            color: Colors.grey,
-                          ),
-                          border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        
-                              onChanged: (value) {
-                                setState(() {          
-                                  if (_selectedDropdownValue == userInputAnswers![index]){
-                                    _selectedDropdownValue =
-                                          value;
-                                  userInputAnswers![index] =
-                                          value;
-                                  }else{
-                                    userInputAnswers![index] =
-                                          value; // Update the user input in the list
-                                      print(userInputAnswers);
-                                      print(index);
-                                  }                                     
-                                 
-                                });
-                              },
-                              // Add other properties to the TextField as needed
-                            ),
-                          ),
-                          IconButton(
-                          onPressed: () {     
-                            setState(() {                              
-                              
-                              if (_selectedDropdownValue == userInputAnswers![index]){
-                                  print(userInputAnswers);
-                              }else{
-                                userInputAnswers!.removeAt(index); 
-                                                           
-                                print(userInputAnswers);
-                              }
-                              
-                            });                       
-                            
-                          // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
-                          // pass in the current widget's unique key to delete the current widget
-                          // widget.delete(widget.key);
-                          },
-                        icon: const Icon(Icons.delete, color: Colors.white),
-                      ),
-                      ],
-                      ),
-                    ],
-                  );
-                  
-                
+                  return multipleChoiceOptions.elementAt(index);
                 },
-                
               ),
             ),
-            
             DropdownButton(
               isExpanded: true,
               // this value must always match the value in the list it gets items from, from the start
-              value: _selectedDropdownValue,
+              value: widget._selectedDropdownValue,
 
               onChanged: (newValue) {
                 setState(
                   () {
-                    _selectedDropdownValue = newValue as String;
+                    widget._selectedDropdownValue = newValue as String;
+                    print(widget._selectedDropdownValue);
                   },
                 );
               },
-              hint: Text('Select Answer', style: TextStyle( color: Colors.white)), 
-              items: userInputAnswers!.map((option) {
+              hint:
+                  Text('Select Answer', style: TextStyle(color: Colors.white)),
+              items: widget.dropdownList!.map((option) {
                 return DropdownMenuItem(
                   value: option,
                   child: Text(option, style: TextStyle(fontFamily: 'Nunito')),
@@ -721,13 +638,46 @@ class _QAContainerState extends State<QAContainer> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ElevatedButton(
-                    onPressed: userInputAnswers!.length < 8
-                      ? () {
-                          setState(() {
-                            userInputAnswers!.add('Option ${userInputAnswers!.length + 1}');
-                          });
-                        }
-                      : null,
+                    onPressed: widget.dropdownList!.length < 8
+                        ? () {
+                            setState(() {
+                              final uniqueKey = UniqueKey();
+                              widget.dropdownList!.add(
+                                  'Option ${widget.dropdownList!.length + 1}');
+                              multipleChoiceOptions.add(MultipleChoiceOption(
+                                  onChanged: (value, optionIndex) {
+                                    setState(() {
+                                      if (widget._selectedDropdownValue ==
+                                          widget.dropdownList![optionIndex]) {
+                                        widget._selectedDropdownValue = value;
+                                      }
+                                      print(value);
+                                      widget.dropdownList![optionIndex] = value;
+                                      print(widget.dropdownList);
+                                    });
+                                  },
+                                  // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                  // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  delete: (key, dropdownIndex) {
+                                    setState(() {
+                                      // print(widget.dropdownList![dropdownIndex]);
+                                      // print(widget._selectedDropdownValue);
+                                      if (!(widget
+                                              .dropdownList![dropdownIndex] ==
+                                          widget._selectedDropdownValue)) {
+                                        widget.dropdownList!
+                                            .removeAt(dropdownIndex);
+                                        multipleChoiceOptions.removeWhere(
+                                            (multipleChoiceOption) =>
+                                                multipleChoiceOption.key ==
+                                                key);
+                                      }
+                                    });
+                                  },
+                                  key: uniqueKey));
+                            });
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: Colors.transparent,
