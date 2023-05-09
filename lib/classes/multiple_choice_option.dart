@@ -7,6 +7,7 @@ class MultipleChoiceOption extends StatefulWidget {
   Function onChanged;
   final Key? key;
   int? number;
+  List? oldData;
 
   final _optionController = TextEditingController();
 
@@ -14,6 +15,7 @@ class MultipleChoiceOption extends StatefulWidget {
       {required this.delete,
       required this.onChanged,
       required this.key,
+      this.oldData,
       int? number})
       : super(key: key) {
     // set the optional parameter if no value is provided
