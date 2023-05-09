@@ -212,6 +212,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           itemCount: qaContainers.length,
+                          
                           itemBuilder: (context, index) {
                             // with each index return qaContainer at that index into listview with adjusted question number
                             qaContainers.elementAt(index).number = index + 1;
@@ -293,17 +294,20 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                             // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
                                                             // a key is passed in as a parameterwhich  is the unique key of the widget
                                                             delete: (key) {
-                                                              setState(() {
+                                                              setState(() {                                                               
                                                                 qaContainers.removeWhere(
                                                                     (QAContainer) =>
                                                                         QAContainer
                                                                             .key ==
                                                                         key);
+                                                                
                                                               });
                                                             },
                                                             key: uniqueKey));
                                                         Navigator.of(context)
                                                             .pop();
+                                                        
+                                                      
                                                       },
                                                     );
                                                   },

@@ -90,6 +90,7 @@ class QAContainer extends StatefulWidget {
           type: 'shortAnswer');
     }
   }
+  List<MultipleChoiceOption> multipleChoiceOptions = [];
 
   @override
   State<QAContainer> createState() => _QAContainerState();
@@ -103,7 +104,7 @@ class _QAContainerState extends State<QAContainer> {
   //   widget._answerController.dispose();
   //   super.dispose();
   // }
-  List<MultipleChoiceOption> multipleChoiceOptions = [];
+  
   List? trueOrFalseOptions = ["True", "False"];
   final List? userInitializedAnswers = [''];
   @override
@@ -606,11 +607,11 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,                
+                itemCount: widget.multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
-                  multipleChoiceOptions.elementAt(index).number = index + 1;
+                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return multipleChoiceOptions.elementAt(index);
+                  return widget.multipleChoiceOptions.elementAt(index);
                 },
               ),
             ),
@@ -667,9 +668,11 @@ class _QAContainerState extends State<QAContainer> {
                               final uniqueKey = UniqueKey();
                               widget.dropdownList!.add(
                                   'Option ${widget.dropdownList!.length + 1}');
-                              multipleChoiceOptions.add(MultipleChoiceOption(
+                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
                                     setState(() {
+                                      print(value);
+                                      if (!widget.dropdownList!.contains(value)){
                                       if (widget._selectedDropdownValue ==
                                           widget.dropdownList![optionIndex]) {
                                         widget._selectedDropdownValue = value;
@@ -677,7 +680,18 @@ class _QAContainerState extends State<QAContainer> {
                                       print(value);
                                       widget.dropdownList![optionIndex] = value;
                                       print(widget.dropdownList);
-                                    });
+                                    }else{
+                                       if (widget._selectedDropdownValue ==
+                                          widget.dropdownList![optionIndex]) {
+                                        widget._selectedDropdownValue = value;
+                                      }
+                                      widget.dropdownList![optionIndex] = "No Duplicates";
+
+                                      //
+                                      
+                                     
+                                    }
+                                  });
                                   },
                                   // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
                                   // a key is passed in as a parameterwhich  is the unique key of the widget
@@ -690,14 +704,14 @@ class _QAContainerState extends State<QAContainer> {
                                           widget._selectedDropdownValue)) {
                                         widget.dropdownList!
                                             .removeAt(dropdownIndex);
-                                        multipleChoiceOptions.removeWhere(
+                                        widget.multipleChoiceOptions.removeWhere(
                                             (multipleChoiceOption) =>
                                                 multipleChoiceOption.key ==
                                                 key);
                                       }
                                     });
                                   },
-                                  key: uniqueKey));
+                                  okey: uniqueKey));
                             });
                           }
                         : null,
@@ -799,11 +813,11 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,                
+                itemCount: widget.multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
-                  multipleChoiceOptions.elementAt(index).number = index + 1;
+                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return multipleChoiceOptions.elementAt(index);
+                  return widget.multipleChoiceOptions.elementAt(index);
                 },
               ),
             ),
@@ -860,7 +874,7 @@ class _QAContainerState extends State<QAContainer> {
                               final uniqueKey = UniqueKey();
                               widget.dropdownList!.add(
                                   'Option ${widget.dropdownList!.length + 1}');
-                              multipleChoiceOptions.add(MultipleChoiceOption(
+                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
                                     setState(() {
                                       if (widget._selectedDropdownValue ==
@@ -883,14 +897,14 @@ class _QAContainerState extends State<QAContainer> {
                                           widget._selectedDropdownValue)) {
                                         widget.dropdownList!
                                             .removeAt(dropdownIndex);
-                                        multipleChoiceOptions.removeWhere(
+                                        widget.multipleChoiceOptions.removeWhere(
                                             (multipleChoiceOption) =>
                                                 multipleChoiceOption.key ==
                                                 key);
                                       }
                                     });
                                   },
-                                  key: uniqueKey));
+                                  okey: uniqueKey));
                             });
                           }
                         : null,
@@ -993,11 +1007,11 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: multipleChoiceOptions!.length,                
+                itemCount: widget.multipleChoiceOptions!.length,                
                 itemBuilder: (context, index) {
-                  multipleChoiceOptions.elementAt(index).number = index + 1;
+                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return multipleChoiceOptions.elementAt(index);
+                  return widget.multipleChoiceOptions.elementAt(index);
                 },
               ),
             ),           
@@ -1022,7 +1036,7 @@ class _QAContainerState extends State<QAContainer> {
                               final uniqueKey = UniqueKey();
                               widget.dropdownList!.add(
                                   'Item ${widget.dropdownList!.length + 1}');
-                              multipleChoiceOptions.add(MultipleChoiceOption(
+                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
                                     setState(() {                                     
                                       print(value);
@@ -1036,19 +1050,21 @@ class _QAContainerState extends State<QAContainer> {
                                     setState(() {
                                       // print(widget.dropdownList![dropdownIndex]);
                                       // print(widget._selectedDropdownValue);
+                                      
                                       if (!(widget
                                               .dropdownList![dropdownIndex] ==
                                           widget._selectedDropdownValue)) {
                                         widget.dropdownList!
                                             .removeAt(dropdownIndex);
-                                        multipleChoiceOptions.removeWhere(
+                                        widget.multipleChoiceOptions.removeWhere(
                                             (multipleChoiceOption) =>
                                                 multipleChoiceOption.key ==
                                                 key);
+                                                
                                       }
                                     });
                                   },
-                                  key: uniqueKey));
+                                  okey: uniqueKey));
                             });
                           }
                         : null,
