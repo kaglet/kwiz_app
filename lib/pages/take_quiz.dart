@@ -37,9 +37,15 @@ class QuizScreenState extends State<QuizScreen> {
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        answerOptionsMC = List.filled(quizLength, []);
+        answerOptionsMC = List.filled(quizLength, []);    //filling the quiz with quiz length number of lists
         answerOptionsDD = List.filled(quizLength, []);
         answerOptionsR = List.filled(quizLength, []);
+
+        for (int i = 0; i < quizLength; i++) {
+          answerOptionsMC[i] = List.filled(quizLength, "");   //filling the inner list with empty string 
+          answerOptionsDD[i] = List.filled(quizLength, "");   //WRONG not quizlength use number of 
+          answerOptionsR[i] = List.filled(quizLength, "");
+        }
 
         if (question.questionType == "multipleChoice"){
           answerOptionsMC[question.questionNumber-1] = question.answerOptions;
@@ -65,11 +71,11 @@ class QuizScreenState extends State<QuizScreen> {
         quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
-    popList(quiz);
-    // List<String> quest = [];
-    // List<String> ans = [];
-    // questions = popQuestionsList(quiz, quest, ans);
-    // answers = popAnswersList(quiz, quest, ans);
+    //popList(quiz);
+    List<String> quest = [];
+    List<String> ans = [];
+    questions = popQuestionsList(quiz, quest, ans);
+    answers = popAnswersList(quiz, quest, ans);
     setState(() {
       _isLoading = false;
     });
@@ -81,12 +87,12 @@ class QuizScreenState extends State<QuizScreen> {
     super.initState();
   }
 
-  void popList(Quiz? q) {
-    for (int i = 0; i < quizLength; i++) {
-      questions.add(q!.quizQuestions.elementAt(i).questionText);
-      answers.add(q.quizQuestions.elementAt(i).questionAnswer);
-    }
-  }
+  // void popList(Quiz? q) {
+  //   for (int i = 0; i < quizLength; i++) {
+  //     questions.add(q!.quizQuestions.elementAt(i).questionText);
+  //     answers.add(q.quizQuestions.elementAt(i).questionAnswer);
+  //   }
+  // }
 
 // coverage:ignore-end
   //function for populating the questions and answers
@@ -136,7 +142,10 @@ class QuizScreenState extends State<QuizScreen> {
       answerController.text = userAnswers[currentIndex];
     }
 
-    currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
+    if (_isLoading == false){
+      currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
+    }
+      
     print(currentQuestionType);   
     //load before data comes then display ui after data is recieved
     return Scaffold(
