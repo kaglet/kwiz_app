@@ -19,15 +19,14 @@ class UserData {
   late final List<PastAttempt> pastAttemptQuizzes;
   late final List<Rating> ratings;
 
-  UserData({
-    required this.uID,
-    required this.userName,
-    required this.firstName,
-    required this.lastName,
-    required this.totalScore,
-    required this.totalQuizzes,
-    required this.bookmarkedQuizzes,
-    required this.pastAttemptQuizzes,
-    
-  });
+  UserData(
+      {required this.uID,
+      required this.userName,
+      required this.firstName,
+      required this.lastName,
+      required this.totalScore,
+      required this.totalQuizzes,
+      required this.bookmarkedQuizzes,
+      required this.pastAttemptQuizzes,
+      required this.ratings});
 }

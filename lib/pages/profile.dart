@@ -32,15 +32,15 @@ class _ProfileState extends State<Profile> {
   final AuthService _auth = AuthService();
 
   UserData? currentUser = UserData(
-    uID: ' ',
-    userName: ' ',
-    firstName: ' ',
-    lastName: ' ',
-    totalScore: ' ',
-    totalQuizzes: 0,
-    bookmarkedQuizzes: [],
-    pastAttemptQuizzes: [],
-  );
+      uID: ' ',
+      userName: ' ',
+      firstName: ' ',
+      lastName: ' ',
+      totalScore: ' ',
+      totalQuizzes: 0,
+      bookmarkedQuizzes: [],
+      pastAttemptQuizzes: [],
+      ratings: []);
 
   Future<void> loaddata() async {
     setState(() {

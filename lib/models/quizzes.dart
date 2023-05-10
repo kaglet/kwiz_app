@@ -8,19 +8,20 @@ class Quiz {
   final String quizDateCreated;
   //Kago wont send this through
   final String quizID;
+  final int quizGlobalRating;
 
   late final List<Question> quizQuestions;
 
   final String quizAuthor;
 
-  Quiz({
-    required this.quizName,
-    required this.quizCategory,
-    required this.quizDescription,
-    required this.quizMark,
-    required this.quizDateCreated,
-    required this.quizQuestions,
-    required this.quizID,
-    required this.quizAuthor,
-  });
+  Quiz(
+      {required this.quizName,
+      required this.quizCategory,
+      required this.quizDescription,
+      required this.quizMark,
+      required this.quizDateCreated,
+      required this.quizQuestions,
+      required this.quizID,
+      required this.quizAuthor,
+      required this.quizGlobalRating});
 }

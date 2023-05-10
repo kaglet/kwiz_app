@@ -72,6 +72,7 @@ void main() {
         quizDateCreated: "Test Date",
         quizQuestions: [],
         quizID: "id",
+        quizGlobalRating: 0,
         quizAuthor: "Tester");
 
     final UserData? userData =
@@ -123,7 +124,8 @@ void main() {
         totalScore: ' ',
         totalQuizzes: 0,
         bookmarkedQuizzes: [],
-        pastAttemptQuizzes: []);
+        pastAttemptQuizzes: [],
+        ratings: []);
 
     final UserData? userData = await service.addUser(userDataIn, ourUser);
 
@@ -165,6 +167,7 @@ void main() {
         quizDateCreated: '2023-03-31 20:28',
         quizQuestions: [],
         quizID: 'quizID',
+        quizGlobalRating: 0,
         quizAuthor: 'Biology Quiz Author');
     Quiz? quizOut = await service.getQuizInformationOnly(quizID: 'quizID');
 
@@ -175,6 +178,7 @@ void main() {
     expect(quizOut?.quizMark, quizIn.quizMark);
     expect(quizOut?.quizDateCreated, quizIn.quizDateCreated);
     expect(quizOut?.quizQuestions, quizIn.quizQuestions);
+    expect(quizOut?.quizGlobalRating, quizIn.quizGlobalRating);
     expect(quizOut?.quizAuthor, quizIn.quizAuthor);
   });
   test('create past attempt', () async {
@@ -190,6 +194,7 @@ void main() {
         quizDateCreated: '2023-03-31 20:28',
         quizQuestions: [],
         quizID: 'quizID',
+        quizGlobalRating: 0,
         quizAuthor: 'Biology Quiz Author');
     PastAttempt? pastAttempt = await service.createPastAttempt(
         userID: 'userID',
@@ -220,6 +225,7 @@ void main() {
         quizDateCreated: '2023-03-31 20:28',
         quizQuestions: [],
         quizID: 'quizID',
+        quizGlobalRating: 0,
         quizAuthor: 'Biology Quiz Author');
     PastAttempt? pastAttempt = await service.addPastAttempt(
         userID: 'userID',

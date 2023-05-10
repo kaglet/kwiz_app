@@ -276,15 +276,15 @@ class _RegisterState extends State<Register> {
                                     ),
                                     onPressed: () async {
                                       UserData user = UserData(
-                                        uID: null,
-                                        firstName: firstNameInput,
-                                        userName: userNameInput,
-                                        lastName: lastNameInput,
-                                        totalScore: '0',
-                                        totalQuizzes: 0,
-                                        bookmarkedQuizzes: [],
-                                        pastAttemptQuizzes: [],
-                                      );
+                                          uID: null,
+                                          firstName: firstNameInput,
+                                          userName: userNameInput,
+                                          lastName: lastNameInput,
+                                          totalScore: '0',
+                                          totalQuizzes: 0,
+                                          bookmarkedQuizzes: [],
+                                          pastAttemptQuizzes: [],
+                                          ratings: []);
 
                                       if (_formkey.currentState!.validate()) {
                                         setState(() {
