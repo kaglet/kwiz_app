@@ -61,6 +61,8 @@ class QuizScoreState extends State<QuizScore> {
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      await service.addToQuizGlobalRating(
+          quizID: widget.chosenQuiz?.quizID, rating: _rating);
     }
     ;
     setState(() {
@@ -69,7 +71,7 @@ class QuizScoreState extends State<QuizScore> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  Future<void> updateRating() async {
+  Future<void> updateRating(int rating) async {
     setState(() {
       _isLoading = true;
     });
@@ -79,6 +81,7 @@ class QuizScoreState extends State<QuizScore> {
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      //await service.updateQuizGlobalRating(rating: rating);
     }
     ;
     setState(() {
@@ -411,7 +414,7 @@ class QuizScoreState extends State<QuizScore> {
                                         }
 
                                         if (ratingAlreadyExists) {
-                                          updateRating();
+                                          updateRating(_rating);
                                         } else {
                                           createRating();
                                         }
