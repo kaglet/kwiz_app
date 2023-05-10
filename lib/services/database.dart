@@ -31,7 +31,9 @@ class DatabaseService {
       'QuizDescription': quizInstance.quizDescription,
       // 'QuizMark': QuizInstance.QuizMark,
       'QuizDateCreated': quizInstance.quizDateCreated,
-      'QuizAuthor': quizInstance.quizAuthor
+      'QuizAuthor': quizInstance.quizAuthor,
+      'QuizGlobalRating': quizInstance.quizGlobalRating,
+      'QuizTotalRatings': quizInstance.quizTotalRatings
     });
 
     //this uses the quiz ID and adds each question to a SUb Collection
@@ -121,6 +123,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
@@ -180,6 +183,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
 
       QuerySnapshot collectionSnapshot =
@@ -248,6 +252,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
@@ -271,6 +276,7 @@ class DatabaseService {
         quizQuestions: questions,
         quizID: docSnapshot.id,
         quizGlobalRating: docSnapshot['QuizGlobalRating'],
+        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['QuizAuthor']);
 
     return quiz;
@@ -523,5 +529,22 @@ class DatabaseService {
         .get();
 
     return docSnapshot.exists;
+  }
+
+  Future<void> addToQuizGlobalRating({String? quizID, int? rating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+
+    int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+    int quizTotalRatings = docQuizSnapshot['QuizTotalRatings'];
+    quizGlobalRating += rating!;
+    quizTotalRatings++;
+
+    await quizCollection
+        .doc(quizID)
+        .update({'QuizGlobalRating': quizGlobalRating});
+
+    await quizCollection
+        .doc(quizID)
+        .update({'QuizTotalRatings': quizTotalRatings});
   }
 }

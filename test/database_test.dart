@@ -73,6 +73,7 @@ void main() {
         quizQuestions: [],
         quizID: "id",
         quizGlobalRating: 0,
+        quizTotalRatings: 0,
         quizAuthor: "Tester");
 
     final UserData? userData =
@@ -168,6 +169,7 @@ void main() {
         quizQuestions: [],
         quizID: 'quizID',
         quizGlobalRating: 0,
+        quizTotalRatings: 0,
         quizAuthor: 'Biology Quiz Author');
     Quiz? quizOut = await service.getQuizInformationOnly(quizID: 'quizID');
 
@@ -195,6 +197,7 @@ void main() {
         quizQuestions: [],
         quizID: 'quizID',
         quizGlobalRating: 0,
+        quizTotalRatings: 0,
         quizAuthor: 'Biology Quiz Author');
     PastAttempt? pastAttempt = await service.createPastAttempt(
         userID: 'userID',
@@ -226,6 +229,7 @@ void main() {
         quizQuestions: [],
         quizID: 'quizID',
         quizGlobalRating: 0,
+        quizTotalRatings: 0,
         quizAuthor: 'Biology Quiz Author');
     PastAttempt? pastAttempt = await service.addPastAttempt(
         userID: 'userID',

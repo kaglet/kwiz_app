@@ -23,6 +23,7 @@ class ViewQuizzes extends StatefulWidget {
 
 class _ViewQuizzesState extends State<ViewQuizzes> {
   late String categoryName;
+  String ratingText = '';
   DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
@@ -131,10 +132,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       // } else {
       //   filteredQuizzes = List<Quiz>.from(categoryQuiz!);
       // }
-       filteredQuizzes = categoryQuiz!
-          .where((item) => item.quizName
-              .toLowerCase()
-              .contains(searchTerm.toLowerCase()))
+      filteredQuizzes = categoryQuiz!
+          .where((item) =>
+              item.quizName.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
 
       filLength = filteredQuizzes!.length;
@@ -247,6 +247,19 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                             : ListView.builder(
                                 itemCount: filLength,
                                 itemBuilder: (context, index) {
+                                  if (filteredQuizzes!
+                                          .elementAt(index)
+                                          .quizGlobalRating >
+                                      0) {
+                                    ratingText = filteredQuizzes!
+                                            .elementAt(index)
+                                            .quizGlobalRating
+                                            .toString() +
+                                        '  |  ';
+                                  } else {
+                                    ratingText = '';
+                                  }
+                                  ;
                                   final List<Color> blueAndOrangeShades = [
                                     Colors.orange.shade400,
                                     Colors.orange.shade500,
@@ -291,29 +304,30 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            // handle bookmark button press
+                                        leading: Container(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              // handle bookmark button press
+                                              setState(() {
+                                                isBookmarkedList[index] =
+                                                    !isBookmarkedList[index];
 
-                                            setState(() {
-                                              isBookmarkedList[index] =
-                                                  !isBookmarkedList[index];
-
-                                              if (isBookmarkedList[index] ==
-                                                  true) {
-                                                bookmarkItem(index);
-                                              } else {
-                                                removeBookmark(index);
-                                              }
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isBookmarkedList[index]
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_border,
-                                            color: isBookmarkedList[index]
-                                                ? Colors.blue
-                                                : Colors.white,
+                                                if (isBookmarkedList[index] ==
+                                                    true) {
+                                                  bookmarkItem(index);
+                                                } else {
+                                                  removeBookmark(index);
+                                                }
+                                              });
+                                            },
+                                            icon: Icon(
+                                              isBookmarkedList[index]
+                                                  ? Icons.bookmark
+                                                  : Icons.bookmark_border,
+                                              color: isBookmarkedList[index]
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
                                           ),
                                         ),
                                         textColor: Colors.white,
@@ -321,6 +335,17 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           scrollDirection: Axis.horizontal,
                                           child: Row(
                                             children: [
+                                              if (ratingText != '')
+                                                Icon(Icons.star,
+                                                    color: Colors.orange),
+                                              Text(
+                                                '${ratingText}',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
                                               Text(
                                                 '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
                                                 style: const TextStyle(
