@@ -6,6 +6,7 @@ import 'package:kwiz_v2/services/auth.dart';
 import 'package:kwiz_v2/shared/const.dart';
 import 'package:kwiz_v2/shared/loading.dart';
 
+import '../../services/database.dart';
 import '../home.dart';
 
 class Register extends StatefulWidget {
@@ -18,6 +19,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   //text field state
+  DatabaseService service = DatabaseService();
   final _formkey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
   bool loading = false;
@@ -27,6 +29,32 @@ class _RegisterState extends State<Register> {
   String firstNameInput = '';
   String lastNameInput = '';
   String userNameInput = '';
+  List<UserData>? users;
+   
+
+   @override
+  void initState() {
+    super.initState();
+    loadData().then((value) {
+      setState(() {});
+    });
+  }
+
+  Future<void> loadData() async {
+    users = await service.getAllUsers(); //user.uid
+  }
+  
+  bool searchUserName(List<UserData> arr, String key){
+    int n = arr.length;
+    bool found = false;
+
+    for(int i =0; i < n; i++){
+      if(arr.elementAt(i).userName == key){
+        found = true;
+      }
+    }
+    return found;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +190,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter a username' : null,
+                              val!.isEmpty ? 'Enter a username' : searchUserName(users!, val) ? 'Username already exists' : null,
                           onChanged: (val) {
                             userNameInput = val;
                           },
@@ -300,6 +328,8 @@ class _RegisterState extends State<Register> {
                                             error = 'Please supply valid email';
                                           });
                                         }
+
+
                                         // this fixed it by commenting it out
                                         // else {
                                         //   OurUser ourUser =

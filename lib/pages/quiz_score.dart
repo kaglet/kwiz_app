@@ -77,7 +77,6 @@ class QuizScoreState extends State<QuizScore> {
       await service.addToQuizGlobalRating(
           quizID: widget.chosenQuiz?.quizID, rating: _rating);
     }
-
     setState(() {
       _isLoading = false;
     });
@@ -96,7 +95,6 @@ class QuizScoreState extends State<QuizScore> {
       );
       //await service.updateQuizGlobalRating(rating: rating);
     }
-    ;
     setState(() {
       _isLoading = false;
     });
