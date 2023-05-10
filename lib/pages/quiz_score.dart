@@ -44,6 +44,10 @@ class QuizScoreState extends State<QuizScore> {
   //late List<String> answers = [];
   late List<int> markHistories = [];
   bool _isLoading = true;
+  late int totalQuizzes;
+  late double totalScore;
+  late int numQuestions;
+
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
 
@@ -57,6 +61,8 @@ class QuizScoreState extends State<QuizScore> {
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      await service.addToQuizGlobalRating(
+          quizID: widget.chosenQuiz?.quizID, rating: _rating);
     }
     ;
     setState(() {
@@ -65,7 +71,7 @@ class QuizScoreState extends State<QuizScore> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  Future<void> updateRating() async {
+  Future<void> updateRating(int rating) async {
     setState(() {
       _isLoading = true;
     });
@@ -75,6 +81,7 @@ class QuizScoreState extends State<QuizScore> {
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      //await service.updateQuizGlobalRating(rating: rating);
     }
     ;
     setState(() {
@@ -122,6 +129,16 @@ class QuizScoreState extends State<QuizScore> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  Future<void> updateScore() async {
+    totalQuizzes++;
+    totalScore += score/numQuestions;
+    await service.updateUserScore(
+      userID: userID,
+      totalQuizzes: totalQuizzes,
+      totalScore: totalScore.toString()
+    );
+  }
+
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
     Quiz? details;
@@ -130,6 +147,9 @@ class QuizScoreState extends State<QuizScore> {
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
     ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
+    totalQuizzes = userData.totalQuizzes;
+    totalScore = double.parse(userData.totalScore);
+    numQuestions = details.quizQuestions.length;
 
     // for (int i = 0; i < quizMaxScore; i++) {
     //   answers.add(details.quizQuestions.elementAt(i).questionAnswer);
@@ -183,8 +203,8 @@ class QuizScoreState extends State<QuizScore> {
           : SafeArea(
               child: SingleChildScrollView(
                 child: Container(
-                  width: screenWidth,
-                  height: screenHeight,
+                  width: screenWidth ,
+                  height: screenHeight+200,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -394,10 +414,11 @@ class QuizScoreState extends State<QuizScore> {
                                         }
 
                                         if (ratingAlreadyExists) {
-                                          updateRating();
+                                          updateRating(_rating);
                                         } else {
                                           createRating();
                                         }
+                                        updateScore();
 
                                         Navigator.push(
                                           context,

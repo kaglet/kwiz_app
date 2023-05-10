@@ -9,6 +9,7 @@ class Quiz {
   //Kago wont send this through
   final String quizID;
   final int quizGlobalRating;
+  final int quizTotalRatings;
 
   late final List<Question> quizQuestions;
 
@@ -23,5 +24,6 @@ class Quiz {
       required this.quizQuestions,
       required this.quizID,
       required this.quizAuthor,
-      required this.quizGlobalRating});
+      required this.quizGlobalRating,
+      required this.quizTotalRatings});
 }
