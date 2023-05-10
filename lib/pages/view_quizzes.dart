@@ -251,11 +251,16 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           .elementAt(index)
                                           .quizGlobalRating >
                                       0) {
-                                    ratingText = filteredQuizzes!
+                                    double ratingTextCalc = filteredQuizzes!
                                             .elementAt(index)
-                                            .quizGlobalRating
-                                            .toString() +
-                                        '  |  ';
+                                            .quizGlobalRating /
+                                        filteredQuizzes!
+                                            .elementAt(index)
+                                            .quizTotalRatings;
+                                    ratingTextCalc = double.parse(
+                                        ratingTextCalc.toStringAsFixed(1));
+                                    ratingText =
+                                        ratingTextCalc.toString() + '  |  ';
                                   } else {
                                     ratingText = '';
                                   }
