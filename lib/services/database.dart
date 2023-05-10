@@ -499,6 +499,18 @@ class DatabaseService {
       'TotalQuizzes': 0,
     });
   }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+  Future<void> updateUserScore(
+      {String? userID,
+      int? totalQuizzes,
+      String? totalScore}) async {
+    await userCollection
+    .doc(userID)
+    .update({
+      'TotalScore': totalScore,
+      'TotalQuizzes': totalQuizzes,
+    });
+  }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
   Future<void> createRating(
@@ -525,3 +537,4 @@ class DatabaseService {
     return docSnapshot.exists;
   }
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
