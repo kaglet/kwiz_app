@@ -26,17 +26,34 @@ class MockDataService extends Mock implements DatabaseService {
     // 'QuestionText': question.questionText,
     // });
     final firestore = FakeFirebaseFirestore();
-    await firestore
+    if (question is MultipleAnswerQuestion) {          
+          await firestore
         .collection(QuizCollection)
         .doc(quizID)
         .collection('Questions')
         .doc()
         .set({
-      'QuestionAnswer': question!.questionAnswer,
-      // 'QuestionMark': Question!.QuestionMark,
-      'QuestionNumber': question.questionNumber,
-      'QuestionText': question.questionText,
-    });
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          'QuestionAnswerOptions': question.answerOptions,
+          });
+        } else {
+          await  firestore
+        .collection(QuizCollection)
+        .doc(quizID)
+        .collection('Questions')
+        .doc()
+        .set({
+          'QuestionAnswer': question!.questionAnswer,
+          // 'QuestionMark': Question!.QuestionMark,
+          'QuestionNumber': question.questionNumber,
+          'QuestionText': question.questionText,
+          'QuestionType': question.questionType,
+          });
+        }
   }
 
   @override
@@ -107,17 +124,33 @@ class MockDataService extends Mock implements DatabaseService {
 
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
       var docSnapshot = collectionSnapshot.docs[i];
-      Question question = Question(
-          questionNumber: docSnapshot['QuestionNumber'],
-          questionText: docSnapshot['QuestionText'],
-          questionAnswer: docSnapshot['QuestionAnswer'],
-          questionMark: 0,
-          questionType: "shortAnswer");
-
-      questions.add(question);
-    }
+     if (docSnapshot['QuestionType']=="ranking" || 
+            docSnapshot['QuestionType']=="dropdown" ||
+            docSnapshot['QuestionType']=="multipleChoice"){
+            List<String> QuestionAnswerOptions =
+            List<String>.from(docSnapshot['QuestionAnswerOptions']);
+            MultipleAnswerQuestion question = MultipleAnswerQuestion(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType'],
+            answerOptions: QuestionAnswerOptions);
+            questions.add(question);
+          }
+          else
+          {
+            Question question = Question(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType']);
+            questions.add(question);
+          } 
 
     return quizOutput;
+  }
   }
 
   @override
@@ -143,7 +176,22 @@ class MockDataService extends Mock implements DatabaseService {
       'QuestionAnswer': "Leonardo da Vinci",
       'QuestionNumber': 1,
       'QuestionText': "Who painted the Mona Lisa",
+      'QuestionType' : "shortAnswer"
     });
+
+    await firestore
+        .collection(QuizCollection)
+        .doc(quizID)
+        .collection('Questions')
+        .doc('id1')
+        .set({
+      'QuestionAnswer': "Leonardo da Vinci",
+      'QuestionNumber': 1,
+      'QuestionText': "Who painted the Mona Lisa",
+      'QuestionType' : "multipleChoice",
+      'QuestionAnswerOptions' : ["1","2"]
+    });
+
 
     DocumentSnapshot docSnapshot =
         await firestore.collection(QuizCollection).doc(quizID).get();
@@ -168,14 +216,30 @@ class MockDataService extends Mock implements DatabaseService {
 
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
       var docSnapshot = collectionSnapshot.docs[i];
-      Question question = Question(
-          questionNumber: docSnapshot['QuestionNumber'],
-          questionText: docSnapshot['QuestionText'],
-          questionAnswer: docSnapshot['QuestionAnswer'],
-          questionMark: 0,
-          questionType: "shortAnswer");
-
-      questions.add(question);
+      if (docSnapshot['QuestionType']=="ranking" || 
+            docSnapshot['QuestionType']=="dropdown" ||
+            docSnapshot['QuestionType']=="multipleChoice"){
+            List<String> QuestionAnswerOptions =
+            List<String>.from(docSnapshot['QuestionAnswerOptions']);
+            MultipleAnswerQuestion question = MultipleAnswerQuestion(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType'],
+            answerOptions: QuestionAnswerOptions);
+            questions.add(question);
+          }
+          else
+          {
+            Question question = Question(
+            questionNumber: docSnapshot['QuestionNumber'],
+            questionText: docSnapshot['QuestionText'],
+            questionAnswer: docSnapshot['QuestionAnswer'],
+            questionMark: 0,
+            questionType: docSnapshot['QuestionType']);
+            questions.add(question);
+          } 
     }
 
     return quizOutput;
@@ -191,6 +255,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': "Test",
       'LastName': "Dummy",
       'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
     });
 
     await firestore
@@ -262,6 +328,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': "Test",
       'LastName': "Dummy",
       'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
     });
 
     await firestore
@@ -323,6 +391,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': "Test",
       'LastName': "Dummy",
       'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
     });
 
     await firestore
@@ -385,6 +455,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': "Test",
       'LastName': "Dummy",
       'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
     });
 
     await firestore
@@ -457,6 +529,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': "Test",
       'LastName': "Dummy",
       'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
     });
 
     DocumentSnapshot docSnapshot =
@@ -486,6 +560,8 @@ class MockDataService extends Mock implements DatabaseService {
       'FirstName': userInstance.firstName,
       'LastName': userInstance.lastName,
       'Username': userInstance.userName,
+      'TotalQuizzes':userInstance.totalQuizzes,
+      'TotalScore': userInstance.totalScore
     });
 
     DocumentSnapshot docSnapshot = await firestore
