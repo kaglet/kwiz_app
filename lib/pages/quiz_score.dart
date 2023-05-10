@@ -51,7 +51,7 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    if (_rating >= 0) {
+    if (_rating > 0) {
       await service.createRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,
@@ -69,7 +69,7 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    if (_rating >= 0) {
+    if (_rating > 0) {
       await service.updateRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RatingUI extends StatefulWidget {
-  final int maximumRating = 10;
+  final int maximumRating = 5;
   final Function(int) onRatingSelected;
 
   RatingUI(this.onRatingSelected);

@@ -81,7 +81,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 //     questionMark: 0,
 //     questionType: "multipleChoice",
 //     answerOptions: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"]
-//   ), 
+//   ),
 //   MultipleAnswerQuestion(
 //     questionNumber: 5,
 //     questionText: "Which of the following is a programming languages?",
@@ -109,7 +109,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 //   quizQuestions: quizQuestions,
 //   quizID: "",
 //   quizAuthor: "John Doe"
-// );   
+// );
 
     // Quiz? exampleQuizGet;
 
@@ -147,15 +147,15 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   // return static home screen with navigation functionality //
 
   UserData? currentUser = UserData(
-    uID: ' ',
-    userName: ' ',
-    firstName: ' ',
-    lastName: ' ',
-    totalScore: ' ',
-    totalQuizzes: 0,
-    bookmarkedQuizzes: [],
-    pastAttemptQuizzes: [],
-  );
+      uID: ' ',
+      userName: ' ',
+      firstName: ' ',
+      lastName: ' ',
+      totalScore: ' ',
+      totalQuizzes: 0,
+      bookmarkedQuizzes: [],
+      pastAttemptQuizzes: [],
+      ratings: []);
   late bool _isLoading;
 
   TextEditingController textControllerTitle = TextEditingController();
@@ -406,8 +406,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                             null, // set maxLines to null or a higher value
                                                         textInputAction:
                                                             TextInputAction
-                                                                .newline, 
-                                                           enabled: false,// enable line breaks
+                                                                .newline,
+                                                        enabled:
+                                                            false, // enable line breaks
                                                       ),
                                                       Padding(
                                                         padding:
@@ -565,7 +566,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                       )
                                     ],
                                   ),
-                                         const SizedBox(
+                                  const SizedBox(
                                     height: 30.0,
                                   ),
                                   Row(
@@ -627,7 +628,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   const SizedBox(
-                                    height:30.0,
+                                    height: 30.0,
                                   ),
                                   Row(
                                     children: [
