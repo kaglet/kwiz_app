@@ -31,33 +31,29 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
-    quiz = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
+    quiz = await service.getQuizAndQuestions(quizID: "L75mCQ1cPcVUjkEgajpi");
     print("quiz here" );
     print(quiz);
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        if (question.questionType == "fillInTheBlank"){
-          //qParts = List.filled(2, '');
-          // for (int i = 0; i < 2; i++) {
-          //   qParts.add(questions[question.questionNumber].split("*")[i]);
-          // }
-          //questionParts = questions[currentIndex].split("**");
-          //print(qParts);
-        }
+        answerOptionsMC = List.filled(quizLength, []);
+        answerOptionsDD = List.filled(quizLength, []);
+        answerOptionsR = List.filled(quizLength, []);
+
         if (question.questionType == "multipleChoice"){
-          answerOptionsMC = question.answerOptions;
+          answerOptionsMC[question.questionNumber-1] = question.answerOptions;
           print(question.questionNumber);
           print(question.answerOptions);
           print(question.questionType);    
         }
 
         if (question.questionType == "dropdown"){
-          answerOptionsDD = question.answerOptions;    
+          answerOptionsDD[question.questionNumber] = question.answerOptions;    
         }
 
         if (question.questionType == "ranking"){
-          answerOptionsR = question.answerOptions;    
+          answerOptionsR[question.questionNumber] = question.answerOptions;    
         }
 
       } 
@@ -130,9 +126,9 @@ class QuizScreenState extends State<QuizScreen> {
   List<String> questionParts = [];
 
   //lists for one instance of MC and dropdown and ranking  create list of list for multiple MC and dropdown later
-  List<String> answerOptionsMC = [];
-  List<String> answerOptionsDD = [];
-  List<String> answerOptionsR = [];
+  List<List<String>> answerOptionsMC = [];
+  List<List<String>> answerOptionsDD = [];
+  List<List<String>> answerOptionsR = [];
 
   @override
   Widget build(BuildContext context) {
@@ -325,7 +321,7 @@ class QuizScreenState extends State<QuizScreen> {
                                   itemBuilder: (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(
-                                        answerOptionsMC[index],
+                                        answerOptionsMC[currentIndex][index],
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Nunito',
@@ -334,7 +330,7 @@ class QuizScreenState extends State<QuizScreen> {
                                       onTap: () {
                                         // Handle the selected answer
                                         setState(() {
-                                          answerController.text = answerOptionsMC[index];
+                                          answerController.text = answerOptionsMC[currentIndex][index];
                                         });
                                       },
                                     );
@@ -367,7 +363,7 @@ class QuizScreenState extends State<QuizScreen> {
                               // Display the dropdown button
                               DropdownButtonFormField(
                                 value: answerController.text.isNotEmpty ? answerController.text : null,
-                                items: answerOptionsDD.map<DropdownMenuItem<String>>((String option) {
+                                items: answerOptionsDD[currentIndex].map<DropdownMenuItem<String>>((String option) {
                                   return DropdownMenuItem<String>(
                                     value: option,
                                     child: Text(
@@ -438,11 +434,11 @@ class QuizScreenState extends State<QuizScreen> {
                                       if (newIndex > oldIndex) {
                                         newIndex -= 1;
                                       }
-                                      final String item = answerOptionsR.removeAt(oldIndex);
-                                      answerOptionsR.insert(newIndex, item);
+                                      final String item = answerOptionsR[currentIndex].removeAt(oldIndex);
+                                      answerOptionsR[currentIndex].insert(newIndex, item);
                                     });
                                   },
-                                  children: answerOptionsR
+                                  children: answerOptionsR[currentIndex]
                                     .map((option) => ListTile(
                                       key: ValueKey(option), // Set a unique key for each ListTile
                                       title: Text(

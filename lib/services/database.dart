@@ -216,7 +216,7 @@ class DatabaseService {
       return quiz;
     } catch (e) {
       if (kDebugMode) {
-        print("Get Quiz and Questions Error!!!!! - $e");
+        print("Error!!!!! - $e");
       }
     }
     return null;
