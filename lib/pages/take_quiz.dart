@@ -32,28 +32,21 @@ class QuizScreenState extends State<QuizScreen> {
       _isLoading = true;
     });
     quiz = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
+    print("quiz here" );
     print(quiz);
-    print(quizLength);
-    quizLength =
-        quiz!.quizQuestions.length; //this seemed to have fixed the null error?
-    userAnswers = List.filled(quizLength, '');
-    answerOptionsMC = List.filled(quizLength, []);
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        // if (question.questionType == "fillInTheBlank"){
-        //   //qParts = List.filled(2, '');
-        //   // for (int i = 0; i < 2; i++) {
-        //   //   qParts.add(questions[question.questionNumber].split("*")[i]);
-        //   // }
-        //   //questionParts = questions[currentIndex].split("**");
-        //   //print(qParts);
-        // }
+        if (question.questionType == "fillInTheBlank"){
+          //qParts = List.filled(2, '');
+          // for (int i = 0; i < 2; i++) {
+          //   qParts.add(questions[question.questionNumber].split("*")[i]);
+          // }
+          //questionParts = questions[currentIndex].split("**");
+          //print(qParts);
+        }
         if (question.questionType == "multipleChoice"){
-          for (int i = 0; i < quizLength; i++){
-            answerOptionsMC[i] = question.answerOptions;
-          }
-          
+          answerOptionsMC = question.answerOptions;
           print(question.questionNumber);
           print(question.answerOptions);
           print(question.questionType);    
@@ -64,7 +57,7 @@ class QuizScreenState extends State<QuizScreen> {
         }
 
         if (question.questionType == "ranking"){
-          answerOptionsR = (question.answerOptions);    
+          answerOptionsR = question.answerOptions;    
         }
 
       } 
@@ -72,13 +65,15 @@ class QuizScreenState extends State<QuizScreen> {
 
 
     //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
-    
-    
+    quizLength =
+        quiz!.quizQuestions.length; //this seemed to have fixed the null error?
+    userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
-    List<String> quest = [];
-    List<String> ans = [];
-    questions = popQuestionsList(quiz, quest, ans);
-    answers = popAnswersList(quiz, quest, ans);
+    popList(quiz);
+    // List<String> quest = [];
+    // List<String> ans = [];
+    // questions = popQuestionsList(quiz, quest, ans);
+    // answers = popAnswersList(quiz, quest, ans);
     setState(() {
       _isLoading = false;
     });
@@ -88,6 +83,13 @@ class QuizScreenState extends State<QuizScreen> {
   void initState() {
     loaddata();
     super.initState();
+  }
+
+  void popList(Quiz? q) {
+    for (int i = 0; i < quizLength; i++) {
+      questions.add(q!.quizQuestions.elementAt(i).questionText);
+      answers.add(q.quizQuestions.elementAt(i).questionAnswer);
+    }
   }
 
 // coverage:ignore-end
@@ -128,7 +130,7 @@ class QuizScreenState extends State<QuizScreen> {
   List<String> questionParts = [];
 
   //lists for one instance of MC and dropdown and ranking  create list of list for multiple MC and dropdown later
-  List<List> answerOptionsMC = [];
+  List<String> answerOptionsMC = [];
   List<String> answerOptionsDD = [];
   List<String> answerOptionsR = [];
 
@@ -323,7 +325,7 @@ class QuizScreenState extends State<QuizScreen> {
                                   itemBuilder: (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(
-                                        answerOptionsMC[currentIndex][index],
+                                        answerOptionsMC[index],
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Nunito',
@@ -332,7 +334,7 @@ class QuizScreenState extends State<QuizScreen> {
                                       onTap: () {
                                         // Handle the selected answer
                                         setState(() {
-                                          answerController.text = answerOptionsMC[currentIndex][index];
+                                          answerController.text = answerOptionsMC[index];
                                         });
                                       },
                                     );
