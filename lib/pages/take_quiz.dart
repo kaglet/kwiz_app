@@ -31,13 +31,13 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
-    quiz = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
-    print("quiz here" );
+    quiz = await service.getQuizAndQuestions(quizID: widget.qID);
+    print("quiz here");
     print(quiz);
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        if (question.questionType == "fillInTheBlank"){
+        if (question.questionType == "fillInTheBlank") {
           //qParts = List.filled(2, '');
           // for (int i = 0; i < 2; i++) {
           //   qParts.add(questions[question.questionNumber].split("*")[i]);
@@ -45,24 +45,22 @@ class QuizScreenState extends State<QuizScreen> {
           //questionParts = questions[currentIndex].split("**");
           //print(qParts);
         }
-        if (question.questionType == "multipleChoice"){
+        if (question.questionType == "multipleChoice") {
           answerOptionsMC = question.answerOptions;
           print(question.questionNumber);
           print(question.answerOptions);
-          print(question.questionType);    
+          print(question.questionType);
         }
 
-        if (question.questionType == "dropdown"){
-          answerOptionsDD = question.answerOptions;    
+        if (question.questionType == "dropdown") {
+          answerOptionsDD = question.answerOptions;
         }
 
-        if (question.questionType == "ranking"){
-          answerOptionsR = question.answerOptions;    
+        if (question.questionType == "ranking") {
+          answerOptionsR = question.answerOptions;
         }
-
-      } 
+      }
     }
-
 
     //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
     quizLength =
@@ -141,7 +139,7 @@ class QuizScreenState extends State<QuizScreen> {
     }
 
     currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
-    print(currentQuestionType);   
+    print(currentQuestionType);
     //load before data comes then display ui after data is recieved
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -242,7 +240,7 @@ class QuizScreenState extends State<QuizScreen> {
                             const SizedBox(height: 32.0),
                           ],
                         ),
-                      
+
                       if (currentQuestionType == "trueOrFalse")
                         Column(
                           children: [
@@ -256,7 +254,6 @@ class QuizScreenState extends State<QuizScreen> {
                               ),
                             ),
                             const SizedBox(height: 32.0),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -300,7 +297,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ],
                         ),
 
-                      if (currentQuestionType == "multipleChoice") 
+                      if (currentQuestionType == "multipleChoice")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -317,12 +314,14 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                        
+
                               // Display the answer options
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: answerOptionsMC.length,    //HERE HOW TO GET ANSWEROPTION LIST????
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemCount: answerOptionsMC
+                                      .length, //HERE HOW TO GET ANSWEROPTION LIST????
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(
                                         answerOptionsMC[index],
@@ -334,7 +333,8 @@ class QuizScreenState extends State<QuizScreen> {
                                       onTap: () {
                                         // Handle the selected answer
                                         setState(() {
-                                          answerController.text = answerOptionsMC[index];
+                                          answerController.text =
+                                              answerOptionsMC[index];
                                         });
                                       },
                                     );
@@ -346,7 +346,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
 
-                      if (currentQuestionType == "dropdown") 
+                      if (currentQuestionType == "dropdown")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -363,11 +363,15 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                              
+
                               // Display the dropdown button
                               DropdownButtonFormField(
-                                value: answerController.text.isNotEmpty ? answerController.text : null,
-                                items: answerOptionsDD.map<DropdownMenuItem<String>>((String option) {
+                                value: answerController.text.isNotEmpty
+                                    ? answerController.text
+                                    : null,
+                                items: answerOptionsDD
+                                    .map<DropdownMenuItem<String>>(
+                                        (String option) {
                                   return DropdownMenuItem<String>(
                                     value: option,
                                     child: Text(
@@ -411,7 +415,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
 
-                      if (currentQuestionType == "ranking") 
+                      if (currentQuestionType == "ranking")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -428,7 +432,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                              
+
                               // Display the answer options as draggable tiles
                               Expanded(
                                 child: ReorderableListView(
@@ -438,26 +442,28 @@ class QuizScreenState extends State<QuizScreen> {
                                       if (newIndex > oldIndex) {
                                         newIndex -= 1;
                                       }
-                                      final String item = answerOptionsR.removeAt(oldIndex);
+                                      final String item =
+                                          answerOptionsR.removeAt(oldIndex);
                                       answerOptionsR.insert(newIndex, item);
                                     });
                                   },
                                   children: answerOptionsR
-                                    .map((option) => ListTile(
-                                      key: ValueKey(option), // Set a unique key for each ListTile
-                                      title: Text(
-                                        option,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                      leading: Icon(
-                                        Icons.drag_handle,
-                                        color: Colors.white,
-                                      ),
-                                    ))
-                                    .toList(),
+                                      .map((option) => ListTile(
+                                            key: ValueKey(
+                                                option), // Set a unique key for each ListTile
+                                            title: Text(
+                                              option,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Nunito',
+                                              ),
+                                            ),
+                                            leading: Icon(
+                                              Icons.drag_handle,
+                                              color: Colors.white,
+                                            ),
+                                          ))
+                                      .toList(),
                                 ),
                               ),
                               const SizedBox(height: 32.0),
@@ -465,9 +471,15 @@ class QuizScreenState extends State<QuizScreen> {
                               ElevatedButton(
                                 onPressed: () {
                                   print(answerOptionsR);
-                                  answerController.text = answerOptionsR.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(' ', '').replaceAll('\n', '');
+                                  answerController.text = answerOptionsR
+                                      .toString()
+                                      .replaceAll('[', '')
+                                      .replaceAll(']', '')
+                                      .replaceAll(' ', '')
+                                      .replaceAll('\n', '');
                                   print(answerController.text);
-                                  int diff = answerController.text.compareTo(answers[currentIndex]);
+                                  int diff = answerController.text
+                                      .compareTo(answers[currentIndex]);
                                   print("the difference: $diff");
                                   setState(() {
                                     //currentIndex--;
@@ -523,12 +535,14 @@ class QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
 
-                    
                       if (currentQuestionType == "fillInTheBlank")
                         Column(
                           children: [
                             Text(
-                              questions[currentIndex].substring(0, questions[currentIndex].indexOf("**")),    //gets string before **
+                              questions[currentIndex].substring(
+                                  0,
+                                  questions[currentIndex]
+                                      .indexOf("**")), //gets string before **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -553,7 +567,9 @@ class QuizScreenState extends State<QuizScreen> {
                             ),
                             const SizedBox(height: 32.0),
                             Text(
-                              questions[currentIndex].substring(questions[currentIndex].indexOf("**") + 2),   //gets string after **
+                              questions[currentIndex].substring(
+                                  questions[currentIndex].indexOf("**") +
+                                      2), //gets string after **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -561,11 +577,10 @@ class QuizScreenState extends State<QuizScreen> {
                                 fontFamily: 'Nunito',
                               ),
                             ),
-                          const SizedBox(height: 32.0),
-                        ],
-                      ),
-                    
-      
+                            const SizedBox(height: 32.0),
+                          ],
+                        ),
+
                       // Buttons for moving to the previous/next question
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -621,7 +636,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 onPressed: () {
                                   userAnswers[currentIndex] =
                                       answerController.text.trim();
-                                      print(userAnswers);
+                                  print(userAnswers);
                                   setState(() {
                                     currentIndex++;
                                     updateText();
@@ -634,7 +649,6 @@ class QuizScreenState extends State<QuizScreen> {
                                       .transparent, // set the button background color to transparent
                                   elevation: 0, // remove the button shadow
                                 ),
-                                
                                 child: const Text(
                                   '  Next  ',
                                   style: TextStyle(
@@ -906,7 +920,7 @@ class QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
-        ),
+      ),
     );
   }
 }
