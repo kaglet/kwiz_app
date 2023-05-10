@@ -72,6 +72,7 @@ class QuizScreenState extends State<QuizScreen> {
     // List<String> ans = [];
     // questions = popQuestionsList(quiz, quest, ans);
     // answers = popAnswersList(quiz, quest, ans);
+    currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
     setState(() {
       _isLoading = false;
     });
@@ -131,14 +132,17 @@ class QuizScreenState extends State<QuizScreen> {
   List<String> answerOptionsMC = [];
   List<String> answerOptionsDD = [];
   List<String> answerOptionsR = [];
-
   @override
   Widget build(BuildContext context) {
     void updateText() {
       answerController.text = userAnswers[currentIndex];
     }
 
-    currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
+    if (!_isLoading){
+      currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
+    }
+   
+    
     print(currentQuestionType);
     //load before data comes then display ui after data is recieved
     return Scaffold(
@@ -257,43 +261,85 @@ class QuizScreenState extends State<QuizScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      answerController.text = 'True';
-                                    });
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.green,
-                                  ),
-                                  child: const Text(
-                                    'True',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Nunito',
-                                    ),
-                                  ),
+                                Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.blue, Colors.blue],
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                 setState(() {
                                       answerController.text = 'False';
                                     });
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
-                                  ),
-                                  child: const Text(
-                                    'False',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Nunito',
-                                    ),
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 24),
+                                  backgroundColor: Colors
+                                      .transparent, // set the button background color to transparent
+                                  elevation: 0, // remove the button shadow
+                                ),
+                                child: const Text(
+                                  'False',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Nunito',
                                   ),
                                 ),
-                              ],
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.orange, Colors.orange],
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                 setState(() {
+                                      answerController.text = 'True';
+                                    });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 24),
+                                  backgroundColor: Colors
+                                      .transparent, // set the button background color to transparent
+                                  elevation: 0, // remove the button shadow
+                                ),
+                                child: const Text(
+                                  'True',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Nunito',
+                                  ),
+                                ),
+                              ),
+                            ),                              
+                            ],
                             ),
                             const SizedBox(height: 32.0),
+                            Text(
+                              answerController.text.isEmpty
+                              ? "Select an option"
+                              : "You have selected: ${answerController.text}",
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                              ),
+                            ),
+                             const SizedBox(height: 32.0),
                           ],
                         ),
 
