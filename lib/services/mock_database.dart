@@ -122,7 +122,6 @@ class MockDataService extends Mock implements DatabaseService {
         quizQuestions: questions,
         quizID: docSnapshot.id,
         quizGlobalRating: docSnapshot['QuizGlobalRating'],
-        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['quizAuthor']);
 
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
@@ -214,7 +213,6 @@ class MockDataService extends Mock implements DatabaseService {
         quizQuestions: questions,
         quizID: docSnapshot.id,
         quizGlobalRating: docSnapshot['QuizGlobalRating'],
-        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['quizAuthor']);
 
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
@@ -635,7 +633,6 @@ class MockDataService extends Mock implements DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
-          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['quizAuthor']);
       quizzes.add(quiz);
     }
@@ -692,7 +689,6 @@ class MockDataService extends Mock implements DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
-          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['quizAuthor']);
       quizzes.add(quiz);
     }
@@ -725,7 +721,6 @@ class MockDataService extends Mock implements DatabaseService {
         quizQuestions: questions,
         quizID: docSnapshot.id,
         quizGlobalRating: docSnapshot['QuizGlobalRating'],
-        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['quizAuthor']);
 
     return quiz;
