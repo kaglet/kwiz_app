@@ -31,7 +31,9 @@ class DatabaseService {
       'QuizDescription': quizInstance.quizDescription,
       // 'QuizMark': QuizInstance.QuizMark,
       'QuizDateCreated': quizInstance.quizDateCreated,
-      'QuizAuthor': quizInstance.quizAuthor
+      'QuizAuthor': quizInstance.quizAuthor,
+      'QuizGlobalRating': quizInstance.quizGlobalRating,
+      'QuizTotalRatings': quizInstance.quizTotalRatings
     });
 
     //this uses the quiz ID and adds each question to a SUb Collection
@@ -109,7 +111,7 @@ class DatabaseService {
     QuerySnapshot collectionSnapshot = await quizCollection.get();
     //loops through each document and creates quiz object and adds to quiz list
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
-      var docSnapshot = collectionSnapshot.docs[i];
+      DocumentSnapshot docSnapshot = collectionSnapshot.docs[i];
       late List<Question> questions = [];
       Quiz quiz = Quiz(
           quizName: docSnapshot['QuizName'],
@@ -121,6 +123,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
@@ -180,6 +183,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
 
       QuerySnapshot collectionSnapshot =
@@ -216,7 +220,7 @@ class DatabaseService {
       return quiz;
     } catch (e) {
       if (kDebugMode) {
-        print("Error!!!!! - $e");
+        print("Get Quiz and Questions Error!!!!! - $e");
       }
     }
     return null;
@@ -248,6 +252,7 @@ class DatabaseService {
           quizQuestions: questions,
           quizID: docSnapshot.id,
           quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
@@ -271,6 +276,7 @@ class DatabaseService {
         quizQuestions: questions,
         quizID: docSnapshot.id,
         quizGlobalRating: docSnapshot['QuizGlobalRating'],
+        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['QuizAuthor']);
 
     return quiz;
@@ -499,14 +505,11 @@ class DatabaseService {
       'TotalQuizzes': 0,
     });
   }
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
   Future<void> updateUserScore(
-      {String? userID,
-      int? totalQuizzes,
-      String? totalScore}) async {
-    await userCollection
-    .doc(userID)
-    .update({
+      {String? userID, int? totalQuizzes, String? totalScore}) async {
+    await userCollection.doc(userID).update({
       'TotalScore': totalScore,
       'TotalQuizzes': totalQuizzes,
     });
@@ -535,6 +538,20 @@ class DatabaseService {
         .get();
 
     return docSnapshot.exists;
+  }
+
+  Future<void> addToQuizGlobalRating({String? quizID, int? rating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+
+    int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+    int quizTotalRatings = docQuizSnapshot['QuizTotalRatings'];
+    quizGlobalRating += rating!;
+    quizTotalRatings++;
+
+    await quizCollection.doc(quizID).update({
+      'QuizGlobalRating': quizGlobalRating,
+      'QuizTotalRatings': quizTotalRatings
+    });
   }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------

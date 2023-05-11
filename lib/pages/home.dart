@@ -133,7 +133,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     // }
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
-    randNum = random.nextInt(allQuizzesLength + 1);
+    randNum = random.nextInt(allQuizzesLength);
     textControllerTitle.text = quizzes!.elementAt(randNum).quizName;
     textControllerCat.text = quizzes!.elementAt(randNum).quizCategory;
 

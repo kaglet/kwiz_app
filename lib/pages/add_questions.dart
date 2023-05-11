@@ -514,6 +514,7 @@ class _AddQuestionsState extends State<AddQuestions> {
         // quizAuthorID: widget.user.uid,
         quizID: '',
         quizGlobalRating: 0,
+        quizTotalRatings: 0,
         quizAuthor: widget.currentUser!.userName);
     return quiz;
   }

@@ -62,14 +62,28 @@ class QuizScoreState extends State<QuizScore> {
         rating: _rating,
       );
     }
-    ;
+
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  Future<void> updateRating() async {
+  Future<void> addToGlobalRating() async {
+    setState(() {
+      _isLoading = true;
+    });
+    if (_rating > 0) {
+      await service.addToQuizGlobalRating(
+          quizID: widget.chosenQuiz?.quizID, rating: _rating);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> updateRating(int rating) async {
     setState(() {
       _isLoading = true;
     });
@@ -79,12 +93,12 @@ class QuizScoreState extends State<QuizScore> {
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      //await service.updateQuizGlobalRating(rating: rating);
     }
-    ;
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   Future<void> createAttempt() async {
@@ -101,7 +115,7 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   Future<void> updateAttempt() async {
@@ -123,17 +137,22 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   Future<void> updateScore() async {
+    setState(() {
+      _isLoading = true;
+    });
     totalQuizzes++;
-    totalScore += score/numQuestions;
+    totalScore += score / numQuestions;
     await service.updateUserScore(
-      userID: userID,
-      totalQuizzes: totalQuizzes,
-      totalScore: totalScore.toString()
-    );
+        userID: userID,
+        totalQuizzes: totalQuizzes,
+        totalScore: totalScore.toString());
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
@@ -201,7 +220,7 @@ class QuizScoreState extends State<QuizScore> {
               child: SingleChildScrollView(
                 child: Container(
                   width: screenWidth,
-                  height: screenHeight,
+                  height: screenHeight + 200,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -411,11 +430,13 @@ class QuizScoreState extends State<QuizScore> {
                                         }
 
                                         if (ratingAlreadyExists) {
-                                          updateRating();
+                                          //updateRating(_rating);
                                         } else {
                                           createRating();
+                                          addToGlobalRating();
                                         }
-                                        updateScore();
+
+                                        //updateScore();
 
                                         Navigator.push(
                                           context,
