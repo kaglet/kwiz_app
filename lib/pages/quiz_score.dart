@@ -39,7 +39,7 @@ class QuizScoreState extends State<QuizScore> {
   late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
-  late String title;
+  late String title = '';
   late int quizMaxScore = widget.answers.length;
   //late List<String> answers = [];
   late List<int> markHistories = [];
@@ -157,6 +157,9 @@ class QuizScoreState extends State<QuizScore> {
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
+    setState(() {
+      _isLoading = true;
+    });
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
@@ -171,6 +174,9 @@ class QuizScoreState extends State<QuizScore> {
     //   answers.add(details.quizQuestions.elementAt(i).questionAnswer);
     // }
     //print(answers);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 //This ensures that the quiz information and category image/gif have loaded
