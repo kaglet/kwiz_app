@@ -38,7 +38,7 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   void initState() {
     super.initState();
-    _startLoading();
+    //  _startLoading();
     loadData().then((value) {
       setState(() {});
     });
@@ -57,7 +57,10 @@ class _LeaderboardState extends State<Leaderboard> {
     //maxSort(filteredUsers!);
     bubbleSortDescending(filteredUsers!);
 
-    //Bookmark Logic
+    
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 // This function is used to filter the quizzes by doing a linear search of the quizzes retrieved from the database,
@@ -162,241 +165,256 @@ class _LeaderboardState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: filteredUsers == null && _isLoading
-          ? null
-          : AppBar(
-              title: const Text(
-                'Leaderboard',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontFamily: 'TitanOne',
-                ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-      body: filteredUsers == null && _isLoading
-          ? Loading()
-          : Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 27, 57, 82),
-                    Color.fromARGB(255, 5, 12, 31),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      style: const TextStyle(
+    return _isLoading
+        ? Loading()
+        : Scaffold(
+            appBar: filteredUsers == null && _isLoading
+                ? null
+                : AppBar(
+                    title: const Text(
+                      'Leaderboard',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.normal,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Nunito',
+                        fontFamily: 'TitanOne',
                       ),
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 45, 64,
-                            96), // set the background color to a darker grey
-                        hintText: 'Find a user',
-                        hintStyle: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontFamily:
-                              'Nunito', // set the hint text color to a light grey
-                        ),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          color: const Color.fromRGBO(192, 192, 192,
-                              1), // set the search icon color to a light grey
-                          onPressed: () {
-                            filterQuizzes(_searchController.text);
-                          },
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromRGBO(81, 95, 87,
-                                  1)), // set the border color to a darker grey
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .white), // set the focused border color to white
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        filterQuizzes(value);
+                    ),
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
                     ),
                   ),
-                  Expanded(
-                    child: Stack(
+            body: filteredUsers == null && _isLoading
+                ? Loading()
+                : Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromARGB(255, 27, 57, 82),
+                          Color.fromARGB(255, 5, 12, 31),
+                        ],
+                      ),
+                    ),
+                    child: Column(
                       children: [
-                        Container(
-                          decoration: const BoxDecoration(),
-                        ),
-                        filteredUsers == null && _isLoading
-                            ? Loading()
-                            : ListView.builder(
-                                itemCount: filLength,
-                                itemBuilder: (context, index) {
-                                  // final List<Color> blueAndOrangeShades = [
-                                  //   Colors.orange.shade400,
-                                  //   Colors.orange.shade500,
-                                  //   Colors.orange.shade600,
-                                  //   Colors.orange.shade700,
-                                  // ];
-
-                                  final List<Color> blueAndOrangeShades = [
-                                    Colors.blueGrey.shade400,
-                                    Colors.blueGrey.shade500,
-                                    Colors.blueGrey.shade600,
-                                    Colors.blueGrey.shade700,
-                                  ];
-
-                                  final Color color1 = blueAndOrangeShades[
-                                      index % blueAndOrangeShades.length];
-
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                      horizontal: 16,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color:
-                                          filteredUsers!.elementAt(index).uID ==
-                                                  userData?.uID
-                                              ? Colors.orange
-                                              : color1,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 3.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Card(
-                                      color:
-                                          const Color.fromARGB(240, 45, 64, 96),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(
-                                          filteredUsers!
-                                              .elementAt(index)
-                                              .userName,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.orange,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        leading: Text(
-                                          (findKeyByValue(
-                                                  sortedMap,
-                                                  filteredUsers!
-                                                      .elementAt(index)) + 1)
-                                              .toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        textColor: Colors.white,
-                                        subtitle: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                             Text('Quizzes: ${filteredUsers!
-                                                    .elementAt(index)
-                                                    .totalQuizzes} |',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                               Text('Total score: ${filteredUsers!
-                                                    .elementAt(index)
-                                                    .totalScore}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              
-                                            ],
-                                          ),
-                                        ),
-                                        trailing: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                color1,
-                                                const Color.fromARGB(
-                                                    255, 59, 98, 172),
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
-                                          ),
-                                          child: ElevatedButton(
-                                            onPressed: null,
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              elevation: 0,
-                                            ),
-                                            child: Text(
-                                              weightedScore(index).toString(),
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.orange,
-                                                fontFamily: 'Nunito',
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Nunito',
+                            ),
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color.fromARGB(255, 45, 64,
+                                  96), // set the background color to a darker grey
+                              hintText: 'Find a user',
+                              hintStyle: const TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white,
+                                fontFamily:
+                                    'Nunito', // set the hint text color to a light grey
+                              ),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.search),
+                                color: const Color.fromRGBO(192, 192, 192,
+                                    1), // set the search icon color to a light grey
+                                onPressed: () {
+                                  filterQuizzes(_searchController.text);
                                 },
                               ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(81, 95, 87,
+                                        1)), // set the border color to a darker grey
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors
+                                        .white), // set the focused border color to white
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              filterQuizzes(value);
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(),
+                              ),
+                              filteredUsers == null && _isLoading
+                                  ? Loading()
+                                  : ListView.builder(
+                                      itemCount: filLength,
+                                      itemBuilder: (context, index) {
+                                        // final List<Color> blueAndOrangeShades = [
+                                        //   Colors.orange.shade400,
+                                        //   Colors.orange.shade500,
+                                        //   Colors.orange.shade600,
+                                        //   Colors.orange.shade700,
+                                        // ];
+
+                                        final List<Color> blueAndOrangeShades =
+                                            [
+                                          Colors.blueGrey.shade400,
+                                          Colors.blueGrey.shade500,
+                                          Colors.blueGrey.shade600,
+                                          Colors.blueGrey.shade700,
+                                        ];
+
+                                        final Color color1 =
+                                            blueAndOrangeShades[index %
+                                                blueAndOrangeShades.length];
+
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0,
+                                            horizontal: 16,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: filteredUsers!
+                                                        .elementAt(index)
+                                                        .uID ==
+                                                    userData?.uID
+                                                ? Colors.orange
+                                                : color1,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                                blurRadius: 3.0,
+                                                spreadRadius: 2.0,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Card(
+                                            color: const Color.fromARGB(
+                                                240, 45, 64, 96),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: ListTile(
+                                              title: Text(
+                                                filteredUsers!
+                                                    .elementAt(index)
+                                                    .userName,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.orange,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
+                                              leading: Text(
+                                                (findKeyByValue(
+                                                            sortedMap,
+                                                            filteredUsers!
+                                                                .elementAt(
+                                                                    index)) +
+                                                        1)
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
+                                              textColor: Colors.white,
+                                              subtitle: SingleChildScrollView(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      'Quizzes: ${filteredUsers!.elementAt(index).totalQuizzes} |',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      'Total score: ${filteredUsers!.elementAt(index).totalScore}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              trailing: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      color1,
+                                                      const Color.fromARGB(
+                                                          255, 59, 98, 172),
+                                                    ],
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                  ),
+                                                ),
+                                                child: ElevatedButton(
+                                                  onPressed: null,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    ),
+                                                    elevation: 0,
+                                                  ),
+                                                  child: Text(
+                                                    weightedScore(index)
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Colors.orange,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
-    );
+                  ),
+          );
   }
 }
 
