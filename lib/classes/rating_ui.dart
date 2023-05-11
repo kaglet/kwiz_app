@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 class RatingUI extends StatefulWidget {
   final int maximumRating = 5;
   final Function(int) onRatingSelected;
+  final int? initialRating;
 
-  RatingUI(this.onRatingSelected);
+  RatingUI(this.onRatingSelected, {this.initialRating = 0});
 
   @override
   _RatingUI createState() => _RatingUI();
 }
 
 class _RatingUI extends State<RatingUI> {
-  int _currentRating = 0;
+  int? _currentRating;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentRating = widget.initialRating;
+  }
 
   Widget _buildRatingStar(int index) {
-    if (index < _currentRating) {
+    if (index < _currentRating!) {
       return Icon(Icons.star, color: Colors.orange);
     } else {
       return Icon(Icons.star_border_outlined);
@@ -30,7 +37,7 @@ class _RatingUI extends State<RatingUI> {
             _currentRating = index + 1;
           });
 
-          this.widget.onRatingSelected(_currentRating);
+          this.widget.onRatingSelected(_currentRating!);
         },
       );
     });
@@ -48,7 +55,7 @@ class _RatingUI extends State<RatingUI> {
             setState(() {
               _currentRating = 0;
             });
-            this.widget.onRatingSelected(_currentRating);
+            this.widget.onRatingSelected(_currentRating!);
           },
         )
       ],

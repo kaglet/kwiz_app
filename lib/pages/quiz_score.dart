@@ -29,6 +29,7 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
+  late int? oldRating = 0;
   late bool ratingAlreadyExists;
   late int _rating = -1;
   late UserData userData;
@@ -83,7 +84,25 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  Future<void> updateRating(int rating) async {
+  Future<void> updateGlobalRating() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await service.updateQuizGlobalRating(
+        quizID: widget.chosenQuiz?.quizID,
+        userID: widget.user.uid,
+        rating: _rating,
+        oldRating: oldRating);
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  //Navigator.popUntil(context, (route) => route.isFirst);
+
+  Future<void> updateRating() async {
     setState(() {
       _isLoading = true;
     });
@@ -165,6 +184,8 @@ class QuizScoreState extends State<QuizScore> {
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
     ratingAlreadyExists = await service.ratingAlreadyExists(
+        userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
+    oldRating = await service.getOldRating(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
     totalQuizzes = userData.totalQuizzes;
     totalScore = double.parse(userData.totalScore);
@@ -275,11 +296,14 @@ class QuizScoreState extends State<QuizScore> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    RatingUI((rating) {
-                                      setState(() {
-                                        _rating = rating;
-                                      });
-                                    }),
+                                    RatingUI(
+                                      (rating) {
+                                        setState(() {
+                                          _rating = rating;
+                                        });
+                                      },
+                                      initialRating: oldRating,
+                                    ),
                                     SizedBox(
                                         height: 44,
                                         child: (_rating != null &&
@@ -436,13 +460,14 @@ class QuizScoreState extends State<QuizScore> {
                                         }
 
                                         if (ratingAlreadyExists) {
-                                          //updateRating(_rating);
+                                          updateGlobalRating();
+                                          updateRating();
                                         } else {
                                           createRating();
                                           addToGlobalRating();
                                         }
 
-                                        //updateScore();
+                                        updateScore();
 
                                         Navigator.push(
                                           context,

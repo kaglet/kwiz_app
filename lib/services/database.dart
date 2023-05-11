@@ -553,5 +553,32 @@ class DatabaseService {
       'QuizTotalRatings': quizTotalRatings
     });
   }
+
+  Future<int?> getOldRating({String? quizID, String? userID}) async {
+    DocumentSnapshot docRatingSnapshot = await userCollection
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+    if (docRatingSnapshot.exists) {
+      return docRatingSnapshot['Rating'];
+    } else {
+      return 0;
+    }
+  }
+
+  Future<void> updateQuizGlobalRating(
+      {String? quizID, String? userID, int? rating, int? oldRating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+    if (rating != -1) {
+      int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+      quizGlobalRating -= oldRating!;
+      quizGlobalRating += rating!;
+
+      await quizCollection.doc(quizID).update({
+        'QuizGlobalRating': quizGlobalRating,
+      });
+    }
+  }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
