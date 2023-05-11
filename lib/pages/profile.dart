@@ -328,7 +328,7 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           const SizedBox(
-                            height: 90.0,
+                            height: 126.0,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -111,7 +111,7 @@ class DatabaseService {
     QuerySnapshot collectionSnapshot = await quizCollection.get();
     //loops through each document and creates quiz object and adds to quiz list
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
-      var docSnapshot = collectionSnapshot.docs[i];
+      DocumentSnapshot docSnapshot = collectionSnapshot.docs[i];
       late List<Question> questions = [];
       Quiz quiz = Quiz(
           quizName: docSnapshot['QuizName'],
@@ -505,14 +505,11 @@ class DatabaseService {
       'TotalQuizzes': 0,
     });
   }
+
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
   Future<void> updateUserScore(
-      {String? userID,
-      int? totalQuizzes,
-      String? totalScore}) async {
-    await userCollection
-    .doc(userID)
-    .update({
+      {String? userID, int? totalQuizzes, String? totalScore}) async {
+    await userCollection.doc(userID).update({
       'TotalScore': totalScore,
       'TotalQuizzes': totalQuizzes,
     });
@@ -551,13 +548,37 @@ class DatabaseService {
     quizGlobalRating += rating!;
     quizTotalRatings++;
 
-    await quizCollection
-        .doc(quizID)
-        .update({'QuizGlobalRating': quizGlobalRating});
+    await quizCollection.doc(quizID).update({
+      'QuizGlobalRating': quizGlobalRating,
+      'QuizTotalRatings': quizTotalRatings
+    });
+  }
 
-    await quizCollection
+  Future<int?> getOldRating({String? quizID, String? userID}) async {
+    DocumentSnapshot docRatingSnapshot = await userCollection
+        .doc(userID)
+        .collection('Ratings')
         .doc(quizID)
-        .update({'QuizTotalRatings': quizTotalRatings});
+        .get();
+    if (docRatingSnapshot.exists) {
+      return docRatingSnapshot['Rating'];
+    } else {
+      return 0;
+    }
+  }
+
+  Future<void> updateQuizGlobalRating(
+      {String? quizID, String? userID, int? rating, int? oldRating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+    if (rating != -1) {
+      int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+      quizGlobalRating -= oldRating!;
+      quizGlobalRating += rating!;
+
+      await quizCollection.doc(quizID).update({
+        'QuizGlobalRating': quizGlobalRating,
+      });
+    }
   }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
