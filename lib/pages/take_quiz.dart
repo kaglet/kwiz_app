@@ -19,7 +19,7 @@ class QuizScreenState extends State<QuizScreen> {
   //final String qID = widget.qID;
   DatabaseService service = DatabaseService();
   // Get the questions from firebase
-  late bool _isLoading;
+  late bool _isLoading = true;
   int quizLength = 0;
   Quiz? quiz;
 
@@ -89,7 +89,9 @@ class QuizScreenState extends State<QuizScreen> {
     }
 
     //load before data comes then display ui after data is recieved
-    return Scaffold(
+    return _isLoading
+            ? Loading() 
+            :Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: _isLoading
           ? null
@@ -112,12 +114,11 @@ class QuizScreenState extends State<QuizScreen> {
               ),
             ),
       body: SafeArea(
-        child: _isLoading
-            ? Loading() /*const Center(
+        child: /*const Center(
                 child: CircularProgressIndicator(),
               )*/
             //after data is loaded this displays
-            : Container(
+             Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
