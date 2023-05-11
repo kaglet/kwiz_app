@@ -31,44 +31,60 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
-    quiz = await service.getQuizAndQuestions(quizID: "L75mCQ1cPcVUjkEgajpi");
+    quiz = await service.getQuizAndQuestions(quizID: widget.qID);
+    
+    quizLength =
+        quiz!.quizQuestions.length;
     print("quiz here" );
-    print(quiz);
+    print(quizLength);
+
+    answerOptionsMC = List<List<String>>.generate(quizLength,
+        (index) => List<String>.filled(10, ""),
+        );    //filling the quiz with quiz length number of lists
+        answerOptionsDD = List<List<String>>.generate(quizLength,
+        (index) => List<String>.filled(10, ""),
+        );
+        answerOptionsR = List<List<String>>.generate(quizLength,
+        (index) => List<String>.filled(10, ""),
+        );
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        answerOptionsMC = List.filled(quizLength, []);    //filling the quiz with quiz length number of lists
-        answerOptionsDD = List.filled(quizLength, []);
-        answerOptionsR = List.filled(quizLength, []);
+        
+        //print(answerOptionsMC);
 
-        for (int i = 0; i < quizLength; i++) {
-          answerOptionsMC[i] = List.filled(quizLength, "");   //filling the inner list with empty string 
-          answerOptionsDD[i] = List.filled(quizLength, "");   //WRONG not quizlength use number of 
-          answerOptionsR[i] = List.filled(quizLength, "");
-        }
+        // for (int i = 0; i < quizLength; i++) {
+        //   answerOptionsMC[i] = List.filled(quizLength, "");   //filling the inner list with empty string 
+        //   answerOptionsDD[i] = List.filled(quizLength, "");   //WRONG not quizlength use number of 
+        //   answerOptionsR[i] = List.filled(quizLength, "");
+        // }
+        // print(answerOptionsMC);
+
+        print(question.questionNumber -1);
 
         if (question.questionType == "multipleChoice"){
           answerOptionsMC[question.questionNumber-1] = question.answerOptions;
-          print(question.questionNumber);
-          print(question.answerOptions);
-          print(question.questionType);    
+          print(answerOptionsMC);
+          // print(question.questionNumber);
+          // print(question.answerOptions);
+          // print(question.questionType);
         }
 
         if (question.questionType == "dropdown"){
-          answerOptionsDD[question.questionNumber] = question.answerOptions;    
+          answerOptionsDD[question.questionNumber-1] = question.answerOptions; 
+          print(answerOptionsDD) ;  
         }
 
         if (question.questionType == "ranking"){
-          answerOptionsR[question.questionNumber] = question.answerOptions;    
+          answerOptionsR[question.questionNumber-1] = question.answerOptions; 
+          print(answerOptionsR) ;  
         }
-
-      } 
+      }
     }
 
-
     //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
-    quizLength =
-        quiz!.quizQuestions.length; //this seemed to have fixed the null error?
+    // quizLength =
+    //     quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
     //popList(quiz);
@@ -247,7 +263,7 @@ class QuizScreenState extends State<QuizScreen> {
                             const SizedBox(height: 32.0),
                           ],
                         ),
-                      
+
                       if (currentQuestionType == "trueOrFalse")
                         Column(
                           children: [
@@ -261,7 +277,6 @@ class QuizScreenState extends State<QuizScreen> {
                               ),
                             ),
                             const SizedBox(height: 32.0),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -305,7 +320,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ],
                         ),
 
-                      if (currentQuestionType == "multipleChoice") 
+                      if (currentQuestionType == "multipleChoice")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -322,20 +337,24 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                        
+
                               // Display the answer options
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: answerOptionsMC.length,    //HERE HOW TO GET ANSWEROPTION LIST????
+                                  itemCount: answerOptionsMC[currentIndex].length,
                                   itemBuilder: (BuildContext context, int index) {
+                                    bool isSelected = answerController.text == answerOptionsMC[currentIndex][index];
+                                    print("How to access?????");
+                                    print(answerOptionsMC[currentIndex]);
                                     return ListTile(
                                       title: Text(
                                         answerOptionsMC[currentIndex][index],
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style: TextStyle(
+                                          color: isSelected ? Colors.white : Colors.grey, // Adjust the colors as needed
                                           fontFamily: 'Nunito',
                                         ),
                                       ),
+                                      tileColor: isSelected ? Colors.green : null, // Adjust the highlight color as needed
                                       onTap: () {
                                         // Handle the selected answer
                                         setState(() {
@@ -350,8 +369,10 @@ class QuizScreenState extends State<QuizScreen> {
                             ],
                           ),
                         ),
+                      
 
-                      if (currentQuestionType == "dropdown") 
+
+                      if (currentQuestionType == "dropdown")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -368,7 +389,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                              
+
                               // Display the dropdown button
                               DropdownButtonFormField(
                                 value: answerController.text.isNotEmpty ? answerController.text : null,
@@ -416,7 +437,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
 
-                      if (currentQuestionType == "ranking") 
+                      if (currentQuestionType == "ranking")
                         SizedBox(
                           height: 500,
                           child: Column(
@@ -433,7 +454,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                               const SizedBox(height: 32.0),
-                              
+
                               // Display the answer options as draggable tiles
                               Expanded(
                                 child: ReorderableListView(
@@ -470,9 +491,15 @@ class QuizScreenState extends State<QuizScreen> {
                               ElevatedButton(
                                 onPressed: () {
                                   print(answerOptionsR);
-                                  answerController.text = answerOptionsR.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(' ', '').replaceAll('\n', '');
+                                  answerController.text = answerOptionsR[currentIndex]
+                                      .toString()
+                                      .replaceAll('[', '')
+                                      .replaceAll(']', '')
+                                      .replaceAll(' ', '')
+                                      .replaceAll('\n', '');
                                   print(answerController.text);
-                                  int diff = answerController.text.compareTo(answers[currentIndex]);
+                                  int diff = answerController.text
+                                      .compareTo(answers[currentIndex]);
                                   print("the difference: $diff");
                                   setState(() {
                                     //currentIndex--;
@@ -528,12 +555,15 @@ class QuizScreenState extends State<QuizScreen> {
                           ),
                         ),
 
-                    
+
                       if (currentQuestionType == "fillInTheBlank")
                         Column(
                           children: [
                             Text(
-                              questions[currentIndex].substring(0, questions[currentIndex].indexOf("**")),    //gets string before **
+                              questions[currentIndex].substring(
+                                  0,
+                                  questions[currentIndex]
+                                      .indexOf("**")), //gets string before **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -558,7 +588,9 @@ class QuizScreenState extends State<QuizScreen> {
                             ),
                             const SizedBox(height: 32.0),
                             Text(
-                              questions[currentIndex].substring(questions[currentIndex].indexOf("**") + 2),   //gets string after **
+                              questions[currentIndex].substring(
+                                  questions[currentIndex].indexOf("**") +
+                                      2), //gets string after **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -566,11 +598,10 @@ class QuizScreenState extends State<QuizScreen> {
                                 fontFamily: 'Nunito',
                               ),
                             ),
-                          const SizedBox(height: 32.0),
-                        ],
-                      ),
-                    
-      
+                            const SizedBox(height: 32.0),
+                          ],
+                        ),
+
                       // Buttons for moving to the previous/next question
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -626,7 +657,7 @@ class QuizScreenState extends State<QuizScreen> {
                                 onPressed: () {
                                   userAnswers[currentIndex] =
                                       answerController.text.trim();
-                                      print(userAnswers);
+                                  print(userAnswers);
                                   setState(() {
                                     currentIndex++;
                                     updateText();
@@ -639,7 +670,6 @@ class QuizScreenState extends State<QuizScreen> {
                                       .transparent, // set the button background color to transparent
                                   elevation: 0, // remove the button shadow
                                 ),
-                                
                                 child: const Text(
                                   '  Next  ',
                                   style: TextStyle(
@@ -911,7 +941,7 @@ class QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
-        ),
+      ),
     );
   }
 }
