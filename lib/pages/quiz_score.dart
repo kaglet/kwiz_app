@@ -30,10 +30,9 @@ class QuizScore extends StatefulWidget {
 
 class QuizScoreState extends State<QuizScore> {
   //Rating variables
-  late int? oldRating = 0;
+  late int? oldRating;
   late bool _ratingAlreadyExists;
   late int _rating;
-  bool isFirstRating = true;
   //---------------------------------------
   late UserData userData;
   late String quizID = widget.chosenQuiz!.quizID;
@@ -42,7 +41,7 @@ class QuizScoreState extends State<QuizScore> {
   late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
-  late String title = '';
+  late String title;
   late int quizMaxScore = widget.answers.length;
   //late List<String> answers = [];
   late List<int> markHistories = [];
@@ -188,7 +187,6 @@ class QuizScoreState extends State<QuizScore> {
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
     _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
-    print(_ratingAlreadyExists);
     oldRating = await service.getOldRating(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
     totalQuizzes = userData.totalQuizzes;
@@ -208,7 +206,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   void initState() {
     super.initState();
-    _startLoading();
+    //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
     });
