@@ -167,6 +167,8 @@ class MockDataService extends Mock implements DatabaseService {
       'quizMark': 10,
       'quizGlobalRating:': 0,
       'quizDateCreated': '2023-03-31 20:28',
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
 
     await firestore
@@ -213,8 +215,8 @@ class MockDataService extends Mock implements DatabaseService {
         quizDateCreated: docSnapshot['quizDateCreated'],
         quizQuestions: questions,
         quizID: docSnapshot.id,
-        quizGlobalRating: docSnapshot['QuizGlobalRating'],
-        quizTotalRatings: docSnapshot['QuizTotalRatings'],
+        quizGlobalRating: docSnapshot['quizGlobalRating'],
+        quizTotalRatings: docSnapshot['quizTotalRatings'],
         quizAuthor: docSnapshot['quizAuthor']);
 
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
@@ -607,7 +609,9 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Biology',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
-      'quizQuestions': questions
+      'quizQuestions': questions,
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
     await firestore.collection(QuizCollection).doc("quizid2").set({
       'quizName': 'Biology Quiz 2',
@@ -616,7 +620,9 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Biology 2',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
-      'quizQuestions': questions
+      'quizQuestions': questions,
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
     List<Quiz> quizzes = [];
 
@@ -634,8 +640,8 @@ class MockDataService extends Mock implements DatabaseService {
           quizDateCreated: docSnapshot['quizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
-          quizGlobalRating: docSnapshot['QuizGlobalRating'],
-          quizTotalRatings: docSnapshot['QuizTotalRatings'],
+          quizGlobalRating: docSnapshot['quizGlobalRating'],
+          quizTotalRatings: docSnapshot['quizTotalRatings'],
           quizAuthor: docSnapshot['quizAuthor']);
       quizzes.add(quiz);
     }
@@ -654,7 +660,9 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Biology',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
-      'quizQuestions': questions
+      'quizQuestions': questions,
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
     await firestore.collection(QuizCollection).doc("quizid2").set({
       'quizName': 'Biology Quiz 2',
@@ -663,7 +671,9 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Biology 2',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
-      'quizQuestions': questions
+      'quizQuestions': questions,
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
     await firestore.collection(QuizCollection).doc("quizid3").set({
       'quizName': 'Sport Quiz',
@@ -672,7 +682,9 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Sport',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
-      'quizQuestions': questions
+      'quizQuestions': questions,
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
     List<Quiz> quizzes = [];
 
@@ -691,8 +703,8 @@ class MockDataService extends Mock implements DatabaseService {
           quizDateCreated: docSnapshot['quizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
-          quizGlobalRating: docSnapshot['QuizGlobalRating'],
-          quizTotalRatings: docSnapshot['QuizTotalRatings'],
+          quizGlobalRating: docSnapshot['quizGlobalRating'],
+          quizTotalRatings: docSnapshot['quizTotalRatings'],
           quizAuthor: docSnapshot['quizAuthor']);
       quizzes.add(quiz);
     }
@@ -711,6 +723,8 @@ class MockDataService extends Mock implements DatabaseService {
       'quizDescription': 'Quiz about Biology',
       'quizMark': 10,
       'quizDateCreated': '2023-03-31 20:28',
+      'quizGlobalRating': 0,
+      'quizTotalRatings': 0
     });
 
     DocumentSnapshot docSnapshot =
@@ -724,8 +738,8 @@ class MockDataService extends Mock implements DatabaseService {
         quizDateCreated: docSnapshot['quizDateCreated'],
         quizQuestions: questions,
         quizID: docSnapshot.id,
-        quizGlobalRating: docSnapshot['QuizGlobalRating'],
-        quizTotalRatings: docSnapshot['QuizTotalRatings'],
+        quizGlobalRating: docSnapshot['quizGlobalRating'],
+        quizTotalRatings: docSnapshot['quizTotalRatings'],
         quizAuthor: docSnapshot['quizAuthor']);
 
     return quiz;
