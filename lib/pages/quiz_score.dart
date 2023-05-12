@@ -249,7 +249,7 @@ class QuizScoreState extends State<QuizScore> {
               child: SingleChildScrollView(
                 child: Container(
                   width: screenWidth,
-                  height: screenHeight + 200,
+                  height: screenHeight,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -281,40 +281,51 @@ class QuizScoreState extends State<QuizScore> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Center(
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: const TextSpan(
-                                      text: "Rate This Quiz",
-                                      style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 42,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                Card(
+                                  color: const Color.fromARGB(240, 45, 64, 96),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(children: [
+                                    Center(
+                                      child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: const TextSpan(
+                                          text: "Rate This Quiz",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RatingUI(
-                                      (rating) {
-                                        setState(() {
-                                          _rating = rating;
-                                        });
-                                      },
-                                      initialRating: oldRating,
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        RatingUI(
+                                          (rating) {
+                                            setState(() {
+                                              _rating = rating;
+                                            });
+                                          },
+                                          initialRating: oldRating,
+                                        ),
+                                        SizedBox(
+                                            height: 44,
+                                            child: (_rating != null &&
+                                                    _rating != 0 &&
+                                                    _rating != -1)
+                                                ? Text(
+                                                    "Rate this $_rating stars",
+                                                    style:
+                                                        TextStyle(fontSize: 18))
+                                                : SizedBox.shrink())
+                                      ],
                                     ),
-                                    SizedBox(
-                                        height: 44,
-                                        child: (_rating != null &&
-                                                _rating != 0 &&
-                                                _rating != -1)
-                                            ? Text("Rate this $_rating stars",
-                                                style: TextStyle(fontSize: 18))
-                                            : SizedBox.shrink())
-                                  ],
+                                  ]),
                                 ),
                                 Padding(
                                   padding:
