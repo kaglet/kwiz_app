@@ -29,13 +29,15 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
+  //Rating variables
   late int? oldRating = 0;
-  late bool ratingAlreadyExists;
-  late int _rating = -1;
+  late bool _ratingAlreadyExists;
+  late int _rating;
+  bool isFirstRating = true;
+  //---------------------------------------
   late UserData userData;
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
-  bool isFirstRating = true;
   late int score = widget.score;
   late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
@@ -179,12 +181,14 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
+    _rating = -1;
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
-    ratingAlreadyExists = await service.ratingAlreadyExists(
+    _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
+    print(_ratingAlreadyExists);
     oldRating = await service.getOldRating(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
     totalQuizzes = userData.totalQuizzes;
@@ -459,7 +463,7 @@ class QuizScoreState extends State<QuizScore> {
                                           updateAttempt();
                                         }
 
-                                        if (ratingAlreadyExists) {
+                                        if (_ratingAlreadyExists) {
                                           updateGlobalRating();
                                           updateRating();
                                         } else {
