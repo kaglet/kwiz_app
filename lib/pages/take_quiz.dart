@@ -7,6 +7,7 @@ import 'package:kwiz_v2/shared/loading.dart';
 import '../models/questions.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
+import 'dart:math';
 
 class QuizScreen extends StatefulWidget {
   final OurUser user;
@@ -61,9 +62,10 @@ class QuizScreenState extends State<QuizScreen> {
           print(answerOptionsDD) ;  
         }
 
-        if (question.questionType == "ranking"){
-          answerOptionsR[question.questionNumber-1] = question.answerOptions; 
-          print(answerOptionsR) ;  
+        if (question.questionType == "ranking") {
+          answerOptionsR[question.questionNumber - 1] = List.from(question.answerOptions)
+            ..shuffle();
+          print(answerOptionsR);
         }
       }
     }
@@ -97,7 +99,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer.replaceAll(" ", ""));
     }
     return ans;
   }
