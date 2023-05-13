@@ -31,7 +31,9 @@ class DatabaseService {
       'QuizDescription': quizInstance.quizDescription,
       // 'QuizMark': QuizInstance.QuizMark,
       'QuizDateCreated': quizInstance.quizDateCreated,
-      'QuizAuthor': quizInstance.quizAuthor
+      'QuizAuthor': quizInstance.quizAuthor,
+      'QuizGlobalRating': quizInstance.quizGlobalRating,
+      'QuizTotalRatings': quizInstance.quizTotalRatings
     });
 
     //this uses the quiz ID and adds each question to a SUb Collection
@@ -45,25 +47,24 @@ class DatabaseService {
   //This private method is called by the addQuizWithQuestions method and adds one question to the database at a time
   Future<void> _addQuestionDocument(
       {String? quizID, Question? question}) async {
-        if (question is MultipleAnswerQuestion) {          
-          quizCollection.doc(quizID).collection('Questions').add({
-          'QuestionAnswer': question!.questionAnswer,
-          // 'QuestionMark': Question!.QuestionMark,
-          'QuestionNumber': question.questionNumber,
-          'QuestionText': question.questionText,
-          'QuestionType': question.questionType,
-          'QuestionAnswerOptions': question.answerOptions,
-          });
-        } else {
-          quizCollection.doc(quizID).collection('Questions').add({
-          'QuestionAnswer': question!.questionAnswer,
-          // 'QuestionMark': Question!.QuestionMark,
-          'QuestionNumber': question.questionNumber,
-          'QuestionText': question.questionText,
-          'QuestionType': question.questionType,
-          });
-        }
-    
+    if (question is MultipleAnswerQuestion) {
+      quizCollection.doc(quizID).collection('Questions').add({
+        'QuestionAnswer': question!.questionAnswer,
+        // 'QuestionMark': Question!.QuestionMark,
+        'QuestionNumber': question.questionNumber,
+        'QuestionText': question.questionText,
+        'QuestionType': question.questionType,
+        'QuestionAnswerOptions': question.answerOptions,
+      });
+    } else {
+      quizCollection.doc(quizID).collection('Questions').add({
+        'QuestionAnswer': question!.questionAnswer,
+        // 'QuestionMark': Question!.QuestionMark,
+        'QuestionNumber': question.questionNumber,
+        'QuestionText': question.questionText,
+        'QuestionType': question.questionType,
+      });
+    }
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -110,7 +111,7 @@ class DatabaseService {
     QuerySnapshot collectionSnapshot = await quizCollection.get();
     //loops through each document and creates quiz object and adds to quiz list
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
-      var docSnapshot = collectionSnapshot.docs[i];
+      DocumentSnapshot docSnapshot = collectionSnapshot.docs[i];
       late List<Question> questions = [];
       Quiz quiz = Quiz(
           quizName: docSnapshot['QuizName'],
@@ -121,11 +122,14 @@ class DatabaseService {
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
+          quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
     return quizzes;
   }
+
   //--------------------------
   //
   ////-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -135,14 +139,14 @@ class DatabaseService {
     List<UserData> users = [];
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
+    late List<Rating> ratings = [];
     //gets all docs from collection
     QuerySnapshot collectionSnapshot = await userCollection.get();
-    
+
     //loops through each document and creates quiz object and adds to quiz list
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
       var docSnapshot = collectionSnapshot.docs[i];
-     
-     
+
       UserData user = UserData(
           //uid: docSnapshot['QuizName'],
           userName: docSnapshot['Username'],
@@ -152,12 +156,12 @@ class DatabaseService {
           totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
+          ratings: ratings,
           uID: docSnapshot.id);
 
-        users.add(user);
-        
+      users.add(user);
     }
-    
+
     return users;
   }
   //-------------------------------------------------------------------------------------------------------------------------------
@@ -178,37 +182,36 @@ class DatabaseService {
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
+          quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
 
       QuerySnapshot collectionSnapshot =
           await quizCollection.doc(quizID).collection('Questions').get();
       for (int i = 0; i < collectionSnapshot.docs.length; i++) {
         var docSnapshot = collectionSnapshot.docs[i];
-        if (docSnapshot['QuestionType']=="ranking" || 
-            docSnapshot['QuestionType']=="dropdown" ||
-            docSnapshot['QuestionType']=="multipleChoice"){
-            List<String> QuestionAnswerOptions =
-            List<String>.from(docSnapshot['QuestionAnswerOptions']);
-            MultipleAnswerQuestion question = MultipleAnswerQuestion(
-            questionNumber: docSnapshot['QuestionNumber'],
-            questionText: docSnapshot['QuestionText'],
-            questionAnswer: docSnapshot['QuestionAnswer'],
-            questionMark: 0,
-            questionType: docSnapshot['QuestionType'],
-            answerOptions: QuestionAnswerOptions);
-            questions.add(question);
-          }
-          else
-          {
-            Question question = Question(
-            questionNumber: docSnapshot['QuestionNumber'],
-            questionText: docSnapshot['QuestionText'],
-            questionAnswer: docSnapshot['QuestionAnswer'],
-            questionMark: 0,
-            questionType: docSnapshot['QuestionType']);
-            questions.add(question);
-          }       
-        
+        if (docSnapshot['QuestionType'] == "ranking" ||
+            docSnapshot['QuestionType'] == "dropdown" ||
+            docSnapshot['QuestionType'] == "multipleChoice") {
+          List<String> QuestionAnswerOptions =
+              List<String>.from(docSnapshot['QuestionAnswerOptions']);
+          MultipleAnswerQuestion question = MultipleAnswerQuestion(
+              questionNumber: docSnapshot['QuestionNumber'],
+              questionText: docSnapshot['QuestionText'],
+              questionAnswer: docSnapshot['QuestionAnswer'],
+              questionMark: 0,
+              questionType: docSnapshot['QuestionType'],
+              answerOptions: QuestionAnswerOptions);
+          questions.add(question);
+        } else {
+          Question question = Question(
+              questionNumber: docSnapshot['QuestionNumber'],
+              questionText: docSnapshot['QuestionText'],
+              questionAnswer: docSnapshot['QuestionAnswer'],
+              questionMark: 0,
+              questionType: docSnapshot['QuestionType']);
+          questions.add(question);
+        }
       }
 
       quiz.quizQuestions
@@ -248,6 +251,8 @@ class DatabaseService {
           quizDateCreated: docSnapshot['QuizDateCreated'],
           quizQuestions: questions,
           quizID: docSnapshot.id,
+          quizGlobalRating: docSnapshot['QuizGlobalRating'],
+          quizTotalRatings: docSnapshot['QuizTotalRatings'],
           quizAuthor: docSnapshot['QuizAuthor']);
       quizzes.add(quiz);
     }
@@ -270,6 +275,8 @@ class DatabaseService {
         quizDateCreated: docSnapshot['QuizDateCreated'],
         quizQuestions: questions,
         quizID: docSnapshot.id,
+        quizGlobalRating: docSnapshot['QuizGlobalRating'],
+        quizTotalRatings: docSnapshot['QuizTotalRatings'],
         quizAuthor: docSnapshot['QuizAuthor']);
 
     return quiz;
@@ -280,6 +287,7 @@ class DatabaseService {
     //Past aatempt cpuld change to user
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
+    late List<Rating> ratings = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -288,10 +296,11 @@ class DatabaseService {
           userName: docSnapshot['Username'],
           firstName: docSnapshot['FirstName'],
           lastName: docSnapshot['LastName'],
-          totalScore:  docSnapshot['TotalScore'],
+          totalScore: docSnapshot['TotalScore'],
           totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
+          ratings: ratings,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -335,6 +344,7 @@ class DatabaseService {
     //Past aatempt cpuld change to user
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
+    late List<Rating> ratings = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -347,6 +357,7 @@ class DatabaseService {
           totalQuizzes: docSnapshot['TotalQuizzes'],
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
+          ratings: ratings,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -475,7 +486,8 @@ class DatabaseService {
         totalScore: docSnapshot['TotalScore'],
         totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: [],
-        pastAttemptQuizzes: []);
+        pastAttemptQuizzes: [],
+        ratings: []);
 
     return user;
   }
@@ -489,9 +501,17 @@ class DatabaseService {
       'FirstName': userInstance.firstName,
       'LastName': userInstance.lastName,
       'Username': userInstance.userName,
-      'TotalScore' : '0',
-      'TotalQuizzes' : 0,
+      'TotalScore': '0',
+      'TotalQuizzes': 0,
+    });
+  }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+  Future<void> updateUserScore(
+      {String? userID, int? totalQuizzes, String? totalScore}) async {
+    await userCollection.doc(userID).update({
+      'TotalScore': totalScore,
+      'TotalQuizzes': totalQuizzes,
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -519,4 +539,46 @@ class DatabaseService {
 
     return docSnapshot.exists;
   }
+
+  Future<void> addToQuizGlobalRating({String? quizID, int? rating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+
+    int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+    int quizTotalRatings = docQuizSnapshot['QuizTotalRatings'];
+    quizGlobalRating += rating!;
+    quizTotalRatings++;
+
+    await quizCollection.doc(quizID).update({
+      'QuizGlobalRating': quizGlobalRating,
+      'QuizTotalRatings': quizTotalRatings
+    });
+  }
+
+  Future<int?> getOldRating({String? quizID, String? userID}) async {
+    DocumentSnapshot docRatingSnapshot = await userCollection
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+    if (docRatingSnapshot.exists) {
+      return docRatingSnapshot['Rating'];
+    } else {
+      return 0;
+    }
+  }
+
+  Future<void> updateQuizGlobalRating(
+      {String? quizID, String? userID, int? rating, int? oldRating}) async {
+    DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
+    if (rating! > 0) {
+      int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
+      quizGlobalRating -= oldRating!;
+      quizGlobalRating += rating!;
+
+      await quizCollection.doc(quizID).update({
+        'QuizGlobalRating': quizGlobalRating,
+      });
+    }
+  }
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------

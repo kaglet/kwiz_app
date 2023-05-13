@@ -32,6 +32,7 @@ class ViewCategoriesState extends State<ViewCategories> {
     catLength = categories!.length;
     _displayedItems = categories;
     fillLength = _displayedItems!.length;
+    
   }
 
 //This ensures that category tiles are populated and that we can search for a category
@@ -65,7 +66,7 @@ class ViewCategoriesState extends State<ViewCategories> {
 
 // coverage:ignore-start
   void _startLoading() async {
-    await Future.delayed(const Duration(milliseconds: 1300));
+    await Future.delayed(const Duration(milliseconds: 600));
     setState(() {
       _isLoading = false;
     });

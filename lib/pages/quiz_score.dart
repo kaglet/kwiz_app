@@ -29,12 +29,14 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
-  late bool ratingAlreadyExists;
-  late int _rating = -1;
+  //Rating variables
+  late int? oldRating;
+  late bool _ratingAlreadyExists;
+  late int _rating;
+  //---------------------------------------
   late UserData userData;
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
-  bool isFirstRating = true;
   late int score = widget.score;
   late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
@@ -44,6 +46,10 @@ class QuizScoreState extends State<QuizScore> {
   //late List<String> answers = [];
   late List<int> markHistories = [];
   bool _isLoading = true;
+  late int totalQuizzes;
+  late double totalScore;
+  late int numQuestions;
+
   DatabaseService service =
       DatabaseService(); //This database service allows me to use all the functions in the database.dart file
 
@@ -51,36 +57,68 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-    if (_rating >= 0) {
+    if (_rating > 0) {
       await service.createRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
     }
-    ;
+
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
+
+  Future<void> addToGlobalRating() async {
+    setState(() {
+      _isLoading = true;
+    });
+    if (_rating > 0) {
+      await service.addToQuizGlobalRating(
+          quizID: widget.chosenQuiz?.quizID, rating: _rating);
+    }
+    setState(() {
+      _isLoading = false;
+    });
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> updateGlobalRating() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await service.updateQuizGlobalRating(
+        quizID: widget.chosenQuiz?.quizID,
+        userID: widget.user.uid,
+        rating: _rating,
+        oldRating: oldRating);
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  //Navigator.popUntil(context, (route) => route.isFirst);
 
   Future<void> updateRating() async {
     setState(() {
       _isLoading = true;
     });
-    if (_rating >= 0) {
+    if (_rating > 0) {
       await service.updateRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,
         rating: _rating,
       );
+      //await service.updateQuizGlobalRating(rating: rating);
     }
-    ;
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   Future<void> createAttempt() async {
@@ -97,7 +135,7 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   Future<void> updateAttempt() async {
@@ -119,29 +157,56 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.popUntil(context, (route) => route.isFirst);
+    //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> updateScore() async {
+    setState(() {
+      _isLoading = true;
+    });
+    totalQuizzes++;
+    totalScore += score / numQuestions;
+    await service.updateUserScore(
+        userID: userID,
+        totalQuizzes: totalQuizzes,
+        totalScore: totalScore.toString());
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
+    setState(() {
+      _isLoading = true;
+    });
+    _rating = -1;
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
-    ratingAlreadyExists = await service.ratingAlreadyExists(
+    _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
+    oldRating = await service.getOldRating(
+        userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
+    totalQuizzes = userData.totalQuizzes;
+    totalScore = double.parse(userData.totalScore);
+    numQuestions = details.quizQuestions.length;
 
     // for (int i = 0; i < quizMaxScore; i++) {
     //   answers.add(details.quizQuestions.elementAt(i).questionAnswer);
     // }
     //print(answers);
+    setState(() {
+      _isLoading = false;
+    });
   }
 
 //This ensures that the quiz information and category image/gif have loaded
   @override
   void initState() {
     super.initState();
-    _startLoading();
+    //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
     });
@@ -184,7 +249,7 @@ class QuizScoreState extends State<QuizScore> {
               child: SingleChildScrollView(
                 child: Container(
                   width: screenWidth,
-                  height: screenHeight,
+                  height: screenHeight + 400,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -216,37 +281,51 @@ class QuizScoreState extends State<QuizScore> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Center(
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: const TextSpan(
-                                      text: "Rate This Quiz",
-                                      style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 42,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                Card(
+                                  color: const Color.fromARGB(240, 45, 64, 96),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(children: [
+                                    Center(
+                                      child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: const TextSpan(
+                                          text: "Rate This Quiz",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RatingUI((rating) {
-                                      setState(() {
-                                        _rating = rating;
-                                      });
-                                    }),
-                                    SizedBox(
-                                        height: 44,
-                                        child: (_rating != null &&
-                                                _rating != 0 &&
-                                                _rating != -1)
-                                            ? Text("Rate this $_rating stars",
-                                                style: TextStyle(fontSize: 18))
-                                            : SizedBox.shrink())
-                                  ],
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        RatingUI(
+                                          (rating) {
+                                            setState(() {
+                                              _rating = rating;
+                                            });
+                                          },
+                                          initialRating: oldRating,
+                                        ),
+                                        SizedBox(
+                                            height: 44,
+                                            child: (_rating != null &&
+                                                    _rating != 0 &&
+                                                    _rating != -1)
+                                                ? Text(
+                                                    "Rate this $_rating stars",
+                                                    style:
+                                                        TextStyle(fontSize: 18))
+                                                : SizedBox.shrink())
+                                      ],
+                                    ),
+                                  ]),
                                 ),
                                 Padding(
                                   padding:
@@ -393,11 +472,15 @@ class QuizScoreState extends State<QuizScore> {
                                           updateAttempt();
                                         }
 
-                                        if (ratingAlreadyExists) {
+                                        if (_ratingAlreadyExists) {
+                                          updateGlobalRating();
                                           updateRating();
                                         } else {
                                           createRating();
+                                          addToGlobalRating();
                                         }
+
+                                        updateScore();
 
                                         Navigator.push(
                                           context,

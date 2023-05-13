@@ -23,6 +23,7 @@ class ViewQuizzes extends StatefulWidget {
 
 class _ViewQuizzesState extends State<ViewQuizzes> {
   late String categoryName;
+  String ratingText = '';
   DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
@@ -40,7 +41,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   void initState() {
     super.initState();
     categoryName = widget.chosenCategory;
-    _startLoading();
+   // _startLoading();
     loadData().then((value) {
       setState(() {});
     });
@@ -66,6 +67,10 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
     //Bookmark Logic
     updateBookmarkList();
+
+      setState(() {
+      _isLoading = false;
+    });
   }
 
   Future<void> bookmarkItem(int index) async {
@@ -131,10 +136,9 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
       // } else {
       //   filteredQuizzes = List<Quiz>.from(categoryQuiz!);
       // }
-       filteredQuizzes = categoryQuiz!
-          .where((item) => item.quizName
-              .toLowerCase()
-              .contains(searchTerm.toLowerCase()))
+      filteredQuizzes = categoryQuiz!
+          .where((item) =>
+              item.quizName.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
 
       filLength = filteredQuizzes!.length;
@@ -155,107 +159,129 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: filteredQuizzes == null && _isLoading
-          ? null
-          : AppBar(
-              title: const Text(
-                'View Quizzes',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontFamily: 'TitanOne',
-                ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.category),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-      body: filteredQuizzes == null && _isLoading
-          ? Loading()
-          : Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color.fromARGB(255, 27, 57, 82),
-                    Color.fromARGB(255, 5, 12, 31),
-                  ],
-                ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      style: const TextStyle(
+    return _isLoading
+        ? Loading()
+        : Scaffold(
+            appBar: filteredQuizzes == null && _isLoading
+                ? null
+                : AppBar(
+                    title: const Text(
+                      'View Quizzes',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.normal,
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Nunito',
+                        fontFamily: 'TitanOne',
                       ),
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color.fromARGB(255, 45, 64,
-                            96), // set the background color to a darker grey
-                        hintText: 'Search quizzes',
-                        hintStyle: const TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontFamily:
-                              'Nunito', // set the hint text color to a light grey
-                        ),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          color: const Color.fromRGBO(192, 192, 192,
-                              1), // set the search icon color to a light grey
-                          onPressed: () {
-                            filterQuizzes(_searchController.text);
-                          },
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Color.fromRGBO(81, 95, 87,
-                                  1)), // set the border color to a darker grey
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                              color: Colors
-                                  .white), // set the focused border color to white
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        filterQuizzes(value);
+                    ),
+                    leading: IconButton(
+                      icon: const Icon(Icons.category),
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
                     ),
                   ),
-                  Expanded(
-                    child: Stack(
+            body: filteredQuizzes == null && _isLoading
+                ? Loading()
+                : Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color.fromARGB(255, 27, 57, 82),
+                          Color.fromARGB(255, 5, 12, 31),
+                        ],
+                      ),
+                    ),
+                    child: Column(
                       children: [
-                        Container(
-                          decoration: const BoxDecoration(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextField(
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Nunito',
+                            ),
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color.fromARGB(255, 45, 64,
+                                  96), // set the background color to a darker grey
+                              hintText: 'Search quizzes',
+                              hintStyle: const TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white,
+                                fontFamily:
+                                    'Nunito', // set the hint text color to a light grey
+                              ),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.search),
+                                color: const Color.fromRGBO(192, 192, 192,
+                                    1), // set the search icon color to a light grey
+                                onPressed: () {
+                                  filterQuizzes(_searchController.text);
+                                },
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Color.fromRGBO(81, 95, 87,
+                                        1)), // set the border color to a darker grey
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors
+                                        .white), // set the focused border color to white
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              filterQuizzes(value);
+                            },
+                          ),
                         ),
-                        filteredQuizzes == null && _isLoading
-                            ? Loading()
-                            : ListView.builder(
-                                itemCount: filLength,
-                                itemBuilder: (context, index) {
-                                  final List<Color> blueAndOrangeShades = [
-                                    Colors.orange.shade400,
-                                    Colors.orange.shade500,
-                                    Colors.orange.shade600,
-                                    Colors.orange.shade700,
-                                  ];
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(),
+                              ),
+                              filteredQuizzes == null && _isLoading
+                                  ? Loading()
+                                  : ListView.builder(
+                                      itemCount: filLength,
+                                      itemBuilder: (context, index) {
+                                  if (filteredQuizzes!
+                                          .elementAt(index)
+                                          .quizGlobalRating >
+                                      0) {
+                                    double ratingTextCalc = filteredQuizzes!
+                                            .elementAt(index)
+                                            .quizGlobalRating /
+                                        filteredQuizzes!
+                                            .elementAt(index)
+                                            .quizTotalRatings;
+                                    ratingTextCalc = double.parse(
+                                        ratingTextCalc.toStringAsFixed(1));
+                                    ratingText =
+                                        ratingTextCalc.toString() + '  |  ';
+                                  } else {
+                                    ratingText = '';
+                                  }
+                                  ;
+                                        final List<Color> blueAndOrangeShades =
+                                            [
+                                          Colors.orange.shade400,
+                                          Colors.orange.shade500,
+                                          Colors.orange.shade600,
+                                          Colors.orange.shade700,
+                                        ];
 
-                                  final Color color1 = blueAndOrangeShades[
-                                      index % blueAndOrangeShades.length];
+                                        final Color color1 =
+                                            blueAndOrangeShades[index %
+                                                blueAndOrangeShades.length];
 
                                   return Container(
                                     margin: const EdgeInsets.symmetric(
@@ -291,29 +317,30 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                             fontFamily: 'Nunito',
                                           ),
                                         ),
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            // handle bookmark button press
+                                        leading: Container(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              // handle bookmark button press
+                                              setState(() {
+                                                isBookmarkedList[index] =
+                                                    !isBookmarkedList[index];
 
-                                            setState(() {
-                                              isBookmarkedList[index] =
-                                                  !isBookmarkedList[index];
-
-                                              if (isBookmarkedList[index] ==
-                                                  true) {
-                                                bookmarkItem(index);
-                                              } else {
-                                                removeBookmark(index);
-                                              }
-                                            });
-                                          },
-                                          icon: Icon(
-                                            isBookmarkedList[index]
-                                                ? Icons.bookmark
-                                                : Icons.bookmark_border,
-                                            color: isBookmarkedList[index]
-                                                ? Colors.blue
-                                                : Colors.white,
+                                                if (isBookmarkedList[index] ==
+                                                    true) {
+                                                  bookmarkItem(index);
+                                                } else {
+                                                  removeBookmark(index);
+                                                }
+                                              });
+                                            },
+                                            icon: Icon(
+                                              isBookmarkedList[index]
+                                                  ? Icons.bookmark
+                                                  : Icons.bookmark_border,
+                                              color: isBookmarkedList[index]
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
                                           ),
                                         ),
                                         textColor: Colors.white,
@@ -321,6 +348,17 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                           scrollDirection: Axis.horizontal,
                                           child: Row(
                                             children: [
+                                              if (ratingText != '')
+                                                Icon(Icons.star,
+                                                    color: Colors.orange),
+                                              Text(
+                                                '${ratingText}',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
                                               Text(
                                                 '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
                                                 style: const TextStyle(

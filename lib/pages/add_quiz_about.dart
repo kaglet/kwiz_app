@@ -28,15 +28,15 @@ class AddQuizState extends State<AddQuiz> {
   DatabaseService service = DatabaseService();
   int currentIndex = 0;
   UserData? currentUser = UserData(
-    uID: ' ',
-    userName: ' ',
-    firstName: ' ',
-    lastName: ' ',
-    totalScore: ' ',
-    totalQuizzes: 0,
-    bookmarkedQuizzes: [],
-    pastAttemptQuizzes: [],
-  );
+      uID: ' ',
+      userName: ' ',
+      firstName: ' ',
+      lastName: ' ',
+      totalScore: ' ',
+      totalQuizzes: 0,
+      bookmarkedQuizzes: [],
+      pastAttemptQuizzes: [],
+      ratings: []);
 
   // screens for stacked widget
   List<Widget> screens = [];
