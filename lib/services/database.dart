@@ -570,7 +570,7 @@ class DatabaseService {
   Future<void> updateQuizGlobalRating(
       {String? quizID, String? userID, int? rating, int? oldRating}) async {
     DocumentSnapshot docQuizSnapshot = await quizCollection.doc(quizID).get();
-    if (rating != -1) {
+    if (rating! > 0) {
       int quizGlobalRating = docQuizSnapshot['QuizGlobalRating'];
       quizGlobalRating -= oldRating!;
       quizGlobalRating += rating!;
