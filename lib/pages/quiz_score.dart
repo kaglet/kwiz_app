@@ -249,7 +249,7 @@ class QuizScoreState extends State<QuizScore> {
               child: SingleChildScrollView(
                 child: Container(
                   width: screenWidth,
-                  height: screenHeight,
+                  height: screenHeight + 400,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(

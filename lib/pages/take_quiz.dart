@@ -443,8 +443,12 @@ class QuizScreenState extends State<QuizScreen> {
                               },
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: answerController.text.isNotEmpty ? Colors.green : Colors.transparent,
+                                fillColor: answerController.text.isNotEmpty ? Color.fromARGB(255, 43, 97, 179) : Colors.transparent,
                                 hintText: 'Select an option',
+                                hintStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
                                 contentPadding: const EdgeInsets.symmetric(
                                   vertical: 10.0,
                                   horizontal: 20.0,
@@ -549,7 +553,7 @@ class QuizScreenState extends State<QuizScreen> {
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 24),
-                                backgroundColor: const Color.fromARGB(96, 33, 243, 82), // set the button background color to transparent
+                                backgroundColor: Colors.green, // set the button background color to transparent
                                 elevation: 2, // remove the button shadow
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10), // Add rounded corners to the button
