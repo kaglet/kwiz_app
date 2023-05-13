@@ -319,6 +319,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                         ),
                                         leading: Container(
                                           child: IconButton(
+                                            iconSize: 23,
                                             onPressed: () {
                                               // handle bookmark button press
                                               setState(() {
@@ -342,7 +343,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                                   : Colors.white,
                                             ),
                                           ),
-                                        ),
+                                       ),
                                         textColor: Colors.white,
                                         subtitle: SingleChildScrollView(
                                           scrollDirection: Axis.horizontal,

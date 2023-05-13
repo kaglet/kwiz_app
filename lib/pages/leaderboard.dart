@@ -57,7 +57,6 @@ class _LeaderboardState extends State<Leaderboard> {
     //maxSort(filteredUsers!);
     bubbleSortDescending(filteredUsers!);
 
-    
     setState(() {
       _isLoading = false;
     });
@@ -124,7 +123,10 @@ class _LeaderboardState extends State<Leaderboard> {
       return 0;
     }
 
-    wSum = score / quizzes;
+    // Give a higher weight to users who have taken more quizzes
+    double weight = 1 + (quizzes / 10);
+
+    wSum = (score / quizzes) * weight;
 
     return double.parse(wSum.toStringAsFixed(2));
   }
@@ -277,7 +279,6 @@ class _LeaderboardState extends State<Leaderboard> {
                                           Colors.blue.shade700,
                                           Colors.blue.shade800,
                                           Colors.blue.shade900,
-
                                         ];
 
                                         final Color color1 =
@@ -398,8 +399,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     elevation: 0,
                                                   ),
                                                   child: Text(
-                                                    '${weightedScore(index)
-                                                        .toStringAsFixed(2)} pts',
+                                                    '${weightedScore(index).toStringAsFixed(2)} pts',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
