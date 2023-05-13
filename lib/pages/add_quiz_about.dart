@@ -256,22 +256,19 @@ class AddQuizState extends State<AddQuiz> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: ElevatedButton(
-                          onPressed: widget._aboutQuizController.text == '' ||
-                                  widget._titleController.text == ''
-                              ? () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AddQuestions(
-                                            aboutQuiz: widget
-                                                ._aboutQuizController.text,
-                                            category: _selectedCategory,
-                                            title: widget._titleController.text,
-                                            user: widget.user,
-                                            currentUser: currentUser)),
-                                  );
-                                }
-                              : null,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddQuestions(
+                                      aboutQuiz:
+                                          widget._aboutQuizController.text,
+                                      category: _selectedCategory,
+                                      title: widget._titleController.text,
+                                      user: widget.user,
+                                      currentUser: currentUser)),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: Colors.transparent,
