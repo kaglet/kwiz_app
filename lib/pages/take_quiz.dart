@@ -591,12 +591,13 @@ class QuizScreenState extends State<QuizScreen> {
                                           .toString()
                                           .replaceAll('[', '')
                                           .replaceAll(']', '')
-                                          .replaceAll(' ', '')
+                                          .replaceAll(', ', ',')
                                           .replaceAll('\n', '');
                                   print(answerController.text);
                                   int diff = answerController.text
                                       .compareTo(answers[currentIndex]);
                                   print("the difference: $diff");
+                                  print(answers[currentIndex]);
                                   setState(() {
                                     //currentIndex--;
                                     //updateText();
