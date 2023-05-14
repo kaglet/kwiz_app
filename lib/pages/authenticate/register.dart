@@ -321,8 +321,15 @@ class _RegisterState extends State<Register> {
                                         dynamic result =
                                             await _auth.RegisterWithEandP(
                                                 email, password, user);
+                                        
+                                         if (result == "InUse" ) {
+                                          setState(() {
+                                            loading = false;
+                                            error = 'This email is already in use';
+                                          });
+                                        }
 
-                                        if (this.mounted || result == null) {
+                                        if (result == null) {
                                           setState(() {
                                             loading = false;
                                             error = 'Please supply valid email';
@@ -365,7 +372,7 @@ class _RegisterState extends State<Register> {
                                       widget.toggleView!();
                                     },
                                     child: Text(
-                                      'Login',
+                                      'Return to login',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Nunito',
@@ -381,15 +388,25 @@ class _RegisterState extends State<Register> {
                                       ),
                                     ),
                                   ),
+                                  
                                 ),
+                                 SizedBox(height: 20.0),
+                                 Center(
+                                   child: Container(                                                   
+                                    decoration: BoxDecoration(                                  
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),child: Text(
+                                      error,
+                                      style: TextStyle(color: Colors.red, fontSize: 10.0),
+                                    ),
+                                                                 ),
+                                 ),
+                                
                               ],
                             ),
                           ),
                         ),
-                        Text(
-                          error,
-                          style: TextStyle(color: Colors.red, fontSize: 14.0),
-                        )
+                        
                       ],
                     ))),
           );

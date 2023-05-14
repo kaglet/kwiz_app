@@ -38,6 +38,22 @@ class _AddQuestionsState extends State<AddQuestions> {
   bool _isLoading = false;
   String? _selectedQuestionType;
 
+  bool checkIfQuestionsAreFilled(List<QAContainer> QAs) {
+    // how can it check when its not always created, well just check if not null
+
+    // if (QAs != null) {
+    //   Quiz quiz = createQuizFromContainers(qaContainers);
+    //   bool boolean = true;
+    //   quiz.quizQuestions.forEach((Question question) {
+    //     if (question.questionText == '' || question.questionAnswer == '') {
+    //       boolean = false;
+    //     }
+    //   });
+    // }
+
+    return true;
+  }
+
   List? questionOptions = [
     "trueOrFalse",
     "fillInTheBlank",
@@ -176,13 +192,17 @@ class _AddQuestionsState extends State<AddQuestions> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: ElevatedButton(
-                                onPressed: () async {
-                                  // coverage:ignore-end
-                                  Quiz quiz =
-                                      createQuizFromContainers(qaContainers);
-                                  addData(quiz);
-                                  // coverage:ignore-start
-                                },
+                                onPressed:
+                                    checkIfQuestionsAreFilled(qaContainers)
+                                        ? () async {
+                                            // coverage:ignore-end
+                                            Quiz quiz =
+                                                createQuizFromContainers(
+                                                    qaContainers);
+                                            addData(quiz);
+                                            // coverage:ignore-start
+                                          }
+                                        : null,
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor: Colors.transparent,

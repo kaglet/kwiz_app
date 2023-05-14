@@ -15,7 +15,8 @@ class QAContainer extends StatefulWidget {
   final _answerController = TextEditingController();
   String _selectedTruthValue = 'True';
   String? _selectedDropdownValue;
-  final List? dropdownList = [];
+  List? dropdownList = [];
+  final List? preDropdownList = [];
   int? number;
 
   QAContainer(
@@ -60,7 +61,7 @@ class QAContainer extends StatefulWidget {
           answer: answer,
           type: 'multipleChoice',
           answerOptions: answerOptions);
-    } 
+    }
     if (qaType == 'dropdown') {
       String answer = _selectedDropdownValue!;
       List<String> answerOptions =
@@ -71,26 +72,26 @@ class QAContainer extends StatefulWidget {
           answer: answer,
           type: 'dropdown',
           answerOptions: answerOptions);
-    }if (qaType == 'ranking') {     
+    }
+    if (qaType == 'ranking') {
       List<String> answerOptions =
           dropdownList!.map((e) => e.toString()).toList();
       String answer = answerOptions.join(",");
       print(answer);
-        
+
       return QAMultiple(
           // answer option will come from all answerOptions controllers
           question: _questionController.text,
           answer: answer,
           type: 'ranking',
           answerOptions: answerOptions);
-    }else {
+    } else {
       return QA(
           question: _questionController.text,
           answer: _answerController.text,
           type: 'shortAnswer');
     }
   }
-  List<MultipleChoiceOption> multipleChoiceOptions = [];
 
   @override
   State<QAContainer> createState() => _QAContainerState();
@@ -104,7 +105,7 @@ class _QAContainerState extends State<QAContainer> {
   //   widget._answerController.dispose();
   //   super.dispose();
   // }
-  
+  List<MultipleChoiceOption> multipleChoiceOptions = [];
   List? trueOrFalseOptions = ["True", "False"];
   final List? userInitializedAnswers = [''];
   @override
@@ -607,11 +608,11 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: widget.multipleChoiceOptions!.length,                
+                itemCount: multipleChoiceOptions!.length,
                 itemBuilder: (context, index) {
-                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return widget.multipleChoiceOptions.elementAt(index);
+                  return multipleChoiceOptions.elementAt(index);
                 },
               ),
             ),
@@ -650,87 +651,117 @@ class _QAContainerState extends State<QAContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 100,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.orange, Colors.deepOrange],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: widget.dropdownList!.length < 8
-                        ? () {
-                            setState(() {
-                              final uniqueKey = UniqueKey();
-                              widget.dropdownList!.add(
-                                  'Option ${widget.dropdownList!.length + 1}');
-                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
-                                  onChanged: (value, optionIndex) {
-                                    setState(() {
-                                      print(value);
-                                      if (!widget.dropdownList!.contains(value)){
-                                      if (widget._selectedDropdownValue ==
-                                          widget.dropdownList![optionIndex]) {
-                                        widget._selectedDropdownValue = value;
-                                      }
-                                      print(value);
-                                      widget.dropdownList![optionIndex] = value;
-                                      print(widget.dropdownList);
-                                    }else{
-                                       if (widget._selectedDropdownValue ==
-                                          widget.dropdownList![optionIndex]) {
-                                        widget._selectedDropdownValue = value;
-                                      }
-                                      widget.dropdownList![optionIndex] = "No Duplicates";
-
-                                      //
-                                      
-                                     
-                                    }
-                                  });
-                                  },
-                                  // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                  // a key is passed in as a parameterwhich  is the unique key of the widget
-                                  delete: (key, dropdownIndex) {
-                                    setState(() {
-                                      // print(widget.dropdownList![dropdownIndex]);
-                                      // print(widget._selectedDropdownValue);
-                                      if (!(widget
-                                              .dropdownList![dropdownIndex] ==
-                                          widget._selectedDropdownValue)) {
-                                        widget.dropdownList!
-                                            .removeAt(dropdownIndex);
-                                        widget.multipleChoiceOptions.removeWhere(
-                                            (multipleChoiceOption) =>
-                                                multipleChoiceOption.key ==
-                                                key);
-                                      }
-                                    });
-                                  },
-                                  okey: uniqueKey));
-                            });
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      padding: const EdgeInsets.all(0.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                Column(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.orange, Colors.deepOrange],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: widget.preDropdownList!.length < 8
+                            ? () {
+                                setState(() {
+                                  final uniqueKey = UniqueKey();
+                                  widget.preDropdownList!.add(
+                                      'Option ${widget.preDropdownList!.length + 1}');
+                                  multipleChoiceOptions.add(MultipleChoiceOption(
+                                      onChanged: (value, optionIndex) {
+                                        setState(() {
+                                          print(value);
+                                          widget.preDropdownList![optionIndex] =
+                                              value;
+                                          print(widget.preDropdownList);
+                                        });
+                                      },
+                                      // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                      // a key is passed in as a parameterwhich  is the unique key of the widget
+                                      delete: (key, dropdownIndex) {
+                                        setState(() {
+                                          // print(widget.dropdownList![dropdownIndex]);
+                                          // print(widget._selectedDropdownValue);
+                                          if (!(widget.preDropdownList![
+                                                  dropdownIndex] ==
+                                              widget._selectedDropdownValue)) {
+                                            widget.preDropdownList!
+                                                .removeAt(dropdownIndex);
+                                            multipleChoiceOptions.removeWhere(
+                                                (multipleChoiceOption) =>
+                                                    multipleChoiceOption.key ==
+                                                    key);
+                                          }
+                                        });
+                                      },
+                                      key: uniqueKey));
+                                });
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          padding: const EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: Text(
+                          'Add Option',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'Add Option',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        letterSpacing: 1.0,
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.blue, Colors.blue],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: widget.preDropdownList!.length ==
+                                widget.preDropdownList!.toSet().length
+                            ? () {
+                                setState(() {
+                                  widget.dropdownList = widget.preDropdownList;
+                                });
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          padding: const EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -741,7 +772,7 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return multipleChoiceContainer;
-    }else if (widget.qaType == 'dropdown') {
+    } else if (widget.qaType == 'dropdown') {
       // return short answer qa container
       SingleChildScrollView dropdownContainer = SingleChildScrollView(
         child: Column(
@@ -813,11 +844,11 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: widget.multipleChoiceOptions!.length,                
+                itemCount: multipleChoiceOptions!.length,
                 itemBuilder: (context, index) {
-                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return widget.multipleChoiceOptions.elementAt(index);
+                  return multipleChoiceOptions.elementAt(index);
                 },
               ),
             ),
@@ -856,74 +887,117 @@ class _QAContainerState extends State<QAContainer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 100,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.orange, Colors.deepOrange],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: widget.dropdownList!.length < 8
-                        ? () {
-                            setState(() {
-                              final uniqueKey = UniqueKey();
-                              widget.dropdownList!.add(
-                                  'Option ${widget.dropdownList!.length + 1}');
-                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
-                                  onChanged: (value, optionIndex) {
-                                    setState(() {
-                                      if (widget._selectedDropdownValue ==
-                                          widget.dropdownList![optionIndex]) {
-                                        widget._selectedDropdownValue = value;
-                                      }
-                                      print(value);
-                                      widget.dropdownList![optionIndex] = value;
-                                      print(widget.dropdownList);
-                                    });
-                                  },
-                                  // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                  // a key is passed in as a parameterwhich  is the unique key of the widget
-                                  delete: (key, dropdownIndex) {
-                                    setState(() {
-                                      // print(widget.dropdownList![dropdownIndex]);
-                                      // print(widget._selectedDropdownValue);
-                                      if (!(widget
-                                              .dropdownList![dropdownIndex] ==
-                                          widget._selectedDropdownValue)) {
-                                        widget.dropdownList!
-                                            .removeAt(dropdownIndex);
-                                        widget.multipleChoiceOptions.removeWhere(
-                                            (multipleChoiceOption) =>
-                                                multipleChoiceOption.key ==
-                                                key);
-                                      }
-                                    });
-                                  },
-                                  okey: uniqueKey));
-                            });
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      backgroundColor: Colors.transparent,
-                      padding: const EdgeInsets.all(0.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // <-- Radius
+                Column(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.orange, Colors.deepOrange],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: widget.preDropdownList!.length < 8
+                            ? () {
+                                setState(() {
+                                  final uniqueKey = UniqueKey();
+                                  widget.preDropdownList!.add(
+                                      'Item ${widget.preDropdownList!.length + 1}');
+                                  multipleChoiceOptions.add(MultipleChoiceOption(
+                                      onChanged: (value, optionIndex) {
+                                        setState(() {
+                                          print(value);
+                                          widget.preDropdownList![optionIndex] =
+                                              value;
+                                          print(widget.preDropdownList);
+                                        });
+                                      },
+                                      // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
+                                      // a key is passed in as a parameterwhich  is the unique key of the widget
+                                      delete: (key, dropdownIndex) {
+                                        setState(() {
+                                          // print(widget.dropdownList![dropdownIndex]);
+                                          // print(widget._selectedDropdownValue);
+                                          if (!(widget.preDropdownList![
+                                                  dropdownIndex] ==
+                                              widget._selectedDropdownValue)) {
+                                            widget.preDropdownList!
+                                                .removeAt(dropdownIndex);
+                                            multipleChoiceOptions.removeWhere(
+                                                (multipleChoiceOption) =>
+                                                    multipleChoiceOption.key ==
+                                                    key);
+                                          }
+                                        });
+                                      },
+                                      key: uniqueKey));
+                                });
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          padding: const EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: Text(
+                          'Add Item',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'Add Option',
-                      style: TextStyle(
-                        fontSize: 10.0,
-                        letterSpacing: 1.0,
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.blue, Colors.blue],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: widget.preDropdownList!.length ==
+                                widget.preDropdownList!.toSet().length
+                            ? () {
+                                setState(() {
+                                  widget.dropdownList = widget.preDropdownList;
+                                });
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          padding: const EdgeInsets.all(0.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
+                          ),
+                        ),
+                        child: Text(
+                          'Done',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -934,8 +1008,7 @@ class _QAContainerState extends State<QAContainer> {
         ),
       );
       return dropdownContainer;
-    }
-    else if (widget.qaType == 'ranking') {
+    } else if (widget.qaType == 'ranking') {
       // return short answer qa container
       SingleChildScrollView rankingContainer = SingleChildScrollView(
         child: Column(
@@ -1007,14 +1080,14 @@ class _QAContainerState extends State<QAContainer> {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: widget.multipleChoiceOptions!.length,                
+                itemCount: multipleChoiceOptions!.length,
                 itemBuilder: (context, index) {
-                  widget.multipleChoiceOptions.elementAt(index).number = index + 1;
+                  multipleChoiceOptions.elementAt(index).number = index + 1;
                   // with each index return qaContainer at that index into listview with adjusted question number
-                  return widget.multipleChoiceOptions.elementAt(index);
+                  return multipleChoiceOptions.elementAt(index);
                 },
               ),
-            ),           
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -1036,9 +1109,9 @@ class _QAContainerState extends State<QAContainer> {
                               final uniqueKey = UniqueKey();
                               widget.dropdownList!.add(
                                   'Item ${widget.dropdownList!.length + 1}');
-                              widget.multipleChoiceOptions.add(MultipleChoiceOption(
+                              multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
-                                    setState(() {                                     
+                                    setState(() {
                                       print(value);
                                       widget.dropdownList![optionIndex] = value;
                                       print(widget.dropdownList);
@@ -1050,21 +1123,19 @@ class _QAContainerState extends State<QAContainer> {
                                     setState(() {
                                       // print(widget.dropdownList![dropdownIndex]);
                                       // print(widget._selectedDropdownValue);
-                                      
                                       if (!(widget
                                               .dropdownList![dropdownIndex] ==
                                           widget._selectedDropdownValue)) {
                                         widget.dropdownList!
                                             .removeAt(dropdownIndex);
-                                        widget.multipleChoiceOptions.removeWhere(
+                                        multipleChoiceOptions.removeWhere(
                                             (multipleChoiceOption) =>
                                                 multipleChoiceOption.key ==
                                                 key);
-                                                
                                       }
                                     });
                                   },
-                                  okey: uniqueKey));
+                                  key: uniqueKey));
                             });
                           }
                         : null,

@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 class MultipleChoiceOption extends StatefulWidget {
   Function delete;
   Function onChanged;
-  final Key? okey;
+  final Key? key;
   int? number;
 
   final _optionController = TextEditingController();
@@ -13,9 +13,9 @@ class MultipleChoiceOption extends StatefulWidget {
   MultipleChoiceOption(
       {required this.delete,
       required this.onChanged,
-      required this.okey,
+      required this.key,
       int? number})
-      : super(key: okey) {
+      : super(key: key) {
     // set the optional parameter if no value is provided
     this.number = number ?? 0;
   }
@@ -86,8 +86,7 @@ class _MultipleChoiceOptionState extends State<MultipleChoiceOption> {
             IconButton(
               onPressed: () {
                 setState(() {
-                  widget.delete(widget.okey, widget.number! - 1);
-                    
+                  widget.delete(widget.key, widget.number! - 1);
                 });
 
                 // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
