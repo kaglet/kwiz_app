@@ -54,10 +54,15 @@ class AuthService {
       await DatabaseService().addUser(userData, ourUser!);
       return _userFromFirebaseUser(user);
     } catch (e) {
-      print(e.toString());
-      return "";
+     print(e.toString());
+      if (e.toString().contains("email-already-in-use")) {
+        return "InUse";
+      } else {
+        return "";
+      }
     }
-  }
+    
+}
 
   //sign out
   Future signOut() async {
