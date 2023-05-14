@@ -99,7 +99,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      ans.add(q!.quizQuestions.elementAt(i).questionAnswer.replaceAll(" ", ""));
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
     }
     return ans;
   }
