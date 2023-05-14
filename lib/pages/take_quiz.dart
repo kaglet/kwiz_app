@@ -435,6 +435,7 @@ class QuizScreenState extends State<QuizScreen> {
 
                               // Display the dropdown button
                               DropdownButtonFormField(
+                                isExpanded: false,
                                 value: answerController.text.isNotEmpty ? answerController.text : null,
                                 items: answerOptionsDD[currentIndex].map<DropdownMenuItem<String>>((String option) {
                                   return DropdownMenuItem<String>(
@@ -442,7 +443,7 @@ class QuizScreenState extends State<QuizScreen> {
                                     child: Text(
                                       option,
                                       style: const TextStyle(
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         fontFamily: 'Nunito',
                                       ),
                                     ),
@@ -453,11 +454,28 @@ class QuizScreenState extends State<QuizScreen> {
                                   setState(() {
                                     answerController.text = newValue ?? "";
                                   });
-                                },
+                                },  icon: Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 20.0,
+                                ),
+                                iconEnabledColor:
+                                    Colors.white, //Icon color
+                                style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  color: Colors
+                                      .white, //Font color //font size on dropdown button
+                                ),
+                                dropdownColor: Color.fromARGB(
+                                    255, 45, 64, 96),
+                                      hint: Text(
+                                    'Select an option',
+                                    style: TextStyle(
+                                        color: Colors.white)),
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Select an option',
+                                  fillColor:Color.fromARGB(
+                                    255, 45, 64, 96),
+                                  
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 10.0,
                                     horizontal: 20.0,
@@ -470,7 +488,8 @@ class QuizScreenState extends State<QuizScreen> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(color:Color.fromARGB(
+                                    255, 45, 64, 96)),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
