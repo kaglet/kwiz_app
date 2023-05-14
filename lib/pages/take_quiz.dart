@@ -7,6 +7,7 @@ import 'package:kwiz_v2/shared/loading.dart';
 import '../models/questions.dart';
 import '../services/database.dart';
 import '../models/quizzes.dart';
+import 'dart:math';
 
 class QuizScreen extends StatefulWidget {
   final OurUser user;
@@ -32,62 +33,48 @@ class QuizScreenState extends State<QuizScreen> {
       _isLoading = true;
     });
     quiz = await service.getQuizAndQuestions(quizID: widget.qID);
-    
-    quizLength =
-        quiz!.quizQuestions.length;
-    print("quiz here" );
+
+    quizLength = quiz!.quizQuestions.length;
+    print("quiz here");
     print(quizLength);
 
-    answerOptionsMC = List<List<String>>.generate(quizLength,
-        (index) => List<String>.filled(10, ""),
-        );    //filling the quiz with quiz length number of lists
-        answerOptionsDD = List<List<String>>.generate(quizLength,
-        (index) => List<String>.filled(10, ""),
-        );
-        answerOptionsR = List<List<String>>.generate(quizLength,
-        (index) => List<String>.filled(10, ""),
-        );
+    answerOptionsMC = List<List<String>>.generate(
+      quizLength,
+      (index) => List<String>.filled(10, ""),
+    ); //filling the quiz with quiz length number of lists
+    answerOptionsDD = List<List<String>>.generate(
+      quizLength,
+      (index) => List<String>.filled(10, ""),
+    );
+    answerOptionsR = List<List<String>>.generate(
+      quizLength,
+      (index) => List<String>.filled(10, ""),
+    );
 
     for (var question in quiz!.quizQuestions) {
       if (question is MultipleAnswerQuestion) {
-        
-        //print(answerOptionsMC);
-
-        // for (int i = 0; i < quizLength; i++) {
-        //   answerOptionsMC[i] = List.filled(quizLength, "");   //filling the inner list with empty string 
-        //   answerOptionsDD[i] = List.filled(quizLength, "");   //WRONG not quizlength use number of 
-        //   answerOptionsR[i] = List.filled(quizLength, "");
-        // }
-        // print(answerOptionsMC);
-
-        print(question.questionNumber -1);
-
-        if (question.questionType == "multipleChoice"){
-          answerOptionsMC[question.questionNumber-1] = question.answerOptions;
+        //populating the multiple answer question type lists
+        if (question.questionType == "multipleChoice") {
+          answerOptionsMC[question.questionNumber - 1] = question.answerOptions;
           print(answerOptionsMC);
-          // print(question.questionNumber);
-          // print(question.answerOptions);
-          // print(question.questionType);
         }
 
-        if (question.questionType == "dropdown"){
-          answerOptionsDD[question.questionNumber-1] = question.answerOptions; 
-          print(answerOptionsDD) ;  
+        if (question.questionType == "dropdown") {
+          answerOptionsDD[question.questionNumber - 1] = question.answerOptions;
+          print(answerOptionsDD);
         }
 
-        if (question.questionType == "ranking"){
-          answerOptionsR[question.questionNumber-1] = question.answerOptions; 
-          print(answerOptionsR) ;  
+        if (question.questionType == "ranking") {
+          answerOptionsR[question.questionNumber - 1] =
+              List.from(question.answerOptions)..shuffle();
+          print(answerOptionsR);
         }
       }
     }
 
-    //quiz = await service.getQuizAndQuestions(quizID: widget.qID);
-    // quizLength =
-    //     quiz!.quizQuestions.length; //this seemed to have fixed the null error?
     userAnswers = List.filled(quizLength, '');
     category = quiz!.quizCategory.toString();
-    //popList(quiz);
+
     List<String> quest = [];
     List<String> ans = [];
     questions = popQuestionsList(quiz, quest, ans);
@@ -103,13 +90,6 @@ class QuizScreenState extends State<QuizScreen> {
     super.initState();
   }
 
-  // void popList(Quiz? q) {
-  //   for (int i = 0; i < quizLength; i++) {
-  //     questions.add(q!.quizQuestions.elementAt(i).questionText);
-  //     answers.add(q.quizQuestions.elementAt(i).questionAnswer);
-  //   }
-  // }
-
 // coverage:ignore-end
   //function for populating the questions and answers
   List<String> popQuestionsList(Quiz? q, List<String> quest, List<String> ans) {
@@ -121,7 +101,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer.replaceAll(" ", ""));
     }
     return ans;
   }
@@ -158,42 +138,38 @@ class QuizScreenState extends State<QuizScreen> {
       answerController.text = userAnswers[currentIndex];
     }
 
-    if (_isLoading == false){
+    if (_isLoading == false) {
       currentQuestionType = quiz!.quizQuestions[currentIndex].questionType;
     }
-      
-    print(currentQuestionType);   
+
+    print(currentQuestionType);
     //load before data comes then display ui after data is recieved
     return _isLoading
-            ? Loading() 
-            :Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: _isLoading
-          ? null
-          : AppBar(
-              title: Text(
-                quiz!.quizName,
-                style: const TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                  fontFamily: 'TitanOne',
-                ),
-              ),
-              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-      body: SafeArea(
-        child: /*const Center(
-                child: CircularProgressIndicator(),
-              )*/
-            //after data is loaded this displays
-             Container(
+        ? Loading()
+        : Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: _isLoading
+                ? null
+                : AppBar(
+                    title: Text(
+                      quiz!.quizName,
+                      style: const TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.white,
+                        fontFamily: 'TitanOne',
+                      ),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+            body: SafeArea(
+              child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -209,6 +185,7 @@ class QuizScreenState extends State<QuizScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      //enables image from start quiz
                       // Flexible(
                       //     flex: 1,
                       //     fit: FlexFit.tight,
@@ -232,6 +209,7 @@ class QuizScreenState extends State<QuizScreen> {
                       ),
                       const SizedBox(height: 16.0),
 
+//UI for question type SHORTANSWER
                       if (currentQuestionType == "shortAnswer")
                         Column(
                           children: [
@@ -265,6 +243,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ],
                         ),
 
+//UI for question type TRUEORFALSE
                       if (currentQuestionType == "trueOrFalse")
                         Column(
                           children: [
@@ -363,6 +342,7 @@ class QuizScreenState extends State<QuizScreen> {
                           ],
                         ),
 
+//UI for question type MULTIPLECHOICE
                       if (currentQuestionType == "multipleChoice")
                         SizedBox(
                           height: 500,
@@ -384,26 +364,53 @@ class QuizScreenState extends State<QuizScreen> {
                               // Display the answer options
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: answerOptionsMC[currentIndex].length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    bool isSelected = answerController.text == answerOptionsMC[currentIndex][index];
+                                  itemCount:
+                                      answerOptionsMC[currentIndex].length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    bool isSelected = answerController.text ==
+                                        answerOptionsMC[currentIndex][index];
                                     print("How to access?????");
                                     print(answerOptionsMC[currentIndex]);
-                                    return ListTile(
-                                      title: Text(
-                                        answerOptionsMC[currentIndex][index],
-                                        style: TextStyle(
-                                          color: isSelected ? Colors.white : Colors.grey, // Adjust the colors as needed
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                      tileColor: isSelected ? Colors.green : null, // Adjust the highlight color as needed
+                                    return GestureDetector(
                                       onTap: () {
                                         // Handle the selected answer
                                         setState(() {
-                                          answerController.text = answerOptionsMC[currentIndex][index];
+                                          answerController.text =
+                                              answerOptionsMC[currentIndex]
+                                                  [index];
                                         });
                                       },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? Colors.green
+                                                : Colors.grey,
+                                            width: 2.0,
+                                          ),
+                                          color: isSelected
+                                              ? Colors.green
+                                              : Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        child: ListTile(
+                                          title: Text(
+                                            answerOptionsMC[currentIndex]
+                                                [index],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: isSelected
+                                                  ? Colors.white
+                                                  : Colors.grey,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     );
                                   },
                                 ),
@@ -412,8 +419,6 @@ class QuizScreenState extends State<QuizScreen> {
                             ],
                           ),
                         ),
-                      
-
 
                       if (currentQuestionType == "dropdown")
                         SizedBox(
@@ -435,15 +440,19 @@ class QuizScreenState extends State<QuizScreen> {
 
                               // Display the dropdown button
                               DropdownButtonFormField(
-                                isExpanded: false,
-                                value: answerController.text.isNotEmpty ? answerController.text : null,
-                                items: answerOptionsDD[currentIndex].map<DropdownMenuItem<String>>((String option) {
+                                value: answerController.text.isNotEmpty
+                                    ? answerController.text
+                                    : null,
+                                items: answerOptionsDD[currentIndex]
+                                    .map<DropdownMenuItem<String>>(
+                                        (String option) {
                                   return DropdownMenuItem<String>(
                                     value: option,
                                     child: Text(
                                       option,
                                       style: const TextStyle(
                                         color: Colors.white,
+                                        fontSize: 20,
                                         fontFamily: 'Nunito',
                                       ),
                                     ),
@@ -473,15 +482,21 @@ class QuizScreenState extends State<QuizScreen> {
                                         color: Colors.white)),
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor:Color.fromARGB(
-                                    255, 45, 64, 96),
-                                  
+                                  fillColor: answerController.text.isNotEmpty
+                                      ? Color.fromARGB(255, 43, 97, 179)
+                                      : Colors.transparent,
+                                  hintText: 'Select an option',
+                                  hintStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Nunito',
+                                  ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 10.0,
                                     horizontal: 20.0,
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Colors.white),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
@@ -493,12 +508,14 @@ class QuizScreenState extends State<QuizScreen> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
+                                // Set the background color of the dropdown when opened
                               ),
                               const SizedBox(height: 32.0),
                             ],
                           ),
                         ),
 
+//UI for question type RANKING
                       if (currentQuestionType == "ranking")
                         SizedBox(
                           height: 500,
@@ -526,26 +543,42 @@ class QuizScreenState extends State<QuizScreen> {
                                       if (newIndex > oldIndex) {
                                         newIndex -= 1;
                                       }
-                                      final String item = answerOptionsR[currentIndex].removeAt(oldIndex);
-                                      answerOptionsR[currentIndex].insert(newIndex, item);
+                                      final String item =
+                                          answerOptionsR[currentIndex]
+                                              .removeAt(oldIndex);
+                                      answerOptionsR[currentIndex]
+                                          .insert(newIndex, item);
                                     });
                                   },
                                   children: answerOptionsR[currentIndex]
-                                    .map((option) => ListTile(
-                                      key: ValueKey(option), // Set a unique key for each ListTile
-                                      title: Text(
-                                        option,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                      leading: Icon(
-                                        Icons.drag_handle,
-                                        color: Colors.white,
-                                      ),
-                                    ))
-                                    .toList(),
+                                      .map((option) => Container(
+                                            key: ValueKey(
+                                                option), // Set a unique key for each ListTile
+                                            decoration: BoxDecoration(
+                                              color: Color.fromARGB(211, 43, 97,
+                                                  179), // Change the color as needed
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                            ),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical:
+                                                    8.0), // Add margin for spacing between boxes
+                                            child: ListTile(
+                                              title: Text(
+                                                option,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                                //textAlign: TextAlign.center,
+                                              ),
+                                              leading: const Icon(
+                                                Icons.drag_handle,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
                                 ),
                               ),
                               const SizedBox(height: 32.0),
@@ -553,12 +586,13 @@ class QuizScreenState extends State<QuizScreen> {
                               ElevatedButton(
                                 onPressed: () {
                                   print(answerOptionsR);
-                                  answerController.text = answerOptionsR[currentIndex]
-                                      .toString()
-                                      .replaceAll('[', '')
-                                      .replaceAll(']', '')
-                                      .replaceAll(' ', '')
-                                      .replaceAll('\n', '');
+                                  answerController.text =
+                                      answerOptionsR[currentIndex]
+                                          .toString()
+                                          .replaceAll('[', '')
+                                          .replaceAll(']', '')
+                                          .replaceAll(' ', '')
+                                          .replaceAll('\n', '');
                                   print(answerController.text);
                                   int diff = answerController.text
                                       .compareTo(answers[currentIndex]);
@@ -570,10 +604,14 @@ class QuizScreenState extends State<QuizScreen> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 24),
+                                      vertical: 20, horizontal: 24),
                                   backgroundColor: Colors
-                                      .transparent, // set the button background color to transparent
-                                  elevation: 0, // remove the button shadow
+                                      .green, // set the button background color to transparent
+                                  elevation: 2, // remove the button shadow
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        10), // Add rounded corners to the button
+                                  ),
                                 ),
                                 child: const Text(
                                   'Save Answer',
@@ -584,48 +622,19 @@ class QuizScreenState extends State<QuizScreen> {
                                   ),
                                 ),
                               ),
-
-                              // Display the text field for adding new answer options
-                              // TextField(
-                              //   controller: answerController,
-                              //   onChanged: (value) {
-                              //     // Update the answer text every time the user types or edits the text field
-                              //     setState(() {
-                              //       answerController.text = value;
-                              //     });
-                              //   },
-                              //   onSubmitted: (value) {
-                              //     // Add the new answer option to the list of answer options
-                              //     setState(() {
-                              //       answerOptionsR.add(value);
-                              //       answerController.clear();
-                              //     });
-                              //   },
-                              //   decoration: InputDecoration(
-                              //     hintText: 'Add an answer option',
-                              //     hintStyle: const TextStyle(
-                              //       color: Colors.white,
-                              //       fontFamily: 'Nunito',
-                              //     ),
-                              //   ),
-                              //   style: const TextStyle(
-                              //     color: Colors.white,
-                              //     fontFamily: 'Nunito',
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
 
-
+//UI for question type FILLINTHEBLANK
                       if (currentQuestionType == "fillInTheBlank")
-                        Column(
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              questions[currentIndex].substring(
-                                  0,
-                                  questions[currentIndex]
-                                      .indexOf("**")), //gets string before **
+                              questions[currentIndex].substring(0,
+                                      questions[currentIndex].indexOf("**")) +
+                                  " RANDOM BLAH", //gets string before **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -633,22 +642,43 @@ class QuizScreenState extends State<QuizScreen> {
                                 fontFamily: 'Nunito',
                               ),
                             ),
-                            const SizedBox(height: 32.0),
-                            TextField(
-                              controller: answerController,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
-                              ),
-                              decoration: const InputDecoration(
-                                hintText: 'Type your answer here',
-                                hintStyle: TextStyle(
-                                  color: Color.fromARGB(255, 126, 125, 125),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Container(
+                              width: 150,
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                controller: answerController,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                   fontFamily: 'Nunito',
+                                  fontSize: 24.0,
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: 'Type your answer here',
+                                  hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 126, 125, 125),
+                                    fontFamily: 'Nunito',
+                                  ),
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                  ),
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 32.0),
+                            SizedBox(
+                              width: 10.0,
+                            ),
                             Text(
                               questions[currentIndex].substring(
                                   questions[currentIndex].indexOf("**") +
@@ -1003,8 +1033,8 @@ class QuizScreenState extends State<QuizScreen> {
                   ),
                 ),
               ),
-      ),
-    );
+            ),
+          );
   }
 }
 

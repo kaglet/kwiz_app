@@ -29,18 +29,19 @@ class QuizScore extends StatefulWidget {
 }
 
 class QuizScoreState extends State<QuizScore> {
-  late int? oldRating = 0;
-  late bool ratingAlreadyExists;
-  late int _rating = -1;
+  //Rating variables
+  late int? oldRating;
+  late bool _ratingAlreadyExists;
+  late int _rating;
+  //---------------------------------------
   late UserData userData;
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
-  bool isFirstRating = true;
   late int score = widget.score;
   late double quizPassScore = quizMaxScore / 2.floor();
   late List userAnswers = widget.userAnswers;
   late String userID = widget.user.uid.toString();
-  late String title = '';
+  late String title;
   late int quizMaxScore = widget.answers.length;
   //late List<String> answers = [];
   late List<int> markHistories = [];
@@ -179,11 +180,12 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
+    _rating = -1;
     Quiz? details;
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
-    ratingAlreadyExists = await service.ratingAlreadyExists(
+    _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
     oldRating = await service.getOldRating(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
@@ -204,7 +206,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   void initState() {
     super.initState();
-    _startLoading();
+    //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
     });
@@ -247,7 +249,7 @@ class QuizScoreState extends State<QuizScore> {
               child: SingleChildScrollView(
                 child: Container(
                   width: screenWidth,
-                  height: screenHeight + 200,
+                  height: screenHeight + 400,
                   //The entire body is wrapped with a container so that we can get the background with a gradient effect
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
@@ -279,40 +281,51 @@ class QuizScoreState extends State<QuizScore> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Center(
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: const TextSpan(
-                                      text: "Rate This Quiz",
-                                      style: TextStyle(
-                                        fontFamily: 'Nunito',
-                                        fontSize: 42,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white,
+                                Card(
+                                  color: const Color.fromARGB(240, 45, 64, 96),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(children: [
+                                    Center(
+                                      child: RichText(
+                                        textAlign: TextAlign.center,
+                                        text: const TextSpan(
+                                          text: "Rate This Quiz",
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito',
+                                            fontSize: 42,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RatingUI(
-                                      (rating) {
-                                        setState(() {
-                                          _rating = rating;
-                                        });
-                                      },
-                                      initialRating: oldRating,
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        RatingUI(
+                                          (rating) {
+                                            setState(() {
+                                              _rating = rating;
+                                            });
+                                          },
+                                          initialRating: oldRating,
+                                        ),
+                                        SizedBox(
+                                            height: 44,
+                                            child: (_rating != null &&
+                                                    _rating != 0 &&
+                                                    _rating != -1)
+                                                ? Text(
+                                                    "Rate this $_rating stars",
+                                                    style:
+                                                        TextStyle(fontSize: 18))
+                                                : SizedBox.shrink())
+                                      ],
                                     ),
-                                    SizedBox(
-                                        height: 44,
-                                        child: (_rating != null &&
-                                                _rating != 0 &&
-                                                _rating != -1)
-                                            ? Text("Rate this $_rating stars",
-                                                style: TextStyle(fontSize: 18))
-                                            : SizedBox.shrink())
-                                  ],
+                                  ]),
                                 ),
                                 Padding(
                                   padding:
@@ -459,7 +472,7 @@ class QuizScoreState extends State<QuizScore> {
                                           updateAttempt();
                                         }
 
-                                        if (ratingAlreadyExists) {
+                                        if (_ratingAlreadyExists) {
                                           updateGlobalRating();
                                           updateRating();
                                         } else {

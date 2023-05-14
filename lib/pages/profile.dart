@@ -1,6 +1,7 @@
 // coverage:ignore-start
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
 import '../services/auth.dart';
@@ -158,7 +159,14 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               if (_isLoading)
-                                const CircularProgressIndicator()
+                                Container(
+                                  child: Center(
+                                    child: SpinKitChasingDots(
+                                      color: Colors.white,
+                                      size: 45,
+                                      duration: Duration(milliseconds: 700),
+                                    ))
+                                )
                               else
                                 Text(
                                   currentUser!.userName,

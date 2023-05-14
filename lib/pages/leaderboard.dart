@@ -57,7 +57,6 @@ class _LeaderboardState extends State<Leaderboard> {
     //maxSort(filteredUsers!);
     bubbleSortDescending(filteredUsers!);
 
-    
     setState(() {
       _isLoading = false;
     });
@@ -124,7 +123,10 @@ class _LeaderboardState extends State<Leaderboard> {
       return 0;
     }
 
-    wSum = score / quizzes;
+    // Give a higher weight to users who have taken more quizzes
+    double weight = 1 + (quizzes / 10);
+
+    wSum = (score / quizzes) * weight;
 
     return double.parse(wSum.toStringAsFixed(2));
   }
@@ -181,7 +183,7 @@ class _LeaderboardState extends State<Leaderboard> {
                       ),
                     ),
                     leading: IconButton(
-                      icon: const Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back_ios),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -215,7 +217,7 @@ class _LeaderboardState extends State<Leaderboard> {
                               filled: true,
                               fillColor: const Color.fromARGB(255, 45, 64,
                                   96), // set the background color to a darker grey
-                              hintText: 'Find a user',
+                              hintText: 'Find a friend',
                               hintStyle: const TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.white,
@@ -268,10 +270,15 @@ class _LeaderboardState extends State<Leaderboard> {
 
                                         final List<Color> blueAndOrangeShades =
                                             [
-                                          Colors.blueGrey.shade400,
-                                          Colors.blueGrey.shade500,
-                                          Colors.blueGrey.shade600,
-                                          Colors.blueGrey.shade700,
+                                          // Colors.blueGrey.shade400,
+                                          // Colors.blueGrey.shade500,
+                                          // Colors.blueGrey.shade600,
+                                          // Colors.blueGrey.shade700,
+
+                                          Colors.blue.shade600,
+                                          Colors.blue.shade700,
+                                          Colors.blue.shade800,
+                                          Colors.blue.shade900,
                                         ];
 
                                         final Color color1 =
@@ -315,7 +322,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     .elementAt(index)
                                                     .userName,
                                                 style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
+                                                  fontWeight: FontWeight.bold,
                                                   color: Colors.orange,
                                                   fontFamily: 'Nunito',
                                                 ),
@@ -329,7 +336,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                         1)
                                                     .toString(),
                                                 style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
+                                                  fontWeight: FontWeight.bold,
                                                   color: Colors.white,
                                                   fontSize: 16,
                                                   fontFamily: 'Nunito',
@@ -352,7 +359,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     ),
                                                     const SizedBox(width: 8),
                                                     Text(
-                                                      'Total score: ${filteredUsers!.elementAt(index).totalScore}',
+                                                      'Total score: ${double.parse(filteredUsers!.elementAt(index).totalScore).toStringAsFixed(2)}',
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.normal,
@@ -392,11 +399,10 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     elevation: 0,
                                                   ),
                                                   child: Text(
-                                                    weightedScore(index)
-                                                        .toString(),
+                                                    '${weightedScore(index).toStringAsFixed(2)} pts',
                                                     style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.normal,
+                                                          FontWeight.bold,
                                                       color: Colors.orange,
                                                       fontFamily: 'Nunito',
                                                     ),
