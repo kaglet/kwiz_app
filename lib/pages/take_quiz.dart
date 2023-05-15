@@ -616,67 +616,77 @@ class QuizScreenState extends State<QuizScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                questions[currentIndex].substring(
-                                    0,
-                                    questions[currentIndex]
-                                        .indexOf("**")), //gets string before **
-                                style: const TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontFamily: 'Nunito',
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                questions[currentIndex].substring(
-                                    questions[currentIndex].indexOf("**") +
-                                        2), //gets string after **
-                                style: const TextStyle(
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontFamily: 'Nunito',
-                                ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: questions[currentIndex].substring(0,
+                                        questions[currentIndex].indexOf("**")),
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " ____________ ",
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: questions[currentIndex].substring(
+                                        questions[currentIndex].indexOf("**") +
+                                            2),
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 32.0),
                             Container(
-                              width: 200,
                               height: 60,
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                controller: answerController,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Nunito',
-                                  fontSize: 24.0,
-                                ),
-                                decoration: const InputDecoration(
-                                  hintText: 'Type your answer here',
-                                  hintStyle: TextStyle(
-                                    color: Color.fromARGB(255, 126, 125, 125),
+                              child: Expanded(
+                                child: TextField(
+                                  textAlign: TextAlign.center,
+                                  controller: answerController,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito',
+                                    fontSize: 24.0,
                                   ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
+                                  decoration: const InputDecoration(
+                                    hintText: 'Type your answer here',
+                                    hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 126, 125, 125),
+                                      fontFamily: 'Nunito',
                                     ),
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 0.0),
                                   ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 0.0),
                                 ),
                               ),
                             ),
