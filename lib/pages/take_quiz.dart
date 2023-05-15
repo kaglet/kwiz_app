@@ -634,8 +634,7 @@ class QuizScreenState extends State<QuizScreen> {
                           children: [
                             Text(
                               questions[currentIndex].substring(0,
-                                      questions[currentIndex].indexOf("**")) +
-                                  " RANDOM BLAH", //gets string before **
+                                      questions[currentIndex].indexOf("**")), //gets string before **
                               style: const TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
