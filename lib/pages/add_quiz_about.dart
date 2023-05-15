@@ -91,11 +91,7 @@ class AddQuizState extends State<AddQuiz> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(user: widget.user),
-                      ));
+                  Navigator.pop(context);
                 },
               ),
             ),

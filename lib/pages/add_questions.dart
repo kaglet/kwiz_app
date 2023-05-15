@@ -103,13 +103,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                 IconButton(
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Home(
-                                user: widget.user,
-                              )),
-                    );
+                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                 ),
               ],

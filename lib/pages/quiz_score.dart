@@ -482,12 +482,8 @@ class QuizScoreState extends State<QuizScore> {
 
                                         updateScore();
 
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Home(user: widget.user)),
-                                        );
+                                        Navigator.popUntil(
+                                            context, (route) => route.isFirst);
                                       },
                                       child: const Text(
                                         'Finish Review',

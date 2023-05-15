@@ -698,12 +698,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    AddQuiz(
-                                                                      user: widget
-                                                                          .user,
-                                                                    )),
+                                                          builder: (context) =>
+                                                              AddQuiz(
+                                                            user: widget.user,
+                                                          ),
+                                                        ),
                                                       );
                                                     },
                                                     child: Card(
