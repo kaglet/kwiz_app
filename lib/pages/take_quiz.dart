@@ -612,25 +612,43 @@ class QuizScreenState extends State<QuizScreen> {
 
 //UI for question type FILLINTHEBLANK
                       if (currentQuestionType == "fillInTheBlank")
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              questions[currentIndex].substring(0,
-                                      questions[currentIndex].indexOf("**")) +
-                                  " RANDOM BLAH", //gets string before **
-                              style: const TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                questions[currentIndex].substring(
+                                    0,
+                                    questions[currentIndex]
+                                        .indexOf("**")), //gets string before **
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              width: 10.0,
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                questions[currentIndex].substring(
+                                    questions[currentIndex].indexOf("**") +
+                                        2), //gets string after **
+                                style: const TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'Nunito',
+                                ),
+                              ),
                             ),
+                            const SizedBox(height: 32.0),
                             Container(
-                              width: 150,
+                              width: 200,
+                              height: 60,
                               child: TextField(
                                 textAlign: TextAlign.center,
                                 controller: answerController,
@@ -657,24 +675,11 @@ class QuizScreenState extends State<QuizScreen> {
                                   focusedBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
                                   ),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 0.0),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              questions[currentIndex].substring(
-                                  questions[currentIndex].indexOf("**") +
-                                      2), //gets string after **
-                              style: const TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
-                            const SizedBox(height: 32.0),
                           ],
                         ),
 
