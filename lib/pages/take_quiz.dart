@@ -101,7 +101,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      ans.add(q!.quizQuestions.elementAt(i).questionAnswer.replaceAll(" ", ""));
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
     }
     return ans;
   }
@@ -464,6 +464,19 @@ class QuizScreenState extends State<QuizScreen> {
                                     answerController.text = newValue ?? "";
                                   });
                                 },
+                                icon: Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 20.0,
+                                ),
+                                iconEnabledColor: Colors.white, //Icon color
+                                style: TextStyle(
+                                  fontFamily: 'Nunito',
+                                  color: Colors
+                                      .white, //Font color //font size on dropdown button
+                                ),
+                                dropdownColor: Color.fromARGB(255, 45, 64, 96),
+                                hint: Text('Select an option',
+                                    style: TextStyle(color: Colors.white)),
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: answerController.text.isNotEmpty
@@ -487,12 +500,12 @@ class QuizScreenState extends State<QuizScreen> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(
+                                        color: Color.fromARGB(255, 45, 64, 96)),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
-                                dropdownColor: Color.fromARGB(255, 43, 97,
-                                    179), // Set the background color of the dropdown when opened
+                                // Set the background color of the dropdown when opened
                               ),
                               const SizedBox(height: 32.0),
                             ],
@@ -575,12 +588,13 @@ class QuizScreenState extends State<QuizScreen> {
                                           .toString()
                                           .replaceAll('[', '')
                                           .replaceAll(']', '')
-                                          .replaceAll(' ', '')
+                                          .replaceAll(', ', ',')
                                           .replaceAll('\n', '');
                                   print(answerController.text);
                                   int diff = answerController.text
                                       .compareTo(answers[currentIndex]);
                                   print("the difference: $diff");
+                                  print(answers[currentIndex]);
                                   setState(() {
                                     //currentIndex--;
                                     //updateText();
