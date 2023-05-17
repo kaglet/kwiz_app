@@ -1037,7 +1037,7 @@ class MockDataService extends Mock implements DatabaseService {
       'QuizDateCreated': 'TestDateCreated',
       'QuizDescription': 'TestDescription',
       'QuizGlobalRating': 5,
-      'QuizTotalRatings': 1
+      'QuizTotalRatings': 2
     });
     await firestore
         .collection(QuizCollection)
