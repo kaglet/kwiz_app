@@ -33,7 +33,6 @@ class _AddQuestionsState extends State<AddQuestions> {
   List<QAContainer> qaContainers = [];
   List<Question> savedQAs = [];
   // DatabaseService service = DatabaseService();
-  DatabaseService service = DatabaseService();
   int currentIndex = 0;
   bool _isLoading = false;
   String? _selectedQuestionType;
@@ -68,6 +67,7 @@ class _AddQuestionsState extends State<AddQuestions> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     await service.addQuizWithQuestions(quiz);
     setState(() {
       _isLoading = false;

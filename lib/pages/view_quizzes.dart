@@ -24,7 +24,6 @@ class ViewQuizzes extends StatefulWidget {
 class _ViewQuizzesState extends State<ViewQuizzes> {
   late String categoryName;
   String ratingText = '';
-  DatabaseService service = DatabaseService();
   List<Quiz>? categoryQuiz;
   List<Quiz>? filteredQuizzes;
   List<Bookmarks>? bookmarkedQuizList = [];
@@ -41,7 +40,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   void initState() {
     super.initState();
     categoryName = widget.chosenCategory;
-   // _startLoading();
+    // _startLoading();
     loadData().then((value) {
       setState(() {});
     });
@@ -49,6 +48,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
 
   // loads data from DB
   Future<void> loadData() async {
+    DatabaseService service = DatabaseService();
     if (categoryName == 'All') {
       categoryQuiz = await service.getAllQuizzes();
     } else {
@@ -68,12 +68,13 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
     //Bookmark Logic
     updateBookmarkList();
 
-      setState(() {
+    setState(() {
       _isLoading = false;
     });
   }
 
   Future<void> bookmarkItem(int index) async {
+    DatabaseService service = DatabaseService();
     // setState(() {
     //   _isLoading = true;
     // });
@@ -85,6 +86,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
   }
 
   Future<void> removeBookmark(int index) async {
+    DatabaseService service = DatabaseService();
     await service.deleteBookmarks(
         userID: widget.user.uid,
         quizID: filteredQuizzes!.elementAt(index).quizID);
@@ -253,24 +255,27 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                   : ListView.builder(
                                       itemCount: filLength,
                                       itemBuilder: (context, index) {
-                                  if (filteredQuizzes!
-                                          .elementAt(index)
-                                          .quizGlobalRating >
-                                      0) {
-                                    double ratingTextCalc = filteredQuizzes!
-                                            .elementAt(index)
-                                            .quizGlobalRating /
-                                        filteredQuizzes!
-                                            .elementAt(index)
-                                            .quizTotalRatings;
-                                    ratingTextCalc = double.parse(
-                                        ratingTextCalc.toStringAsFixed(1));
-                                    ratingText =
-                                        ratingTextCalc.toString() + '  |  ';
-                                  } else {
-                                    ratingText = '';
-                                  }
-                                  ;
+                                        if (filteredQuizzes!
+                                                .elementAt(index)
+                                                .quizGlobalRating >
+                                            0) {
+                                          double ratingTextCalc =
+                                              filteredQuizzes!
+                                                      .elementAt(index)
+                                                      .quizGlobalRating /
+                                                  filteredQuizzes!
+                                                      .elementAt(index)
+                                                      .quizTotalRatings;
+                                          ratingTextCalc = double.parse(
+                                              ratingTextCalc
+                                                  .toStringAsFixed(1));
+                                          ratingText =
+                                              ratingTextCalc.toString() +
+                                                  '  |  ';
+                                        } else {
+                                          ratingText = '';
+                                        }
+                                        ;
                                         final List<Color> blueAndOrangeShades =
                                             [
                                           Colors.orange.shade400,
@@ -283,172 +288,189 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                             blueAndOrangeShades[index %
                                                 blueAndOrangeShades.length];
 
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0,
-                                      horizontal: 16,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: color1,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 3.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Card(
-                                      color:
-                                          const Color.fromARGB(240, 45, 64, 96),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(
-                                          filteredQuizzes!
-                                              .elementAt(index)
-                                              .quizName,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
+                                        return Container(
+                                          margin: const EdgeInsets.symmetric(
+                                            vertical: 8.0,
+                                            horizontal: 16,
                                           ),
-                                        ),
-                                        leading: Container(
-                                          child: IconButton(
-                                            iconSize: 23,
-                                            onPressed: () {
-                                              // handle bookmark button press
-                                              setState(() {
-                                                isBookmarkedList[index] =
-                                                    !isBookmarkedList[index];
-
-                                                if (isBookmarkedList[index] ==
-                                                    true) {
-                                                  bookmarkItem(index);
-                                                } else {
-                                                  removeBookmark(index);
-                                                }
-                                              });
-                                            },
-                                            icon: Icon(
-                                              isBookmarkedList[index]
-                                                  ? Icons.bookmark
-                                                  : Icons.bookmark_border,
-                                              color: isBookmarkedList[index]
-                                                  ? Colors.blue
-                                                  : Colors.white,
-                                            ),
-                                          ),
-                                       ),
-                                        textColor: Colors.white,
-                                        subtitle: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: [
-                                              if (ratingText != '')
-                                                Icon(Icons.star,
-                                                    color: Colors.orange),
-                                              Text(
-                                                '${ratingText}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizCategory}   |',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                '${filteredQuizzes!.elementAt(index).quizDateCreated}',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Nunito',
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        trailing: Container(
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(20),
-                                            gradient: LinearGradient(
-                                              colors: [
-                                                color1,
-                                                const Color.fromARGB(
-                                                    255, 59, 98, 172),
-                                              ],
-                                              begin: Alignment.topLeft,
-                                              end: Alignment.bottomRight,
-                                            ),
+                                            color: color1,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                                blurRadius: 3.0,
+                                                spreadRadius: 2.0,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                           ),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      StartQuiz(
-                                                    user: widget.user,
-                                                    chosenQuiz: filteredQuizzes!
-                                                        .elementAt(index)
-                                                        .quizID,
+                                          child: Card(
+                                            color: const Color.fromARGB(
+                                                240, 45, 64, 96),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: ListTile(
+                                              title: Text(
+                                                filteredQuizzes!
+                                                    .elementAt(index)
+                                                    .quizName,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Nunito',
+                                                ),
+                                              ),
+                                              leading: Container(
+                                                child: IconButton(
+                                                  iconSize: 23,
+                                                  onPressed: () {
+                                                    // handle bookmark button press
+                                                    setState(() {
+                                                      isBookmarkedList[index] =
+                                                          !isBookmarkedList[
+                                                              index];
+
+                                                      if (isBookmarkedList[
+                                                              index] ==
+                                                          true) {
+                                                        bookmarkItem(index);
+                                                      } else {
+                                                        removeBookmark(index);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    isBookmarkedList[index]
+                                                        ? Icons.bookmark
+                                                        : Icons.bookmark_border,
+                                                    color:
+                                                        isBookmarkedList[index]
+                                                            ? Colors.blue
+                                                            : Colors.white,
                                                   ),
                                                 ),
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
                                               ),
-                                            ),
-                                            child: const Text(
-                                              'Start Quiz',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.white,
-                                                fontFamily: 'Nunito',
+                                              textColor: Colors.white,
+                                              subtitle: SingleChildScrollView(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    if (ratingText != '')
+                                                      Icon(Icons.star,
+                                                          color: Colors.orange),
+                                                    Text(
+                                                      '${ratingText}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${filteredQuizzes!.elementAt(index).quizAuthor}   |',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      '${filteredQuizzes!.elementAt(index).quizCategory}   |',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      '${filteredQuizzes!.elementAt(index).quizDateCreated}',
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Nunito',
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              trailing: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  gradient: LinearGradient(
+                                                    colors: [
+                                                      color1,
+                                                      const Color.fromARGB(
+                                                          255, 59, 98, 172),
+                                                    ],
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                  ),
+                                                ),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            StartQuiz(
+                                                          user: widget.user,
+                                                          chosenQuiz:
+                                                              filteredQuizzes!
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .quizID,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    elevation: 0,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Start Quiz',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      color: Colors.white,
+                                                      fontFamily: 'Nunito',
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
-    );
+                  ),
+          );
   }
 }
 

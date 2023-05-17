@@ -29,7 +29,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   int allQuizzesLength = 0;
   int randNum = 0;
   Random random = Random();
-  DatabaseService service = DatabaseService();
   List<Quiz>? quizzes;
   late bool _isLoading = true;
 
@@ -55,6 +54,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength);

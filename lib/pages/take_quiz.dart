@@ -19,7 +19,6 @@ class QuizScreen extends StatefulWidget {
 
 class QuizScreenState extends State<QuizScreen> {
   //final String qID = widget.qID;
-  DatabaseService service = DatabaseService();
   // Get the questions from firebase
   late bool _isLoading = true;
   int quizLength = 0;
@@ -32,6 +31,7 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     quiz = await service.getQuizAndQuestions(quizID: widget.qID);
 
     quizLength = quiz!.quizQuestions.length;

@@ -21,8 +21,6 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-  DatabaseService service = DatabaseService();
-
   List<UserData>? filteredUsers;
   List<UserData>? users;
   Map<int, UserData> sortedMap = {};
@@ -46,6 +44,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   // loads data from DB
   Future<void> loadData() async {
+    DatabaseService service = DatabaseService();
     userData = await service.getUserAndBookmarks(userID: widget.user.uid);
 
     users = await service.getAllUsers(); //user.uid
@@ -103,8 +102,6 @@ class _LeaderboardState extends State<Leaderboard> {
     });
     bubbleSortDescending(filteredUsers!);
   }
-
-  // coverage:ignore-start
 
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 2000));

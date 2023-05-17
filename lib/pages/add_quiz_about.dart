@@ -25,7 +25,6 @@ class AddQuizState extends State<AddQuiz> {
   List<QAContainer> qaContainers = [];
   List? categories = [];
   String _selectedCategory = 'Art';
-  DatabaseService service = DatabaseService();
   int currentIndex = 0;
   UserData? currentUser = UserData(
       uID: ' ',
@@ -49,6 +48,7 @@ class AddQuizState extends State<AddQuiz> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     categories = await service.getCategories();
     currentUser = await service.getUser(widget.user.uid);
     // categories = categoriesDynamic?.map((e) => e.toString()).toList();

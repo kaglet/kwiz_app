@@ -27,7 +27,6 @@ class _ProfileState extends State<Profile> {
   bool _isLoading = false;
   late void Function(bool) onOverlayClose;
   List? quizzes = [];
-  DatabaseService service = DatabaseService();
   late final OverlayEntry overlayEntry;
   late final AnimationController controller;
   final AuthService _auth = AuthService();
@@ -47,6 +46,7 @@ class _ProfileState extends State<Profile> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     quizzes = await service.getCategories();
     currentUser = await service.getUser(widget.user.uid);
     // categories = categoriesDynamic?.map((e) => e.toString()).toList();
@@ -160,13 +160,12 @@ class _ProfileState extends State<Profile> {
                             children: [
                               if (_isLoading)
                                 Container(
-                                  child: Center(
-                                    child: SpinKitChasingDots(
-                                      color: Colors.white,
-                                      size: 45,
-                                      duration: Duration(milliseconds: 700),
-                                    ))
-                                )
+                                    child: Center(
+                                        child: SpinKitChasingDots(
+                                  color: Colors.white,
+                                  size: 45,
+                                  duration: Duration(milliseconds: 700),
+                                )))
                               else
                                 Text(
                                   currentUser!.userName,

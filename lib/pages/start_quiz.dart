@@ -24,12 +24,12 @@ class StartQuizState extends State<StartQuiz> {
   String date = '';
   late String quizID = widget.chosenQuiz;
   bool _isLoading = true;
-  DatabaseService service =
-      DatabaseService(); //This database service allows me to use all the functions in the database.dart file
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
   Future<void> loaddata() async {
     Quiz? details;
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     details = await service.getQuizInformationOnly(quizID: quizID);
     title = details!.quizName;
     info = details.quizDescription;
@@ -61,25 +61,26 @@ class StartQuizState extends State<StartQuiz> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 57, 82),
       resizeToAvoidBottomInset: false,
-      appBar: _isLoading ? null
-      :AppBar(
-        title: Text(
-          title,
-          style: const TextStyle(
-              fontFamily: 'TitanOne',
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.start,
-        ),
-        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: _isLoading
+          ? null
+          : AppBar(
+              title: Text(
+                title,
+                style: const TextStyle(
+                    fontFamily: 'TitanOne',
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
       //The entire body is wrapped with a SingleChild Scroll view that ensures that the page is scrollable vertically so that the user can always see all the components
       body: _isLoading
           ? Loading()
