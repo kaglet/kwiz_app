@@ -110,6 +110,10 @@ class _QAContainerState extends State<QAContainer> {
   final List? userInitializedAnswers = [''];
   @override
   Widget build(BuildContext context) {
+    // depending on the value received from add questions, one of the 6 questions is returned to the page via a container
+    // multiple choice question uses multiple choice option.dart to populate multiple options
+    // each return statement is adjusted depending on question type
+    // if new question type to be added, add it here
     if (widget.qaType == 'shortAnswer') {
       // return short answer qa container
       SingleChildScrollView shortAnswerContainer = SingleChildScrollView(

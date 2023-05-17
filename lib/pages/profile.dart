@@ -465,14 +465,18 @@ class _ProfileState extends State<Profile> {
                                                         const SizedBox(
                                                             width: 50.0),
                                                         TextButton(
-                                                          onPressed: () async {
+                                                          onPressed: ()  {   
+                                                              _auth
+                                                                .signOut();
+                                                           
+
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
                                                             controller
                                                                 .reverse();
-                                                            await _auth
-                                                                .signOut();
+                                                           
+                                                            
                                                           },
                                                           child: Container(
                                                             decoration:

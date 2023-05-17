@@ -30,6 +30,7 @@ class AddQuestions extends StatefulWidget {
 }
 
 class _AddQuestionsState extends State<AddQuestions> {
+  // initialise variables for screen
   List<QAContainer> qaContainers = [];
   List<Question> savedQAs = [];
   // DatabaseService service = DatabaseService();
@@ -193,12 +194,14 @@ class _AddQuestionsState extends State<AddQuestions> {
                               ),
                               child: ElevatedButton(
                                 onPressed:
+                                // validation for save button
                                     checkIfQuestionsAreFilled(qaContainers)
                                         ? () async {
                                             // coverage:ignore-end
                                             Quiz quiz =
                                                 createQuizFromContainers(
                                                     qaContainers);
+                                                    //used to add quiz to database
                                             addData(quiz);
                                             // coverage:ignore-start
                                           }
@@ -230,6 +233,8 @@ class _AddQuestionsState extends State<AddQuestions> {
                       Expanded(
                         flex: 1,
                         child: ListView.builder(
+                          // the list view builder stores the different types of questions
+                          // questions come from qa container
                           scrollDirection: Axis.vertical,
                           itemCount: qaContainers.length,
                           itemBuilder: (context, index) {
@@ -258,6 +263,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                   _selectedQuestionType = null;
 
                                   showDialog(
+                                    // on the onpressed for adding new button, pop up dialog is shown to select question type
                                     context: context,
                                     builder: (BuildContext context) {
                                       return WillPopScope(
@@ -301,6 +307,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                   isExpanded: false,
                                                   value: _selectedQuestionType,
                                                   onChanged: (newValue) {
+                                                    //when item is chosen to be added,  add the question to list view
                                                     setState(
                                                       () {
                                                         _selectedQuestionType =
@@ -327,6 +334,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                       },
                                                     );
                                                   },
+                                                  // dropdown options and values
                                                   hint: Text(
                                                       'Select Question Type',
                                                       style: TextStyle(
@@ -501,6 +509,7 @@ class _AddQuestionsState extends State<AddQuestions> {
 
     for (var qaContainer in qaContainers) {
       // extract QA data in qaContainer into a useable object form
+      // this method converts the qa containers into a quiz object, to be added to the database
       QA qa = qaContainer.extractQA();
       if (qa is QAMultiple) {
         MultipleAnswerQuestion questionObj = MultipleAnswerQuestion(
