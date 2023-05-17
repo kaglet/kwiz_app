@@ -403,11 +403,11 @@ class _QAContainerState extends State<QAContainer> {
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: 'Question ${widget.number} - pre Blank',
+                      labelText: 'Question ${widget.number} (before blank)',
                       labelStyle: const TextStyle(
                         color: Colors.grey,
                       ),
-                      hintText: 'Question ${widget.number} - pre Blank',
+                      hintText: 'Question ${widget.number} (before blank)',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),
@@ -511,11 +511,11 @@ class _QAContainerState extends State<QAContainer> {
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      labelText: 'Question ${widget.number} - post Blank',
+                      labelText: 'Question ${widget.number} (after blank)',
                       labelStyle: const TextStyle(
                         color: Colors.grey,
                       ),
-                      hintText: 'Question ${widget.number} - post Blank',
+                      hintText: 'Question ${widget.number} (after blank)',
                       hintStyle: const TextStyle(
                         color: Colors.grey,
                       ),

@@ -17,7 +17,6 @@ class QuizAttempts extends StatefulWidget {
 }
 
 class _QuizAttemptsState extends State<QuizAttempts> {
-  DatabaseService service = DatabaseService();
   late PastAttempt pastAttempt;
   int fillLength = 0;
 

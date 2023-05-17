@@ -21,8 +21,6 @@ class Leaderboard extends StatefulWidget {
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-  DatabaseService service = DatabaseService();
-
   List<UserData>? filteredUsers;
   List<UserData>? users;
   Map<int, UserData> sortedMap = {};
@@ -46,6 +44,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   // loads data from DB
   Future<void> loadData() async {
+    DatabaseService service = DatabaseService();
     userData = await service.getUserAndBookmarks(userID: widget.user.uid);
 
     users = await service.getAllUsers(); //user.uid
@@ -66,32 +65,7 @@ class _LeaderboardState extends State<Leaderboard> {
 // it is moved to normal lists first as this caused issues
   void filterQuizzes(String searchTerm) {
     setState(() {
-      //  filteredUsers = List<UserData>.from(users!);
-      //  List<String> quizzesNames = [];
-      //  List<String> filteredQuizzesNames = [];
-
-      //   for (int i = 0; i < usersLength; i++) {
-      //     quizzesNames.add(users!.elementAt(i).userName);
-      //   }
-
-      //   filteredQuizzesNames = quizzesNames
-      //       .where(
-      //           (quiz) => quiz.toLowerCase().contains(searchTerm.toLowerCase()))
-      //       .toList();
-
-      //   if (filteredQuizzesNames.isNotEmpty) {
-      //     filteredUsers!.clear();
-      //     for (int j = 0; j < filteredQuizzesNames.length; j++) {
-      //       for (int k = 0; k < usersLength; k++) {
-      //         if (filteredQuizzesNames[j] ==
-      //             users!.elementAt(k).userName) {
-      //           filteredUsers!.add(users!.elementAt(k));
-      //         }
-      //       }
-      //     }
-      //   } else {
-      //     filteredUsers = List<UserData>.from(users!);
-      //   }
+      
       filteredUsers = users!
           .where((item) =>
               item.userName.toLowerCase().contains(searchTerm.toLowerCase()))
@@ -104,8 +78,6 @@ class _LeaderboardState extends State<Leaderboard> {
     bubbleSortDescending(filteredUsers!);
   }
 
-  // coverage:ignore-start
-
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
@@ -113,6 +85,9 @@ class _LeaderboardState extends State<Leaderboard> {
     });
   }
 
+
+  //This function calculates the weigthed score for the leaderboard based on the
+  //number of quizzes and a users total score
   double weightedScore(int index) {
     double wSum = 0;
 
@@ -131,6 +106,8 @@ class _LeaderboardState extends State<Leaderboard> {
     return double.parse(wSum.toStringAsFixed(2));
   }
 
+
+  //Used to sort the list of users based on their weigthed score
   void bubbleSortDescending(List<UserData> arr) {
     int n = arr.length;
 
@@ -155,6 +132,7 @@ class _LeaderboardState extends State<Leaderboard> {
     }
   }
 
+  //Used in the sorting process as a map is used to store users along with their score
   int findKeyByValue(Map<int, UserData> map, UserData value) {
     for (final entry in map.entries) {
       if (entry.value.uID == value.uID) {
@@ -165,11 +143,14 @@ class _LeaderboardState extends State<Leaderboard> {
     return -1;
   }
 
+
+  //Widget tree
   @override
   Widget build(BuildContext context) {
     return _isLoading
-        ? Loading()
+        ? Loading() //Loading indicator if contents are not loaded
         : Scaffold(
+          //Appbar
             appBar: filteredUsers == null && _isLoading
                 ? null
                 : AppBar(
@@ -261,24 +242,19 @@ class _LeaderboardState extends State<Leaderboard> {
                                   : ListView.builder(
                                       itemCount: filLength,
                                       itemBuilder: (context, index) {
-                                        // final List<Color> blueAndOrangeShades = [
-                                        //   Colors.orange.shade400,
-                                        //   Colors.orange.shade500,
-                                        //   Colors.orange.shade600,
-                                        //   Colors.orange.shade700,
-                                        // ];
-
+                                        
+                                        //Colours for the alternating card borders
                                         final List<Color> blueAndOrangeShades =
                                             [
                                           // Colors.blueGrey.shade400,
                                           // Colors.blueGrey.shade500,
                                           // Colors.blueGrey.shade600,
                                           // Colors.blueGrey.shade700,
-
+                                          Colors.blue.shade500,
                                           Colors.blue.shade600,
                                           Colors.blue.shade700,
                                           Colors.blue.shade800,
-                                          Colors.blue.shade900,
+                                         
                                         ];
 
                                         final Color color1 =
@@ -348,6 +324,7 @@ class _LeaderboardState extends State<Leaderboard> {
                                                     Axis.horizontal,
                                                 child: Row(
                                                   children: [
+                                                    //Data displayed in each card
                                                     Text(
                                                       'Quizzes: ${filteredUsers!.elementAt(index).totalQuizzes} |',
                                                       style: const TextStyle(
@@ -385,7 +362,8 @@ class _LeaderboardState extends State<Leaderboard> {
                                                   ),
                                                 ),
                                                 child: ElevatedButton(
-                                                  onPressed: null,
+                                                  //Displayes the score
+                                                  onPressed: (){},
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     backgroundColor:

@@ -27,7 +27,6 @@ class bm extends StatefulWidget {
 }
 
 class _bmState extends State<bm> {
-  DatabaseService service = DatabaseService();
   late String quizID;
   late List? quizMarks;
   late List? quizDatesCreated;
@@ -41,6 +40,7 @@ class _bmState extends State<bm> {
   final TextEditingController _searchController = TextEditingController();
 
   Future<void> loaddata() async {
+    DatabaseService service = DatabaseService();
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;

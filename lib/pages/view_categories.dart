@@ -17,7 +17,6 @@ class ViewCategories extends StatefulWidget {
 }
 
 class ViewCategoriesState extends State<ViewCategories> {
-  DatabaseService service = DatabaseService();
   List? categories;
   int catLength = 0;
   List? _displayedItems = [];
@@ -27,12 +26,12 @@ class ViewCategoriesState extends State<ViewCategories> {
   final TextEditingController _controller = TextEditingController();
 //Loading Data from the database
   Future<void> loaddata() async {
+    DatabaseService service = DatabaseService();
     categories = await service.getCategories();
     categories!.insert(0, 'All');
     catLength = categories!.length;
     _displayedItems = categories;
     fillLength = _displayedItems!.length;
-    
   }
 
 //This ensures that category tiles are populated and that we can search for a category

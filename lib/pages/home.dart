@@ -29,7 +29,6 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   int allQuizzesLength = 0;
   int randNum = 0;
   Random random = Random();
-  DatabaseService service = DatabaseService();
   List<Quiz>? quizzes;
   late bool _isLoading = true;
 
@@ -52,85 +51,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   // loads data from DB
   Future<void> loadData() async {
-//     List<Question> quizQuestions = [
-//   Question(
-//     questionNumber: 1,
-//     questionText: "What is the capital of France?",
-//     questionAnswer: "Paris",
-//     questionMark: 0,
-//     questionType: "shortAnswer"
-//   ),
-//   Question(
-//     questionNumber: 2,
-//     questionText: "The Earth is flat. True or False?",
-//     questionAnswer: "False",
-//     questionMark: 0,
-//     questionType: "trueOrFalse"
-//   ),
-//   Question(
-//     questionNumber: 3,
-//     questionText: "The longest river in the world is the **?",
-//     questionAnswer: "Nile",
-//     questionMark: 0,
-//     questionType: "fillInTheBlank"
-//   ),
-//   MultipleAnswerQuestion(
-//     questionNumber: 4,
-//     questionText: "What is the largest animal on earth?",
-//     questionAnswer: "Blue Whale",
-//     questionMark: 0,
-//     questionType: "multipleChoice",
-//     answerOptions: ["Elephant", "Giraffe", "Blue Whale", "Hippopotamus"]
-//   ),
-//   MultipleAnswerQuestion(
-//     questionNumber: 5,
-//     questionText: "Which of the following is a programming languages?",
-//     questionAnswer: "Java",
-//     questionMark: 0,
-//     questionType: "dropdown",
-//     answerOptions: ["Java", "Snkae", "Diamond","Webdev"]
-//   ),
-//   MultipleAnswerQuestion(
-//     questionNumber: 6,
-//     questionText: "Rank the following countries by population (largest to smallest).",
-//     questionAnswer: "China,India,United States,Indonesia",
-//     questionMark: 0,
-//     questionType: "ranking",
-//     answerOptions: ["China", "India", "United States", "Indonesia"]
-//   )
-// ];
-
-// Quiz exampleQuizAdd = Quiz(
-//   quizName: "General Knowledge Quiz",
-//   quizCategory: "Trivia",
-//   quizDescription: "A quiz to test your general knowledge",
-//   quizMark: 0,
-//   quizDateCreated:  DateTime.now().toString(),
-//   quizQuestions: quizQuestions,
-//   quizID: "",
-//   quizAuthor: "John Doe"
-// );
-
-    // Quiz? exampleQuizGet;
-
     setState(() {
       _isLoading = true;
     });
-    //
-    // service.addQuizWithQuestions(exampleQuizAdd);
-    //Nc7dCXdZF6Y44clloxEZ
-    // exampleQuizGet = await service.getQuizAndQuestions(quizID: 'Nc7dCXdZF6Y44clloxEZ');
-    // for (var question in exampleQuizGet!.quizQuestions) {
-    //   if (question is MultipleAnswerQuestion) {
-    //     print(question.questionNumber);
-    //     print(question.answerOptions);
-    //     print(question.questionType);
-    //   } else {
-    //     print(question.questionNumber);
-    //     print(question.questionAnswer);
-    //     print(question.questionType);
-    //   }
-    // }
+    DatabaseService service = DatabaseService();
     quizzes = await service.getAllQuizzes();
     allQuizzesLength = quizzes!.length;
     randNum = random.nextInt(allQuizzesLength);
@@ -774,12 +698,11 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                       Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    AddQuiz(
-                                                                      user: widget
-                                                                          .user,
-                                                                    )),
+                                                          builder: (context) =>
+                                                              AddQuiz(
+                                                            user: widget.user,
+                                                          ),
+                                                        ),
                                                       );
                                                     },
                                                     child: Card(

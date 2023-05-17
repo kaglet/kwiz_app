@@ -16,24 +16,23 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+   //This service is an object that allows us to use our authorization functions and methods
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
   bool loading = false;
 
-  //text field state
+  //text field state that ensure all fields are blank when the user first views the page
   String email = '';
   String password = '';
   String error = '';
 
   @override
   Widget build(BuildContext context) {
-    return loading
+    return loading //This boolean value is what calls the loading class if it is set to true
         ? Loading()
         : Scaffold(
             resizeToAvoidBottomInset: false,
-            // backgroundColor: Colors.blue[100],
             appBar: AppBar(
-              // backgroundColor: Color.fromARGB(255, 27, 57, 82),
               elevation: 0.0,
               title: Center(
                 child: Text(
@@ -60,9 +59,9 @@ class _SignInState extends State<SignIn> {
                 )
               ],*/
             ),
-            body: Container(
+            body: Container( //This container houses the body of the page
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: LinearGradient( // This is what gives the background a gradient effect
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
@@ -75,14 +74,14 @@ class _SignInState extends State<SignIn> {
                 child: Column(
                   children: [
                     Form(
-                        key: _formkey,
+                        key: _formkey,  //This formkey ensures that the user enters valid data
                         child: SingleChildScrollView(
                           child: Column(
                             children: <Widget>[
                               SizedBox(
                                 height: 50,
                               ),
-                              Image.asset('assets/images/KWIZLogo2.png',
+                              Image.asset('assets/images/KWIZLogo2.png', //Loads our App's logo
                                   height: 200, width: 200, scale: 0.5),
                               SizedBox(
                                 height: 50,
@@ -115,6 +114,7 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 ),
                                 validator: (val) =>
+                                //Checks if an email was entered
                                     val!.isEmpty ? 'Enter your email' : null,
                                 onChanged: (val) {
                                   email = val;
@@ -149,6 +149,7 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 ),
                                 validator: (val) =>
+                                    //Checks if a password was entered
                                     val!.isEmpty ? 'Enter your password' : null,
                                 obscureText: true,
                                 onChanged: (val) {
@@ -186,15 +187,17 @@ class _SignInState extends State<SignIn> {
                                         onPressed: () async {
                                           if (_formkey.currentState!
                                               .validate()) {
-                                            setState(() => loading = true);
+                                            setState(() => loading = true); //Calls the loading class
+                                            //Checks if the user exists in the database
                                             dynamic result =
                                                 await _auth.SignInWithEandP(
                                                     email, password);
+                                            //Displays an error if the user credentials are incorrect
                                             if (result == null) {
                                               setState(() {
                                                 loading = false;
                                                 error =
-                                                    'could not sign in with those credentials';
+                                                    'Could not sign in with those credentials';
                                               });
                                             } /*else{
                                           OurUser ourUser = OurUser(uid: user.uID);

@@ -50,14 +50,13 @@ class QuizScoreState extends State<QuizScore> {
   late double totalScore;
   late int numQuestions;
 
-  DatabaseService service =
-      DatabaseService(); //This database service allows me to use all the functions in the database.dart file
-
   Future<void> createRating() async {
     setState(() {
       _isLoading = true;
     });
     if (_rating > 0) {
+      DatabaseService service =
+          DatabaseService(); //This database service allows me to use all the functions in the database.dart file
       await service.createRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,
@@ -76,6 +75,8 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     if (_rating > 0) {
+      DatabaseService service =
+          DatabaseService(); //This database service allows me to use all the functions in the database.dart file
       await service.addToQuizGlobalRating(
           quizID: widget.chosenQuiz?.quizID, rating: _rating);
     }
@@ -89,7 +90,8 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
-
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     await service.updateQuizGlobalRating(
         quizID: widget.chosenQuiz?.quizID,
         userID: widget.user.uid,
@@ -108,6 +110,8 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     if (_rating > 0) {
+      DatabaseService service =
+          DatabaseService(); //This database service allows me to use all the functions in the database.dart file
       await service.updateRating(
         userID: userID,
         quizID: widget.chosenQuiz?.quizID,
@@ -125,6 +129,8 @@ class QuizScoreState extends State<QuizScore> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     await service.createPastAttempt(
       userID: userID,
       quiz: widget.chosenQuiz,
@@ -149,6 +155,8 @@ class QuizScoreState extends State<QuizScore> {
         markHistories.add(score);
       }
     });
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     await service.addPastAttempt(
         userID: userID,
         quizMarks: markHistories,
@@ -166,6 +174,8 @@ class QuizScoreState extends State<QuizScore> {
     });
     totalQuizzes++;
     totalScore += score / numQuestions;
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     await service.updateUserScore(
         userID: userID,
         totalQuizzes: totalQuizzes,
@@ -182,6 +192,8 @@ class QuizScoreState extends State<QuizScore> {
     });
     _rating = -1;
     Quiz? details;
+    DatabaseService service =
+        DatabaseService(); //This database service allows me to use all the functions in the database.dart file
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
@@ -206,6 +218,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   void initState() {
     super.initState();
+    // do database stuff here and pass into loaddata function to populate page
     //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
@@ -482,12 +495,8 @@ class QuizScoreState extends State<QuizScore> {
 
                                         updateScore();
 
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Home(user: widget.user)),
-                                        );
+                                        Navigator.popUntil(
+                                            context, (route) => route.isFirst);
                                       },
                                       child: const Text(
                                         'Finish Review',

@@ -34,7 +34,6 @@ class _AddQuestionsState extends State<AddQuestions> {
   List<QAContainer> qaContainers = [];
   List<Question> savedQAs = [];
   // DatabaseService service = DatabaseService();
-  DatabaseService service = DatabaseService();
   int currentIndex = 0;
   bool _isLoading = false;
   String? _selectedQuestionType;
@@ -69,6 +68,7 @@ class _AddQuestionsState extends State<AddQuestions> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     await service.addQuizWithQuestions(quiz);
     setState(() {
       _isLoading = false;
@@ -104,13 +104,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                 IconButton(
                   icon: const Icon(Icons.home),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Home(
-                                user: widget.user,
-                              )),
-                    );
+                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                 ),
               ],

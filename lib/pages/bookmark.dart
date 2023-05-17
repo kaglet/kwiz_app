@@ -19,7 +19,6 @@ class Bookmark extends StatefulWidget {
 
 class _BookmarkState extends State<Bookmark> {
   late String categoryName;
-  DatabaseService service = DatabaseService();
   // List? bookmarkedQuiz = [];
   List<Bookmarks>? bookmarkedQuizList = [];
   List<Bookmarks>? filteredQuizzes = [];
@@ -40,7 +39,6 @@ class _BookmarkState extends State<Bookmark> {
     loadData().then((value) {
       setState(() {});
     });
-  
   }
 
   @override
@@ -50,12 +48,14 @@ class _BookmarkState extends State<Bookmark> {
   }
 
   Future<void> removeBookmark(int index) async {
+    DatabaseService service = DatabaseService();
     await service.deleteBookmarks(
         userID: widget.user.uid, quizID: bookmarkedQuizList![index].quizID);
   }
 
   // loads data from DB
   Future<void> loadData() async {
+    DatabaseService service = DatabaseService();
     userData = await service.getUserAndBookmarks(userID: widget.user.uid);
     bookmarkedQuizList = userData!.bookmarkedQuizzes;
     bookmarkedQuizListLength = bookmarkedQuizList!.length;
@@ -299,14 +299,14 @@ class _BookmarkState extends State<Bookmark> {
                                             // Remove the selected bookmark from the list
                                             removeBookmark(index);
                                             // Refresh the list of displayed items
-                                            
+
                                             setState(() {
-                                             // filteredQuizzes!.removeAt(index);
+                                              // filteredQuizzes!.removeAt(index);
                                               bookmarkedQuizList!
                                                   .removeAt(index);
-                                                  print(bookmarkedQuizList!.length);
+                                              print(bookmarkedQuizList!.length);
                                               filLength =
-                                                   bookmarkedQuizList!.length;
+                                                  bookmarkedQuizList!.length;
                                             });
                                           },
                                           color: Colors.white,

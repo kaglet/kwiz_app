@@ -28,4 +28,12 @@ abstract class DatabaseService {
       List<int>? quizMarks,
       String? quizDateAttempted,
       String? quizID});
+  Future<int> createRating(String? userID, String? quizID, int? rating);
+  Future<int> testUpdateRating(
+      {int? newRating, String? userID, String? quizID});
+  Future<bool> ratingAlreadyExists({String? userID, String? quizID});
+  Future<List<int>> addToGlobalRating({String? quizID, int? rating});
+  Future<int> getOldRating({String? quizID, String? userID});
+  Future<int> updateQuizGlobalRating(
+      {String? quizID, String? userID, int? rating, int? oldRating});
 }

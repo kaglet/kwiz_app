@@ -26,7 +26,6 @@ class AddQuizState extends State<AddQuiz> {
   List<QAContainer> qaContainers = [];
   List? categories = [];
   String _selectedCategory = 'Art';
-  DatabaseService service = DatabaseService();
   int currentIndex = 0;
   UserData? currentUser = UserData(
       uID: ' ',
@@ -50,6 +49,7 @@ class AddQuizState extends State<AddQuiz> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     categories = await service.getCategories();
     currentUser = await service.getUser(widget.user.uid);
     // categories = categoriesDynamic?.map((e) => e.toString()).toList();
@@ -92,11 +92,7 @@ class AddQuizState extends State<AddQuiz> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios_new_outlined),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Home(user: widget.user),
-                      ));
+                  Navigator.pop(context);
                 },
               ),
             ),

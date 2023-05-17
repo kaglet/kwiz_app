@@ -15,7 +15,6 @@ class QuizHistory extends StatefulWidget {
 }
 
 class _QuizHistoryState extends State<QuizHistory> {
-  DatabaseService service = DatabaseService();
   List? pastAttemptsList = [];
   int pastAttemptsListLength = 0;
   List? pastAttempts = [];
@@ -43,6 +42,7 @@ class _QuizHistoryState extends State<QuizHistory> {
   }
 
   Future<void> loaddata() async {
+    DatabaseService service = DatabaseService();
     userData = await service.getUserAndPastAttempts(userID: widget.user.uid);
     pastAttemptsList = userData!.pastAttemptQuizzes;
     pastAttemptsListLength = pastAttemptsList!.length;
@@ -82,86 +82,87 @@ class _QuizHistoryState extends State<QuizHistory> {
       appBar: _isLoading
           ? null
           : AppBar(
-        title: const Text(
-          'Quiz History',
-          style: TextStyle(
-              fontFamily: 'TitanOne',
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.start,
-        ),
-        backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: _isLoading ? Loading()
-        :Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromARGB(255, 27, 57, 82),
-              Color.fromARGB(255, 5, 12, 31),
-            ],
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Nunito',
-                ),
-                controller: _searchController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 45, 64,
-                      96), // set the background color to a darker grey
-                  hintText: 'Search quizzes',
-                  hintStyle: const TextStyle(
-                    fontSize: 18.0,
+              title: const Text(
+                'Quiz History',
+                style: TextStyle(
+                    fontFamily: 'TitanOne',
+                    fontSize: 30,
                     color: Colors.white,
-                    fontFamily:
-                        'Nunito', // set the hint text color to a light grey
-                  ),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.search),
-                    color: const Color.fromRGBO(192, 192, 192,
-                        1), // set the search icon color to a light grey
-                    onPressed: () {},
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(81, 95, 87,
-                            1)), // set the border color to a darker grey
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                        color: Colors
-                            .white), // set the focused border color to white
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
-                onChanged: _onSearchTextChanged,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              backgroundColor: const Color.fromARGB(255, 27, 57, 82),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
-            Expanded(
-              child: Stack(
+      body: _isLoading
+          ? Loading()
+          : Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromARGB(255, 27, 57, 82),
+                    Color.fromARGB(255, 5, 12, 31),
+                  ],
+                ),
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Nunito',
+                      ),
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color.fromARGB(255, 45, 64,
+                            96), // set the background color to a darker grey
+                        hintText: 'Search quizzes',
+                        hintStyle: const TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontFamily:
+                              'Nunito', // set the hint text color to a light grey
+                        ),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.search),
+                          color: const Color.fromRGBO(192, 192, 192,
+                              1), // set the search icon color to a light grey
+                          onPressed: () {},
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Color.fromRGBO(81, 95, 87,
+                                  1)), // set the border color to a darker grey
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: Colors
+                                  .white), // set the focused border color to white
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                      ),
+                      onChanged: _onSearchTextChanged,
+                    ),
                   ),
-                  ListView.builder(
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: const BoxDecoration(),
+                        ),
+                        ListView.builder(
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
@@ -261,7 +262,8 @@ class _QuizHistoryState extends State<QuizHistory> {
                                                   QuizAttempts(
                                                       user: widget.user,
                                                       chosenQuiz:
-                                                          _displayedItems?[index]),
+                                                          _displayedItems?[
+                                                              index]),
                                             ));
                                       },
                                       style: ElevatedButton.styleFrom(
@@ -288,12 +290,12 @@ class _QuizHistoryState extends State<QuizHistory> {
                             );
                           },
                         ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
+            ),
     );
   }
 }

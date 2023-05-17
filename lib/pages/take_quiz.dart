@@ -19,7 +19,6 @@ class QuizScreen extends StatefulWidget {
 
 class QuizScreenState extends State<QuizScreen> {
   //final String qID = widget.qID;
-  DatabaseService service = DatabaseService();
   // Get the questions from firebase
   late bool _isLoading = true;
   int quizLength = 0;
@@ -32,6 +31,7 @@ class QuizScreenState extends State<QuizScreen> {
     setState(() {
       _isLoading = true;
     });
+    DatabaseService service = DatabaseService();
     quiz = await service.getQuizAndQuestions(quizID: widget.qID);
 
     quizLength = quiz!.quizQuestions.length;
@@ -101,7 +101,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   List<String> popAnswersList(Quiz? q, List<String> quest, List<String> ans) {
     for (int i = 0; i < quizLength; i++) {
-      ans.add(q!.quizQuestions.elementAt(i).questionAnswer.replaceAll(" ", ""));
+      ans.add(q!.quizQuestions.elementAt(i).questionAnswer);
     }
     return ans;
   }
@@ -463,23 +463,20 @@ class QuizScreenState extends State<QuizScreen> {
                                   setState(() {
                                     answerController.text = newValue ?? "";
                                   });
-                                },  icon: Icon(
+                                },
+                                icon: Icon(
                                   Icons.arrow_drop_down,
                                   size: 20.0,
                                 ),
-                                iconEnabledColor:
-                                    Colors.white, //Icon color
+                                iconEnabledColor: Colors.white, //Icon color
                                 style: TextStyle(
                                   fontFamily: 'Nunito',
                                   color: Colors
                                       .white, //Font color //font size on dropdown button
                                 ),
-                                dropdownColor: Color.fromARGB(
-                                    255, 45, 64, 96),
-                                      hint: Text(
-                                    'Select an option',
-                                    style: TextStyle(
-                                        color: Colors.white)),
+                                dropdownColor: Color.fromARGB(255, 45, 64, 96),
+                                hint: Text('Select an option',
+                                    style: TextStyle(color: Colors.white)),
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: answerController.text.isNotEmpty
@@ -503,8 +500,8 @@ class QuizScreenState extends State<QuizScreen> {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color:Color.fromARGB(
-                                    255, 45, 64, 96)),
+                                    borderSide: BorderSide(
+                                        color: Color.fromARGB(255, 45, 64, 96)),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                 ),
@@ -591,12 +588,13 @@ class QuizScreenState extends State<QuizScreen> {
                                           .toString()
                                           .replaceAll('[', '')
                                           .replaceAll(']', '')
-                                          .replaceAll(' ', '')
+                                          .replaceAll(', ', ',')
                                           .replaceAll('\n', '');
                                   print(answerController.text);
                                   int diff = answerController.text
                                       .compareTo(answers[currentIndex]);
                                   print("the difference: $diff");
+                                  print(answers[currentIndex]);
                                   setState(() {
                                     //currentIndex--;
                                     //updateText();
@@ -628,69 +626,84 @@ class QuizScreenState extends State<QuizScreen> {
 
 //UI for question type FILLINTHEBLANK
                       if (currentQuestionType == "fillInTheBlank")
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              questions[currentIndex].substring(0,
-                                      questions[currentIndex].indexOf("**")) +
-                                  " RANDOM BLAH", //gets string before **
-                              style: const TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Container(
-                              width: 150,
-                              child: TextField(
-                                textAlign: TextAlign.center,
-                                controller: answerController,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Nunito',
-                                  fontSize: 24.0,
-                                ),
-                                decoration: const InputDecoration(
-                                  hintText: 'Type your answer here',
-                                  hintStyle: TextStyle(
-                                    color: Color.fromARGB(255, 126, 125, 125),
-                                    fontFamily: 'Nunito',
-                                  ),
-                                  border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: questions[currentIndex].substring(0,
+                                        questions[currentIndex].indexOf("**")),
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
                                     ),
                                   ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                  TextSpan(
+                                    text: " ____________ ",
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                  TextSpan(
+                                    text: questions[currentIndex].substring(
+                                        questions[currentIndex].indexOf("**") +
+                                            2),
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Nunito',
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              questions[currentIndex].substring(
-                                  questions[currentIndex].indexOf("**") +
-                                      2), //gets string after **
-                              style: const TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: 'Nunito',
+                                ],
                               ),
                             ),
                             const SizedBox(height: 32.0),
+                            Container(
+                              height: 60,
+                              child: Expanded(
+                                child: TextField(
+                                  textAlign: TextAlign.center,
+                                  controller: answerController,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Nunito',
+                                    fontSize: 24.0,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    hintText: 'Type your answer here',
+                                    hintStyle: TextStyle(
+                                      color: Color.fromARGB(255, 126, 125, 125),
+                                      fontFamily: 'Nunito',
+                                    ),
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 0.0),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
 
