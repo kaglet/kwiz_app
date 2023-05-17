@@ -872,4 +872,181 @@ class MockDataService extends Mock implements DatabaseService {
 
     return pastAttempt;
   }
+
+  Future<int> createRating(
+      {String? userID, String? quizID, int? rating}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .set({'Rating': rating});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    int outRating = docSnapshot['Rating'];
+
+    return outRating;
+  }
+
+  @override
+  Future<int> testUpdateRating(
+      {String? quizID, int? newRating, String? userID}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .set({'Rating': -1});
+
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .update({'Rating': newRating});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    int outRating = docSnapshot['Rating'];
+
+    return outRating;
+  }
+
+  Future<bool> ratingAlreadyExists({String? userID, String? quizID}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .set({'Rating': 3});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    return docSnapshot.exists;
+  }
+
+  Future<List<int>> addToGlobalRating({String? quizID, int? rating}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(QuizCollection).doc(quizID).set({
+      'QuizName': 'TestQuiz',
+      'QuizAuthor': 'TestAuthor',
+      'QuizCategory': 'TestCategory',
+      'QuizDateCreated': 'TestDateCreated',
+      'QuizDescription': 'TestDescription',
+      'QuizGlobalRating': 5,
+      'QuizTotalRatings': 1
+    });
+    await firestore
+        .collection(QuizCollection)
+        .doc(quizID)
+        .update({'QuizGlobalRating': 5 + rating!, 'QuizTotalRatings': 2});
+
+    DocumentSnapshot docSnapshot =
+        await firestore.collection(QuizCollection).doc(quizID).get();
+
+    Quiz quiz = Quiz(
+        quizName: docSnapshot['QuizName'],
+        quizCategory: docSnapshot['QuizCategory'],
+        quizDescription: docSnapshot['QuizDescription'],
+        quizMark: 10,
+        quizDateCreated: docSnapshot['QuizDateCreated'],
+        quizQuestions: [],
+        quizID: docSnapshot.id,
+        quizGlobalRating: docSnapshot['QuizGlobalRating'],
+        quizTotalRatings: docSnapshot['QuizTotalRatings'],
+        quizAuthor: docSnapshot['QuizAuthor']);
+
+    return [quiz.quizGlobalRating, quiz.quizTotalRatings];
+  }
+
+  Future<int> getOldRating({
+    String? quizID,
+    String? userID,
+  }) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .set({'Rating': 3});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Ratings')
+        .doc(quizID)
+        .get();
+
+    return docSnapshot['Rating'];
+  }
+
+  Future<int> updateQuizGlobalRating(
+      {String? quizID, String? userID, int? rating, int? oldRating}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(QuizCollection).doc(quizID).set({
+      'QuizName': 'TestQuiz',
+      'QuizAuthor': 'TestAuthor',
+      'QuizCategory': 'TestCategory',
+      'QuizDateCreated': 'TestDateCreated',
+      'QuizDescription': 'TestDescription',
+      'QuizGlobalRating': 5,
+      'QuizTotalRatings': 1
+    });
+    await firestore
+        .collection(QuizCollection)
+        .doc(quizID)
+        .update({'QuizGlobalRating': 5 + rating! - oldRating!});
+
+    DocumentSnapshot docSnapshot =
+        await firestore.collection(QuizCollection).doc(quizID).get();
+
+    return docSnapshot['QuizGlobalRating'];
+  }
 }
