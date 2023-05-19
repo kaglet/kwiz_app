@@ -37,20 +37,19 @@ class _AddQuestionsState extends State<AddQuestions> {
   bool _isLoading = false;
   String? _selectedQuestionType;
 
-  bool checkIfQuestionsAreFilled(List<QAContainer> QAs) {
+  bool checkIfQuestionsAreFilled(Quiz quiz) {
     // how can it check when its not always created, well just check if not null
-
-    // if (QAs != null) {
-    //   Quiz quiz = createQuizFromContainers(qaContainers);
-    //   bool boolean = true;
-    //   quiz.quizQuestions.forEach((Question question) {
-    //     if (question.questionText == '' || question.questionAnswer == '') {
-    //       boolean = false;
-    //     }
-    //   });
-    // }
-
-    return true;
+    bool boolean = true;
+    print(quiz.quizQuestions.length);
+    for (var i = 0; i < quiz.quizQuestions.length; i++) {
+      print(quiz.quizQuestions.elementAt(i).questionText);
+      print(quiz.quizQuestions.elementAt(i).questionAnswer);
+      if (quiz.quizQuestions.elementAt(i).questionText == '' ||
+          quiz.quizQuestions.elementAt(i).questionAnswer == '') {
+        return false;
+      }
+    }
+    return boolean;
   }
 
   List? questionOptions = [
@@ -186,17 +185,34 @@ class _AddQuestionsState extends State<AddQuestions> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: ElevatedButton(
-                                onPressed:
-                                    checkIfQuestionsAreFilled(qaContainers)
-                                        ? () async {
-                                            // coverage:ignore-end
-                                            Quiz quiz =
-                                                createQuizFromContainers(
-                                                    qaContainers);
-                                            addData(quiz);
-                                            // coverage:ignore-start
-                                          }
-                                        : null,
+                                onPressed: () async {
+                                  Quiz quiz =
+                                      createQuizFromContainers(qaContainers);
+                                  if (checkIfQuestionsAreFilled(quiz) ==
+                                      false) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              'Quiz questions and/or answers not filled in'),
+                                          content: const Text(
+                                              'Please fill in all the questions and answers for this quiz.'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    addData(quiz);
+                                  }
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor: Colors.transparent,
