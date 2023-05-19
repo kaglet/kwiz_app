@@ -253,40 +253,17 @@ class AddQuizState extends State<AddQuiz> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            if (widget._aboutQuizController.text == '' ||
-                                widget._titleController.text == '') {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title:
-                                        const Text('Missing quiz information'),
-                                    content: const Text(
-                                        'Please fill in the information for this quiz.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddQuestions(
-                                        aboutQuiz:
-                                            widget._aboutQuizController.text,
-                                        category: _selectedCategory,
-                                        title: widget._titleController.text,
-                                        user: widget.user,
-                                        currentUser: currentUser)),
-                              );
-                            }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddQuestions(
+                                      aboutQuiz:
+                                          widget._aboutQuizController.text,
+                                      category: _selectedCategory,
+                                      title: widget._titleController.text,
+                                      user: widget.user,
+                                      currentUser: currentUser)),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,

@@ -188,30 +188,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                 onPressed: () async {
                                   Quiz quiz =
                                       createQuizFromContainers(qaContainers);
-                                  if (checkIfQuestionsAreFilled(quiz) ==
-                                      false) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Quiz questions and/or answers not filled in'),
-                                          content: const Text(
-                                              'Please fill in all the questions and answers for this quiz.'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    addData(quiz);
-                                  }
+                                  addData(quiz);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
