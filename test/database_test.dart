@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -245,5 +246,74 @@ void main() {
     expect(pastAttempt?.pastAttemptQuizDescription, quizIn.quizDescription);
     expect(pastAttempt?.pastAttemptQuizMark, quizIn.quizMark);
     expect(pastAttempt?.pastAttemptQuizMarks, quizMarks);
+  });
+
+  test('create rating', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    String userID = 'userID';
+    int rating = 3;
+
+    int expectedRating = await service.createRating(
+        userID: userID, rating: rating, quizID: quizID);
+
+    expect(expectedRating, rating);
+  });
+
+  test('update rating', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    String userID = 'userID';
+    int rating = 3;
+
+    int expectedRating = await service.testUpdateRating(
+        userID: userID, newRating: rating, quizID: quizID);
+
+    expect(expectedRating, rating);
+  });
+
+  test('ratingAlreadyExists', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    String userID = 'userID';
+
+    bool ratingAlreadyexists =
+        await service.ratingAlreadyExists(userID: userID, quizID: quizID);
+
+    expect(ratingAlreadyexists, true);
+  });
+
+  test('addToGlobalRating', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    int rating = 3;
+
+    List<int> output =
+        await service.addToGlobalRating(rating: rating, quizID: quizID);
+
+    expect(output, [8, 2]);
+  });
+  test('getOldRating', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    String userID = 'userID';
+
+    int expectedRating =
+        await service.getOldRating(userID: userID, quizID: quizID);
+
+    expect(expectedRating, 3);
+  });
+
+  test('updateGlobalRating', () async {
+    final service = MockDataService();
+    String quizID = 'quizID';
+    String userID = 'userID';
+    int rating = 5;
+    int oldRating = 4;
+
+    int expectedRating = await service.updateQuizGlobalRating(
+        userID: userID, quizID: quizID, rating: rating, oldRating: oldRating);
+
+    expect(expectedRating, 6);
   });
 }

@@ -22,6 +22,7 @@ class AddQuiz extends StatefulWidget {
 }
 
 class AddQuizState extends State<AddQuiz> {
+  //initialises variables to be used in screen
   List<QAContainer> qaContainers = [];
   List? categories = [];
   String _selectedCategory = 'Art';
@@ -138,6 +139,8 @@ class AddQuizState extends State<AddQuiz> {
                             padding: const EdgeInsets.all(12.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
+                              // the below widges are what is used to populate the screen, includes quiz tile and description
+                              // also includes category selctor and continue adding questions button
                               children: <Widget>[
                                 TextField(
                                   controller: widget._titleController,
@@ -253,6 +256,7 @@ class AddQuizState extends State<AddQuiz> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
+                          // on the onpressed of the button, user is navigated to add questions page
                             Navigator.push(
                               context,
                               MaterialPageRoute(

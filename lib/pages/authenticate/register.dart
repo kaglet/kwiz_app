@@ -18,7 +18,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  //text field state
+  //This service is an object that allows us to use our database functions and methods
   DatabaseService service = DatabaseService();
   final _formkey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
@@ -31,7 +31,7 @@ class _RegisterState extends State<Register> {
   String userNameInput = '';
   List<UserData>? users;
    
-
+  //Initialises the page
    @override
   void initState() {
     super.initState();
@@ -39,11 +39,12 @@ class _RegisterState extends State<Register> {
       setState(() {});
     });
   }
-
+  //This function loads all the users that are stored in the database
   Future<void> loadData() async {
     users = await service.getAllUsers(); //user.uid
   }
-  
+
+  //This function is a linear search that checks whether or not a user already exists in the database by checking usernames
   bool searchUserName(List<UserData> arr, String key){
     int n = arr.length;
     bool found = false;
@@ -58,7 +59,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
+    return loading //This boolean value is what calls the loading class if it is set to true
         ? Loading()
         : Scaffold(
             resizeToAvoidBottomInset: false,
@@ -77,9 +78,9 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-            body: Container(
+            body: Container( //This container houses the body of the page
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: LinearGradient( // This is what gives the background a gradient effect
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
@@ -90,7 +91,7 @@ class _RegisterState extends State<Register> {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                 child: Form(
-                    key: _formkey,
+                    key: _formkey, //This formkey ensures that the user enters valid data
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 20.0),
@@ -122,7 +123,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter a first name' : null,
+                              val!.isEmpty ? 'Enter a first name' : null, //Checks if a first name was entered
                           onChanged: (val) {
                             firstNameInput = val;
                           },
@@ -156,7 +157,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter a last name' : null,
+                              val!.isEmpty ? 'Enter a last name' : null, //Checks if a last name was entered
                           onChanged: (val) {
                             lastNameInput = val;
                           },
@@ -190,7 +191,8 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              val!.isEmpty ? 'Enter a username' : searchUserName(users!, val) ? 'Username already exists' : null,
+                            //Checks if a username was entered. It aslo checks if that username is unique
+                              val!.isEmpty ? 'Enter a username' : searchUserName(users!, val) ? 'Username already exists' : null, 
                           onChanged: (val) {
                             userNameInput = val;
                           },
@@ -224,6 +226,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
+                            //Checks if an email address was entered
                               val!.isEmpty ? 'Enter an email' : null,
                           onChanged: (val) {
                             email = val;
@@ -258,6 +261,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) => val!.length < 6
+                              //Checks if a password was entered. The password must contain 6 characters
                               ? 'Password must be at least 6 characters'
                               : null,
                           obscureText: true,
@@ -303,6 +307,7 @@ class _RegisterState extends State<Register> {
                                       ),
                                     ),
                                     onPressed: () async {
+                                      //Userdata object that is pushed to the database
                                       UserData user = UserData(
                                           uID: null,
                                           firstName: firstNameInput,
@@ -316,19 +321,20 @@ class _RegisterState extends State<Register> {
 
                                       if (_formkey.currentState!.validate()) {
                                         setState(() {
-                                          loading = true;
+                                          loading = true; //Calls the loading class
                                         });
+                                        //Checks if the user was sucesfully added to the database
                                         dynamic result =
                                             await _auth.RegisterWithEandP(
                                                 email, password, user);
-                                        
+                                        //Checks if user entered a unique email
                                          if (result == "InUse" ) {
                                           setState(() {
                                             loading = false;
                                             error = 'This email is already in use';
                                           });
                                         }
-
+                                      //Check if the email is valid
                                         if (result == null) {
                                           setState(() {
                                             loading = false;
