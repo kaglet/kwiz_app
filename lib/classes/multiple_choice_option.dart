@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+// This class represents a multiple choice option custom widget used in a multiple choice question type
 class MultipleChoiceOption extends StatefulWidget {
   Function delete;
   Function onChanged;
@@ -84,14 +85,12 @@ class _MultipleChoiceOptionState extends State<MultipleChoiceOption> {
               ),
             ),
             IconButton(
+              // invokes widget.delete method for this widget.
+              // pass in the current widget's unique key to delete the current widget
               onPressed: () {
                 setState(() {
                   widget.delete(widget.key, widget.number! - 1);
                 });
-
-                // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
-                // pass in the current widget's unique key to delete the current widget
-                // widget.delete(widget.key);
               },
               icon: const Icon(Icons.delete, color: Colors.white),
             ),

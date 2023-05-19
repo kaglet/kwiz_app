@@ -52,7 +52,6 @@ class AddQuizState extends State<AddQuiz> {
     DatabaseService service = DatabaseService();
     categories = await service.getCategories();
     currentUser = await service.getUser(widget.user.uid);
-    // categories = categoriesDynamic?.map((e) => e.toString()).toList();
     setState(() {
       _isLoading = false;
     });
@@ -64,12 +63,6 @@ class AddQuizState extends State<AddQuiz> {
     loaddata();
     super.initState();
     _selectedCategory = 'Art';
-    // screens = [
-    //   Home(
-    //     user: widget.user,
-    //   ),
-    //   Profile(user: widget.user)
-    // ];
   }
 
   @override
@@ -203,6 +196,7 @@ class AddQuizState extends State<AddQuiz> {
                                   height: 2.0,
                                 ),
                                 Center(
+                                  // this dropdown loads all the categories from the database
                                   child: DropdownButton(
                                     isExpanded: true,
                                     value: _selectedCategory,
@@ -256,7 +250,7 @@ class AddQuizState extends State<AddQuiz> {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                          // on the onpressed of the button, user is navigated to add questions page
+                            // on the onpressed of the button, user is navigated to add questions page
                             Navigator.push(
                               context,
                               MaterialPageRoute(

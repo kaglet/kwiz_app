@@ -99,12 +99,6 @@ class QAContainer extends StatefulWidget {
 
 class _QAContainerState extends State<QAContainer> {
   @override
-  // void dispose() {
-  //   // Dispose the controllers when the widget is disposed
-  //   widget._questionController.dispose();
-  //   widget._answerController.dispose();
-  //   super.dispose();
-  // }
   List<MultipleChoiceOption> multipleChoiceOptions = [];
   List? trueOrFalseOptions = ["True", "False"];
   final List? userInitializedAnswers = [''];
@@ -256,7 +250,7 @@ class _QAContainerState extends State<QAContainer> {
               children: [
                 IconButton(
                   onPressed: () {
-                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // invokes widget.delete method for this widget.
                     // pass in the current widget's unique key to delete the current widget
                     widget.delete(widget.key);
                   },
@@ -368,7 +362,7 @@ class _QAContainerState extends State<QAContainer> {
               children: [
                 IconButton(
                   onPressed: () {
-                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // invokes widget.delete method for this widget.
                     // pass in the current widget's unique key to delete the current widget
                     widget.delete(widget.key);
                   },
@@ -610,6 +604,7 @@ class _QAContainerState extends State<QAContainer> {
             ),
             SizedBox(
               height: 100,
+              // ListView is what creates and displays each newly added multiple choice option
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: multipleChoiceOptions!.length,
@@ -668,6 +663,7 @@ class _QAContainerState extends State<QAContainer> {
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      // add a new default multiple choice option to the list storing them
                       child: ElevatedButton(
                         onPressed: widget.preDropdownList!.length < 8
                             ? () {
@@ -738,6 +734,7 @@ class _QAContainerState extends State<QAContainer> {
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      // when done button is clicked save the options officially into the dropdown list
                       child: ElevatedButton(
                         onPressed: widget.preDropdownList!.length ==
                                 widget.preDropdownList!.toSet().length
@@ -787,7 +784,7 @@ class _QAContainerState extends State<QAContainer> {
               children: [
                 IconButton(
                   onPressed: () {
-                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // invokes widget.delete method for this widget.
                     // pass in the current widget's unique key to delete the current widget
                     widget.delete(widget.key);
                   },
@@ -846,6 +843,7 @@ class _QAContainerState extends State<QAContainer> {
             ),
             SizedBox(
               height: 100,
+              // ListView is what creates and displays each newly added dropdown option
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: multipleChoiceOptions!.length,
@@ -905,6 +903,7 @@ class _QAContainerState extends State<QAContainer> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ElevatedButton(
+                        // add a new default multiple choice option to the list storing them
                         onPressed: widget.preDropdownList!.length < 8
                             ? () {
                                 setState(() {
@@ -921,11 +920,9 @@ class _QAContainerState extends State<QAContainer> {
                                         });
                                       },
                                       // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                      // a key is passed in as a parameterwhich  is the unique key of the widget
+                                      // a key is passed in as a parameter which  is the unique key of the widget
                                       delete: (key, dropdownIndex) {
                                         setState(() {
-                                          // print(widget.dropdownList![dropdownIndex]);
-                                          // print(widget._selectedDropdownValue);
                                           if (!(widget.preDropdownList![
                                                   dropdownIndex] ==
                                               widget._selectedDropdownValue)) {
@@ -974,6 +971,7 @@ class _QAContainerState extends State<QAContainer> {
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      // when done button is clicked save the options officially into the dropdown list
                       child: ElevatedButton(
                         onPressed: widget.preDropdownList!.length ==
                                 widget.preDropdownList!.toSet().length
@@ -1023,7 +1021,7 @@ class _QAContainerState extends State<QAContainer> {
               children: [
                 IconButton(
                   onPressed: () {
-                    // invokes widget.delete method for this widget. It's like using this.delete and this.key except that changes for stateful widgets.
+                    // invokes widget.delete method for this widget.
                     // pass in the current widget's unique key to delete the current widget
                     widget.delete(widget.key);
                   },
@@ -1082,6 +1080,7 @@ class _QAContainerState extends State<QAContainer> {
             ),
             SizedBox(
               height: 100,
+              // ListView is what creates and displays each newly added ranking option
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: multipleChoiceOptions!.length,
@@ -1106,6 +1105,7 @@ class _QAContainerState extends State<QAContainer> {
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  // add a new default multiple choice option to the list storing them
                   child: ElevatedButton(
                     onPressed: widget.dropdownList!.length < 8
                         ? () {
@@ -1116,17 +1116,13 @@ class _QAContainerState extends State<QAContainer> {
                               multipleChoiceOptions.add(MultipleChoiceOption(
                                   onChanged: (value, optionIndex) {
                                     setState(() {
-                                      print(value);
                                       widget.dropdownList![optionIndex] = value;
-                                      print(widget.dropdownList);
                                     });
                                   },
                                   // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                  // a key is passed in as a parameterwhich  is the unique key of the widget
+                                  // a key is passed in as a parameter which  is the unique key of the widget
                                   delete: (key, dropdownIndex) {
                                     setState(() {
-                                      // print(widget.dropdownList![dropdownIndex]);
-                                      // print(widget._selectedDropdownValue);
                                       if (!(widget
                                               .dropdownList![dropdownIndex] ==
                                           widget._selectedDropdownValue)) {
@@ -1171,6 +1167,7 @@ class _QAContainerState extends State<QAContainer> {
       return rankingContainer;
     }
 
+    // return a widget that displays nothing if for some reason the other if-elses did not execute
     return SingleChildScrollView(
       child: Text('None'),
     );

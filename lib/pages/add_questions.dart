@@ -78,7 +78,7 @@ class _AddQuestionsState extends State<AddQuestions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // if isLoading is true, return nothing else if isLoading is false display appbar
+      // if isLoading is true, return nothing else if isLoading is false (loading is done) display appbar
       appBar: _isLoading
           ? null
           : AppBar(
@@ -96,7 +96,6 @@ class _AddQuestionsState extends State<AddQuestions> {
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
-                  // TODO: Implement category filter
                 },
               ),
               actions: [
@@ -302,8 +301,8 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                         // String qaType = 'trueOrFalse';
                                                         qaContainers.add(QAContainer(
                                                             qaType: qaType,
-                                                            // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                                            // a key is passed in as a parameterwhich  is the unique key of the widget
+                                                            // add newly created qaContainer with its own delete function so container is able to delete itself later
+                                                            // a key is passed in as a parameter which is used to uniquely identify a widget for deletion
                                                             delete: (key) {
                                                               setState(() {
                                                                 qaContainers.removeWhere(
@@ -440,21 +439,6 @@ class _AddQuestionsState extends State<AddQuestions> {
                                       );
                                     },
                                   );
-
-                                  // String qaType = 'trueOrFalse';
-
-                                  // qaContainers.add(QAContainer(
-                                  //     qaType: qaType,
-                                  //     // add new qaContainer with an anonymous delete function passed in as a paramter so container can be able to delete itself later
-                                  //     // a key is passed in as a parameterwhich  is the unique key of the widget
-                                  //     delete: (key) {
-                                  //       setState(() {
-                                  //         qaContainers.removeWhere(
-                                  //             (QAContainer) =>
-                                  //                 QAContainer.key == key);
-                                  //       });
-                                  //     },
-                                  //     key: uniqueKey));
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -525,7 +509,6 @@ class _AddQuestionsState extends State<AddQuestions> {
         quizMark: savedQAs.length,
         quizDateCreated: DateTime.now().toString().substring(0, 16),
         quizQuestions: savedQAs,
-        // quizAuthorID: widget.user.uid,
         quizID: '',
         quizGlobalRating: 0,
         quizTotalRatings: 0,
