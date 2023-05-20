@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
+import 'package:kwiz_v2/pages/view_friends.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -345,7 +346,7 @@ class _ProfileState extends State<Profile> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        Bookmark(user: widget.user)),
+                                        ViewFriends(user: widget.user)),
                               );
                             },
                             child: Card(

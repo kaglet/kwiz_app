@@ -587,5 +587,52 @@ class DatabaseService {
       });
     }
   }
+
   //--------------------------------------------------------------------------------
+  Future<UserData?> getUserAndFriends({String? userID}) async {
+    //Past aatempt cpuld change to user
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+    late List<Rating> ratings = [];
+    late List<Friend> friends = [];
+
+    try {
+      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
+      UserData user = UserData(
+          //uid: docSnapshot['QuizName'],
+          userName: docSnapshot['Username'],
+          firstName: docSnapshot['FirstName'],
+          lastName: docSnapshot['LastName'],
+          totalScore: docSnapshot['TotalScore'],
+          totalQuizzes: docSnapshot['TotalQuizzes'],
+          bookmarkedQuizzes: bookmarks,
+          pastAttemptQuizzes: pastAttempts,
+          ratings: ratings,
+          friends: friends,
+          uID: docSnapshot.id);
+
+      QuerySnapshot collectionSnapshot =
+          await userCollection.doc(userID).collection('Friends').get();
+      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+        var docSnapshot = collectionSnapshot.docs[i];
+        Friend friend = Friend(
+            userID: userID,
+            friendID: docSnapshot.id,
+            status: docSnapshot['Status'],
+            friendName: docSnapshot['FriendName']);
+
+        friends.add(friend);
+      }
+
+      // user.pastAttemptQuizzes
+      //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
+
+      return user;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error!!!!! - $e");
+      }
+    }
+    return null;
+  }
 }
