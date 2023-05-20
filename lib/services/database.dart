@@ -148,13 +148,14 @@ class DatabaseService {
     for (int i = 0; i < collectionSnapshot.docs.length; i++) {
       DocumentSnapshot docSnapshot = collectionSnapshot.docs[i];
       Challenge challenge = Challenge(
-        dateCompleted: docSnapshot['ChallengeDateCompleted'],
-        dateSent: docSnapshot['ChallengeDateSent'],
-        receiverID: docSnapshot['ChallengeReceiverID'],
-        receiverMark: docSnapshot['ChallengeReceiverMark'],
-        senderID: docSnapshot['ChallengeSenderID'],
-        senderMark: docSnapshot['ChallengeSenderMark'],
-        quizID: docSnapshot.id,
+        dateCompleted: docSnapshot['DateCompleted'],
+        dateSent: docSnapshot['DateSent'],
+        receiverID: docSnapshot['ReceiverID'],
+        receiverMark: docSnapshot['ReceiverMark'],
+        senderID: docSnapshot['SenderID'],
+        senderMark: docSnapshot['SenderMark'],
+        quizID: docSnapshot['QuizID'],
+        challengeID: docSnapshot.id,
       );
       challenges.add(challenge);
     }
