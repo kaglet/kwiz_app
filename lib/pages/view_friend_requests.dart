@@ -3,19 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
-import 'package:kwiz_v2/pages/view_friend_requests.dart';
+import 'package:kwiz_v2/pages/view_friends.dart';
 import 'package:kwiz_v2/shared/loading.dart';
 import '../services/database.dart';
 
-class ViewFriends extends StatefulWidget {
+class ViewFriendRequests extends StatefulWidget {
   final OurUser user;
-  const ViewFriends({Key? key, required this.user}) : super(key: key);
+  const ViewFriendRequests({Key? key, required this.user}) : super(key: key);
 
   @override
-  _ViewFriendsState createState() => _ViewFriendsState();
+  _ViewFriendRequestsState createState() => _ViewFriendRequestsState();
 }
 
-class _ViewFriendsState extends State<ViewFriends> {
+class _ViewFriendRequestsState extends State<ViewFriendRequests> {
   late String? myUsername;
   late String _username;
   DatabaseService service = DatabaseService();
@@ -54,7 +54,8 @@ class _ViewFriendsState extends State<ViewFriends> {
     friendsListLength = friendsList!.length;
     //Extracting the List of distinct quiz names for each past attempt
     for (int i = 0; i < friendsListLength; i++) {
-      if (friendsList![i].status != 'pending') {
+      if (friendsList![i].sender != widget.user.uid &&
+          friendsList![i].status == 'pending') {
         friends!.add(friendsList?[i]);
       }
     }
@@ -80,139 +81,6 @@ class _ViewFriendsState extends State<ViewFriends> {
     });
   }
 
-  Future<void> _addFriendDialog() async {
-    bool userExists = false; // Local variable to track user existence
-
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: const Text('Add Friend'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('Enter the username:'),
-                  TextField(
-                    onChanged: (value) {
-                      _username = value;
-                    },
-                  ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                TextButton(
-                  child: const Text('Add'),
-                  onPressed: () async {
-                    userExists = await service.userExists(_username);
-
-                    if (userExists && _username != myUsername) {
-                      bool alreadyFriends = false;
-                      alreadyFriends = await service.alreadyFriends(
-                          _username, widget.user.uid);
-
-                      if (alreadyFriends) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Already Friends'),
-                              content: const Text('Already Friends'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        await service.addFriend(
-                            _username, widget.user.uid, userData!.userName);
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Friend Request Sent'),
-                              content: const Text(
-                                  'Your friend request has been sent.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    } else if (_username == myUsername) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('That is your username'),
-                            content: const Text('That is your username'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Username does not exist'),
-                            content: const Text(
-                                'The entered username does not exist.'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
@@ -220,7 +88,7 @@ class _ViewFriendsState extends State<ViewFriends> {
           ? null
           : AppBar(
               title: const Text(
-                'Friends',
+                'Friend Requests',
                 style: TextStyle(
                     fontFamily: 'TitanOne',
                     fontSize: 30,
@@ -264,7 +132,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                         filled: true,
                         fillColor: const Color.fromARGB(255, 45, 64,
                             96), // set the background color to a darker grey
-                        hintText: 'Search friends',
+                        hintText: 'Search Friend Requests',
                         hintStyle: const TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
@@ -382,17 +250,21 @@ class _ViewFriendsState extends State<ViewFriends> {
                                       ),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        service.acceptFriendRequest(
+                                            _displayedItems?[index].friendName,
+                                            widget.user.uid,
+                                            userData!.userName);
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QuizAttempts(
+                                                builder: (context) =>
+                                                    ViewFriends(
                                                       user: widget.user,
-                                                      chosenQuiz:
-                                                          _displayedItems?[
-                                                              index]),
-                                            ));
+                                                      //chosenQuiz:
+                                                      //_displayedItems?[
+                                                      //    index]),
+                                                    )));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors
@@ -404,7 +276,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                                         ),
                                       ),
                                       child: const Text(
-                                        'Remove Friend',
+                                        'Accept Friend Request',
                                         style: TextStyle(
                                           fontWeight: FontWeight.normal,
                                           color: Colors.white,
@@ -424,31 +296,6 @@ class _ViewFriendsState extends State<ViewFriends> {
                 ],
               ),
             ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ViewFriendRequests(
-                        user: widget.user,
-                      ),
-                    ));
-              },
-              child: const Text('Friend Requests'),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  _addFriendDialog();
-                },
-                child: const Text('Add Friend'))
-          ],
-        ),
-      ),
     );
   }
 }
