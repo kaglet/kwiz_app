@@ -7,6 +7,7 @@ import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
 import '../models/rating.dart';
+import '../models/friend.dart';
 
 class DatabaseService {
   //Quiz Collection Name

@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
 import 'package:kwiz_v2/pages/view_challenges.dart';
+import 'package:kwiz_v2/pages/view_friends.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
 import 'package:kwiz_v2/models/user.dart';
