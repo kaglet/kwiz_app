@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kwiz_v2/models/bookmarks.dart';
+import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
@@ -19,6 +20,10 @@ class DatabaseService {
   //User Colection Name
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('Users');
+
+  //Quiz Collection Name
+  final CollectionReference challengeCollection =
+      FirebaseFirestore.instance.collection('Challenges');
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
   //add quiz
@@ -128,6 +133,32 @@ class DatabaseService {
       quizzes.add(quiz);
     }
     return quizzes;
+  }
+
+  //--------------------------
+  //
+
+  //get all Quizzes
+  //This method gets all the challenges from the Challenges Collection and retruns them as a list of Challenge objects
+  Future<List<Challenge>?> getAllChallenges() async {
+    List<Challenge> challenges = [];
+    //gets all docs from collection
+    QuerySnapshot collectionSnapshot = await challengeCollection.get();
+    //loops through each document and creates quiz object and adds to quiz list
+    for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+      DocumentSnapshot docSnapshot = collectionSnapshot.docs[i];
+      Challenge challenge = Challenge(
+        dateCompleted: docSnapshot['ChallengeDateCompleted'],
+        dateSent: docSnapshot['ChallengeDateSent'],
+        receiverID: docSnapshot['ChallengeReceiverID'],
+        receiverMark: docSnapshot['ChallengeReceiverMark'],
+        senderID: docSnapshot['ChallengeSenderID'],
+        senderMark: docSnapshot['ChallengeSenderMark'],
+        quizID: docSnapshot.id,
+      );
+      challenges.add(challenge);
+    }
+    return challenges;
   }
 
   //--------------------------
@@ -512,6 +543,23 @@ class DatabaseService {
     await userCollection.doc(userID).update({
       'TotalScore': totalScore,
       'TotalQuizzes': totalQuizzes,
+    });
+  }
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+// Given a challenge ID update status of that challenge to accepted or rejected
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+  Future<void> acceptChallengeRequest({String? challengeID}) async {
+    await challengeCollection.doc(challengeID).update({
+      'Status': 'Open',
+    });
+  }
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+  Future<void> rejectChallengeRequest({String? challengeID}) async {
+    await challengeCollection.doc(challengeID).update({
+      'Status': 'Closed',
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
