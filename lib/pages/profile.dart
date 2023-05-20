@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
+import 'package:kwiz_v2/pages/view_challenges.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -276,7 +277,7 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           const SizedBox(
-                            height: 60.0,
+                            height: 20.0,
                           ),
                           Row(
                             children: [
@@ -335,7 +336,67 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           const SizedBox(
-                            height: 126.0,
+                            height: 20.0,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  height: 70.0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      onOverlayClose(false);
+                                      controller.reverse();
+                                      //  overlayEntry.remove();
+                                      // navigate to bookmarks screen
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ViewChallenges(
+                                                    user: widget.user)),
+                                      );
+                                    },
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color.fromARGB(255, 222, 127, 43),
+                                              Color.fromARGB(255, 246, 120, 82),
+                                            ],
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Challenges',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.0,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 126,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -464,18 +525,14 @@ class _ProfileState extends State<Profile> {
                                                         const SizedBox(
                                                             width: 50.0),
                                                         TextButton(
-                                                          onPressed: ()  {   
-                                                              _auth
-                                                                .signOut();
-                                                           
+                                                          onPressed: () {
+                                                            _auth.signOut();
 
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
                                                             controller
                                                                 .reverse();
-                                                           
-                                                            
                                                           },
                                                           child: Container(
                                                             decoration:
