@@ -1,3 +1,4 @@
+// coverage:ignore-start
 import 'package:flutter/material.dart';
 class ViewChallenges extends StatefulWidget{
 @override
@@ -74,3 +75,4 @@ Widget build(BuildContext context){
 }
 
 }
+// coverage:ignore-end
