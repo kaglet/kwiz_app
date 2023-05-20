@@ -635,4 +635,50 @@ class DatabaseService {
     }
     return null;
   }
+
+  Future<bool> userExists(String? username) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: username).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return true;
+    }
+
+    return false;
+  }
+
+  Future<String?> getMyUsername(String? myUserID) async {
+    DocumentSnapshot docSnapshot = await userCollection.doc(myUserID).get();
+    return docSnapshot['Username'];
+  }
+
+  Future<void> addFriend(String? username, String? myUserID) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: username).get();
+
+    DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+    String friendID = docSnapshot.id;
+
+    await userCollection
+        .doc(myUserID)
+        .collection('Friends')
+        .doc(friendID)
+        .set({'Status': 'pending', 'FriendName': username});
+  }
+
+  Future<bool> alreadyFriends(String? username, String? myUserID) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: username).get();
+
+    DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+    String friendID = docSnapshot.id;
+
+    DocumentSnapshot friendDocSnaphot = await userCollection
+        .doc(myUserID)
+        .collection('Friends')
+        .doc(friendID)
+        .get();
+
+    return friendDocSnaphot.exists;
+  }
 }

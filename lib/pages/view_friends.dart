@@ -8,29 +8,33 @@ import '../services/database.dart';
 
 class ViewFriends extends StatefulWidget {
   final OurUser user;
-  const ViewFriends({super.key, required this.user});
+  const ViewFriends({Key? key, required this.user}) : super(key: key);
+
   @override
-  // ignore: library_private_types_in_public_api
   _ViewFriendsState createState() => _ViewFriendsState();
 }
 
 class _ViewFriendsState extends State<ViewFriends> {
-  List? friendsList = [];
+  late String? myUsername;
+  late String _username;
+  DatabaseService service = DatabaseService();
+  List<dynamic>? friendsList = [];
   int friendsListLength = 0;
-  List? friends = [];
+  List<dynamic>? friends = [];
   int friendsLength = 0;
-  List? _displayedItems = [];
+  List<dynamic>? _displayedItems = [];
   bool _isLoading = true;
   int fillLength = 0;
   UserData? userData;
   String? name = '';
   final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     _displayedItems = friends;
     _startLoading();
-    loaddata().then((value) {
+    loaddata().then((_) {
       setState(() {});
     });
   }
@@ -43,10 +47,11 @@ class _ViewFriendsState extends State<ViewFriends> {
 
   Future<void> loaddata() async {
     DatabaseService service = DatabaseService();
+    myUsername = await service.getMyUsername(widget.user.uid);
     userData = await service.getUserAndFriends(userID: widget.user.uid);
     friendsList = userData!.friends;
     friendsListLength = friendsList!.length;
-    //Extracting the List of disticnt quiz names for each past attempt
+    //Extracting the List of distinct quiz names for each past attempt
     for (int i = 0; i < friendsListLength; i++) {
       friends!.add(friendsList?[i]);
     }
@@ -55,8 +60,6 @@ class _ViewFriendsState extends State<ViewFriends> {
     fillLength = _displayedItems!.length;
   }
 
-// coverage:ignore-end
-//This method is used to control the search bar
   void _onSearchTextChanged(String text) {
     setState(() {
       _displayedItems = friends!
@@ -67,12 +70,143 @@ class _ViewFriendsState extends State<ViewFriends> {
     });
   }
 
-// coverage:ignore-start
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 1300));
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _addFriendDialog() async {
+    bool userExists = false; // Local variable to track user existence
+
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: const Text('Add Friend'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('Enter the username:'),
+                  TextField(
+                    onChanged: (value) {
+                      _username = value;
+                    },
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: const Text('Add'),
+                  onPressed: () async {
+                    userExists = await service.userExists(_username);
+
+                    if (userExists && _username != myUsername) {
+                      bool alreadyFriends = false;
+                      alreadyFriends = await service.alreadyFriends(
+                          _username, widget.user.uid);
+
+                      if (alreadyFriends) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Already Friends'),
+                              content: const Text('Already Friends'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        await service.addFriend(_username, widget.user.uid);
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Friend Request Sent'),
+                              content: const Text(
+                                  'Your friend request has been sent.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    } else if (_username == myUsername) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('That is your username'),
+                            content: const Text('That is your username'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Username does not exist'),
+                            content: const Text(
+                                'The entered username does not exist.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -286,6 +420,25 @@ class _ViewFriendsState extends State<ViewFriends> {
                 ],
               ),
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                print('Friend requests');
+              },
+              child: const Text('Friend Requests'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  _addFriendDialog();
+                },
+                child: const Text('Add Friend'))
+          ],
+        ),
+      ),
     );
   }
 }
