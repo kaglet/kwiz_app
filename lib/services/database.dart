@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kwiz_v2/models/bookmarks.dart';
+import 'package:kwiz_v2/models/friend.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
@@ -157,6 +158,7 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
+          friends: [],
           uID: docSnapshot.id);
 
       users.add(user);
@@ -288,6 +290,7 @@ class DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -301,6 +304,7 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
+          friends: friends,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -345,6 +349,7 @@ class DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -358,6 +363,7 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
+          friends: friends,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -487,7 +493,8 @@ class DatabaseService {
         totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: [],
-        ratings: []);
+        ratings: [],
+        friends: []);
 
     return user;
   }
@@ -580,5 +587,5 @@ class DatabaseService {
       });
     }
   }
+  //--------------------------------------------------------------------------------
 }
-//-----------------------------------------------------------------------------------------------------------------------------------------------------

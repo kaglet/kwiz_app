@@ -197,6 +197,7 @@ class QuizScoreState extends State<QuizScore> {
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    userID = userData.uID!;
     _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
     oldRating = await service.getOldRating(

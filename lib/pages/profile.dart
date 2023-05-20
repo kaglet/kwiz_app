@@ -40,7 +40,8 @@ class _ProfileState extends State<Profile> {
       totalQuizzes: 0,
       bookmarkedQuizzes: [],
       pastAttemptQuizzes: [],
-      ratings: []);
+      ratings: [],
+      friends: []);
 
   Future<void> loaddata() async {
     setState(() {
@@ -334,6 +335,25 @@ class _ProfileState extends State<Profile> {
                               ),
                             ],
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              onOverlayClose(false);
+                              controller.reverse();
+                              //  overlayEntry.remove();
+                              // navigate to bookmarks screen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Bookmark(user: widget.user)),
+                              );
+                            },
+                            child: Card(
+                                child: ListTile(
+                              leading: const Icon(Icons.person),
+                              title: const Text('Friends'),
+                            )),
+                          ),
                           const SizedBox(
                             height: 126.0,
                           ),
@@ -464,18 +484,14 @@ class _ProfileState extends State<Profile> {
                                                         const SizedBox(
                                                             width: 50.0),
                                                         TextButton(
-                                                          onPressed: ()  {   
-                                                              _auth
-                                                                .signOut();
-                                                           
+                                                          onPressed: () {
+                                                            _auth.signOut();
 
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
                                                             controller
                                                                 .reverse();
-                                                           
-                                                            
                                                           },
                                                           child: Container(
                                                             decoration:

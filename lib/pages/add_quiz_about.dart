@@ -36,7 +36,8 @@ class AddQuizState extends State<AddQuiz> {
       totalQuizzes: 0,
       bookmarkedQuizzes: [],
       pastAttemptQuizzes: [],
-      ratings: []);
+      ratings: [],
+      friends: []);
 
   // screens for stacked widget
   List<Widget> screens = [];
