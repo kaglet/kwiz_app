@@ -97,12 +97,6 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                 textAlign: TextAlign.start,
               ),
               backgroundColor: const Color.fromARGB(255, 27, 57, 82),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
             ),
       body: _isLoading
           ? Loading()
@@ -203,6 +197,10 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: ListTile(
+                                  leading: Icon(
+                                    Icons.person,
+                                    size: 40,
+                                  ),
                                   title: Text(
                                     _displayedItems?[index].friendName,
                                     style: const TextStyle(

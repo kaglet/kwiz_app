@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
+import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/pages/quiz_attempts.dart';
 import 'package:kwiz_v2/pages/view_friend_requests.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -125,8 +126,10 @@ class _ViewFriendsState extends State<ViewFriends> {
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Already Friends'),
-                              content: const Text('Already Friends'),
+                              title: const Text(
+                                  'Friend Request Already Sent/Already Friends'),
+                              content: const Text(
+                                  'Friend Request Already Sent/Already Friends'),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text('OK'),
@@ -219,6 +222,7 @@ class _ViewFriendsState extends State<ViewFriends> {
       appBar: _isLoading
           ? null
           : AppBar(
+              automaticallyImplyLeading: false,
               title: const Text(
                 'Friends',
                 style: TextStyle(
@@ -230,9 +234,15 @@ class _ViewFriendsState extends State<ViewFriends> {
               ),
               backgroundColor: const Color.fromARGB(255, 27, 57, 82),
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                icon: const Icon(Icons.home),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Home(
+                          user: widget.user,
+                        ),
+                      ));
                 },
               ),
             ),
@@ -335,6 +345,10 @@ class _ViewFriendsState extends State<ViewFriends> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: ListTile(
+                                  leading: Icon(
+                                    Icons.person,
+                                    size: 40,
+                                  ),
                                   title: Text(
                                     _displayedItems?[index].friendName,
                                     style: const TextStyle(
@@ -357,14 +371,6 @@ class _ViewFriendsState extends State<ViewFriends> {
                                           ),
                                         ),
                                         SizedBox(width: 8),
-                                        Text(
-                                          '${_displayedItems?[index].friendName}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -424,28 +430,85 @@ class _ViewFriendsState extends State<ViewFriends> {
                 ],
               ),
             ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromARGB(255, 27, 57, 82),
+              Color.fromARGB(255, 5, 12, 31),
+            ],
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40.0),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color.fromARGB(255, 230, 131, 44),
+                    Color.fromARGB(255, 244, 112, 72),
+                  ],
+                ),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ViewFriendRequests(
                         user: widget.user,
                       ),
-                    ));
-              },
-              child: const Text('Friend Requests'),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  _addFriendDialog();
+                    ),
+                  );
                 },
-                child: const Text('Add Friend'))
+                style: ElevatedButton.styleFrom(
+                  // Set the background color of the button
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 20.0, horizontal: 16.0),
+                  minimumSize: const Size(150, 0),
+                  // Adjust the padding of the button
+                ),
+                child: const Text(
+                  'Friend Requests',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                    fontFamily: 'Nunito',
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 16.0), // Add spacing between the buttons
+            ElevatedButton(
+              onPressed: () {
+                _addFriendDialog();
+              },
+              style: ElevatedButton.styleFrom(
+                primary:
+                    Colors.orange, // Set the background color of the button
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 16.0),
+                minimumSize:
+                    const Size(200, 0), // Adjust the padding of the button
+              ),
+              child: const Text(
+                'Add Friend',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                  fontFamily: 'Nunito',
+                ),
+              ),
+            ),
           ],
         ),
       ),
