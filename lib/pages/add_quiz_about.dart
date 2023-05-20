@@ -2,6 +2,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 // coverage:ignore-start
 import 'package:flutter/material.dart';
+import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/shared/loading.dart';
 import '../shared/loading.dart';
@@ -52,6 +53,12 @@ class AddQuizState extends State<AddQuiz> {
     });
     DatabaseService service = DatabaseService();
     categories = await service.getCategories();
+    List<Challenge>? challenges = await service.getAllChallenges();
+    for (var i = 0; i < challenges!.length; i++) {
+      print(challenges.elementAt(i).dateSent);
+      service.rejectChallengeRequest(
+          challengeID: challenges.elementAt(i).challengeID);
+    }
     currentUser = await service.getUser(widget.user.uid);
     setState(() {
       _isLoading = false;
