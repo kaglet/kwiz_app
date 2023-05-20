@@ -75,6 +75,7 @@ class ViewChallengesState extends State<ViewChallenges>
           ),
         ),
         child: TabBarView(controller: _tabController, children: [
+          // Pending widgets --------------------------------------------------------------------------------------------------------------------
           SingleChildScrollView(
             child: SizedBox(
               height: 100.0,
@@ -93,14 +94,193 @@ class ViewChallengesState extends State<ViewChallenges>
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Column(children: <Widget>[]),
+                    child: Row(children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.orange, Colors.deepOrange],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {},
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: Text(
+                              'Accept',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.orange, Colors.deepOrange],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {},
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: Text(
+                              'Reject',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
               ),
             ),
           ),
-          Text('Active Widgets Go here'),
-          Text('Closed Widgets Go here'),
+          // Active widgets --------------------------------------------------------------------------------------------------------------------
+          SingleChildScrollView(
+            child: SizedBox(
+              height: 100.0,
+              child: Card(
+                margin: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromARGB(255, 45, 64, 96),
+                        Color.fromARGB(255, 45, 64, 96),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.orange, Colors.deepOrange],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {},
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: Text(
+                              'Take quiz',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Closed widgets --------------------------------------------------------------------------------------------------------------------
+          SingleChildScrollView(
+            child: SizedBox(
+              height: 100.0,
+              child: Card(
+                margin: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromARGB(255, 45, 64, 96),
+                        Color.fromARGB(255, 45, 64, 96),
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Colors.orange, Colors.deepOrange],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () async {},
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              backgroundColor: Colors.transparent,
+                              padding: const EdgeInsets.all(12.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(12), // <-- Radius
+                              ),
+                            ),
+                            child: Text(
+                              'Review',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ]),
       ),
     );
