@@ -156,6 +156,7 @@ class DatabaseService {
         senderMark: docSnapshot['SenderMark'],
         quizID: docSnapshot['QuizID'],
         challengeID: docSnapshot.id,
+        senderName: docSnapshot['SenderName'],
       );
       challenges.add(challenge);
     }
