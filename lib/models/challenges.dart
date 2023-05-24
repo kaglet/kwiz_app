@@ -10,6 +10,7 @@ class Challenge {
   final String challengeID;
   final String senderName;
   final String quizName;
+  final String challengeStatus;
 
   Challenge(
       {required this.quizID,
@@ -21,5 +22,6 @@ class Challenge {
       required this.senderMark,
       required this.challengeID,
       required this.senderName,
-      required this.quizName});
+      required this.quizName,
+      required this.challengeStatus});
 }

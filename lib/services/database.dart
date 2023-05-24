@@ -157,6 +157,8 @@ class DatabaseService {
         quizID: docSnapshot['QuizID'],
         challengeID: docSnapshot.id,
         senderName: docSnapshot['SenderName'],
+        quizName: docSnapshot['QuizName'],
+        challengeStatus: docSnapshot['Status'],
       );
       challenges.add(challenge);
     }
@@ -553,7 +555,7 @@ class DatabaseService {
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
   Future<void> acceptChallengeRequest({String? challengeID}) async {
     await challengeCollection.doc(challengeID).update({
-      'Status': 'Open',
+      'Status': 'Active',
     });
   }
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
