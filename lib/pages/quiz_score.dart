@@ -341,6 +341,7 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ]),
                                 ),
+                                
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -436,6 +437,52 @@ class QuizScoreState extends State<QuizScore> {
                                       );
                                     }),
                                   ),
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color.fromARGB(255, 60, 44, 167),
+                                          Colors.deepOrange
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal),
+                                      ),
+                                      //This event takes us to the take_quiz screen
+                                      onPressed: () {
+                                        
+                                      },
+                                      child: const Text(
+                                        'Challenge a friend!',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Nunito',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30,
                                 ),
                                 SizedBox(
                                   width: double.infinity,

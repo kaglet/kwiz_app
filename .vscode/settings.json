@@ -1,4 +1,5 @@
 {
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "C:/Users/mchlk/flutterapps2/kwiz_v2/linux"
+    "cmake.sourceDirectory": "C:/Users/mchlk/flutterapps2/kwiz_v2/linux",
+    "docwriter.style": "Doxygen"
 }
