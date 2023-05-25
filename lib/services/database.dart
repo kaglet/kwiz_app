@@ -263,6 +263,41 @@ class DatabaseService {
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+  //get all Quiz and Questions
+  //This method gets the selected quiz from the Quiz Collection and its subcollection of questions and retruns a quiz object with a list of ordered questions
+  Future<Challenge?> getChallengeForReview({String? challengeID}) async {
+    late List<Question> questions = [];
+
+    try {
+      DocumentSnapshot docSnapshot =
+          await quizCollection.doc(challengeID).get();
+      Challenge challenge = Challenge(
+        dateCompleted: docSnapshot['DateCompleted'],
+        dateSent: docSnapshot['DateSent'],
+        receiverID: docSnapshot['ReceiverID'],
+        receiverMark: docSnapshot['ReceiverMark'],
+        senderID: docSnapshot['SenderID'],
+        senderMark: docSnapshot['SenderMark'],
+        quizID: docSnapshot['QuizID'],
+        challengeID: docSnapshot.id,
+        senderName: docSnapshot['SenderName'],
+        quizName: docSnapshot['QuizName'],
+        challengeStatus: docSnapshot['Status'],
+      );
+
+      return challenge;
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error!!!!! - $e");
+      }
+    }
+    return null;
+  }
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+
   //get Quiz based on category
   //This method gets quizzes from the Quiz Collection based on its category
   Future<List<Quiz>?> getQuizByCategory({String? category}) async {
@@ -562,6 +597,14 @@ class DatabaseService {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
   Future<void> rejectChallengeRequest({String? challengeID}) async {
+    await challengeCollection.doc(challengeID).update({
+      'Status': 'Rejected',
+    });
+  }
+
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+  Future<void> closeChallenge({String? challengeID}) async {
     await challengeCollection.doc(challengeID).update({
       'Status': 'Closed',
     });
