@@ -20,6 +20,7 @@ class ViewChallengesState extends State<ViewChallenges>
   int pendingLength = 0;
   int activeLength = 0;
   int closedLength = 0;
+  int sentLength = 0;
   List<Challenge> active = [];
   List<Challenge> closed = [];
   List<Challenge> sent = [];
@@ -84,6 +85,7 @@ class ViewChallengesState extends State<ViewChallenges>
     pendingLength = pending.length;
     closedLength = closed.length;
     activeLength = active.length;
+    sentLength = challenges.length;
 
     setState(() {
       _isLoading = false;
@@ -413,7 +415,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: sent.length,
+              itemCount: sentLength,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
