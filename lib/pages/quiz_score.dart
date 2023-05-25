@@ -50,6 +50,24 @@ class QuizScoreState extends State<QuizScore> {
   late double totalScore;
   late int numQuestions;
 
+
+    final List<String> names = [
+    'John',
+    'Jane',
+    'Alice',
+    'Bob',
+    'Eve',
+    'Michael',
+    'Sarah',
+        'a',
+    'c',
+    's',
+    'd',
+    'f',
+    'g',
+    'p',
+  ];
+
   Future<void> createRating() async {
     setState(() {
       _isLoading = true;
@@ -70,6 +88,7 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+/// This function adds the user's rating to the global rating of a quiz in a database.
   Future<void> addToGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -86,6 +105,7 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+/// This function updates the global rating of a quiz in a database.
   Future<void> updateGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -438,6 +458,8 @@ class QuizScoreState extends State<QuizScore> {
                                     }),
                                   ),
                                 ),
+
+                                //challenge a friend button
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
@@ -468,8 +490,44 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text('Friend List'),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics: NeverScrollableScrollPhysics(),
+                                                        itemCount: names.length,
+                                                        itemBuilder: (context, index) {
+                                                          final String name = names[index];
+                                                          return ListTile(
+                                                            title: Text(name),
+                                                            trailing: ElevatedButton(
+                                                              onPressed: () {
+                                                                // Perform action on button press
+                                                                print('Button pressed for $name');
+                                                                //Navigator.pop(context);
+                                                              },
+                                                              child: Text('Challenge'),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
                                       },
+
                                       child: const Text(
                                         'Challenge a friend!',
                                         style: TextStyle(
@@ -481,9 +539,12 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ),
                                 ),
+                                //to add spaces between the two buttons
+
                                 const SizedBox(
                                   height: 30,
                                 ),
+                                //Finish review button
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,
