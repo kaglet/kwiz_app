@@ -59,6 +59,10 @@ class ViewChallengesState extends State<ViewChallenges>
         .where((challenge) => challenge.senderID == widget.user.uid)
         .toList();
 
+    pending.forEach((element) {
+      print('Pending challenge ' + element.senderName);
+    });
+
     for (var i = 0; i < challenges.length; i++) {
       print(closed.elementAt(i).dateSent);
       // service.acceptChallengeRequest(
