@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kwiz_v2/pages/bookmark.dart';
 import 'package:kwiz_v2/pages/quiz_history.dart';
 import 'package:kwiz_v2/pages/view_challenges.dart';
+import 'package:kwiz_v2/pages/view_friends.dart';
 import '../services/auth.dart';
 import '../services/database.dart';
 import 'package:kwiz_v2/models/user.dart';
@@ -41,7 +42,8 @@ class _ProfileState extends State<Profile> {
       totalQuizzes: 0,
       bookmarkedQuizzes: [],
       pastAttemptQuizzes: [],
-      ratings: []);
+      ratings: [],
+      friends: []);
 
   Future<void> loaddata() async {
     setState(() {
@@ -319,6 +321,65 @@ class _ProfileState extends State<Profile> {
                                         child: const Center(
                                           child: Text(
                                             'Bookmarks',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.0,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: SizedBox(
+                                  height: 70.0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      onOverlayClose(false);
+                                      controller.reverse();
+                                      //   overlayEntry.remove();
+                                      // navigate to quiz history page
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ViewFriends(user: widget.user)),
+                                      );
+                                    },
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                          gradient: const LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Color.fromARGB(255, 230, 131, 44),
+                                              Color.fromARGB(255, 244, 112, 72),
+                                            ],
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Friends',
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 20.0,
