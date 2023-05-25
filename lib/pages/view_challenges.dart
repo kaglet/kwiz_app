@@ -20,23 +20,9 @@ class ViewChallengesState extends State<ViewChallenges>
   int pendingLength = 0;
   int activeLength = 0;
   int closedLength = 0;
-  int sentLength = 0;
   List<Challenge> active = [];
   List<Challenge> closed = [];
-  List<Challenge> sent = [];
   late bool _isLoading;
-
-  Future<void> rejectChallenge(int index) async {
-    DatabaseService service = DatabaseService();
-    await service.rejectChallengeRequest(
-        challengeID: pending.elementAt(index).challengeID);
-  }
-
-  Future<void> acceptChallenge(int index) async {
-    DatabaseService service = DatabaseService();
-    await service.acceptChallengeRequest(
-        challengeID: pending.elementAt(index).challengeID);
-  }
 
   Future<void> loaddata() async {
     setState(() {
@@ -53,28 +39,6 @@ class ViewChallengesState extends State<ViewChallenges>
     closed = challenges
         .where((challenge) => challenge.challengeStatus == 'Closed')
         .toList();
-    // not just the rejected but the all the challenges the current sender has sent
-
-    print(widget.user.uid);
-    sent = challenges
-        .where((challenge) => challenge.senderID == widget.user.uid)
-        .toList();
-
-    pending.forEach((element) {
-      print('Pending challenge ' + element.senderName);
-    });
-
-    active.forEach((element) {
-      print('Active challenge ' + element.senderName);
-    });
-
-    closed.forEach((element) {
-      print('Closed challenge ' + element.senderName);
-    });
-
-    challenges.forEach((element) {
-      print('Sent challenge' + element.senderName);
-    });
 
     for (var i = 0; i < challenges.length; i++) {
       print(closed.elementAt(i).dateSent);
@@ -82,10 +46,9 @@ class ViewChallengesState extends State<ViewChallenges>
       //     challengeID: closed!.elementAt(i).challengeID);
     }
 
-    pendingLength = pending.length;
-    closedLength = closed.length;
-    activeLength = active.length;
-    sentLength = challenges.length;
+    // pendingLength = pending.length;
+    // closedLength = closed.length;
+    // activeLength = active.length;
 
     setState(() {
       _isLoading = false;
@@ -96,7 +59,7 @@ class ViewChallengesState extends State<ViewChallenges>
   void initState() {
     super.initState();
     loaddata();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.animateTo(0);
   }
 
@@ -131,9 +94,6 @@ class ViewChallengesState extends State<ViewChallenges>
               Tab(text: 'Active'),
               Tab(
                 text: 'Closed',
-              ),
-              Tab(
-                text: 'Sent',
               )
             ]),
         backgroundColor: const Color.fromARGB(255, 27, 57, 82),
@@ -162,7 +122,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: pendingLength,
+              itemCount: pending.length,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
@@ -195,18 +155,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () async {
-                                    acceptChallenge(index);
-                                    // Refresh the list of displayed items
-
-                                    setState(() {
-                                      active.insert(
-                                          0, pending.elementAt(index));
-                                      pending.removeAt(index);
-                                      pendingLength = pending.length;
-                                      print(pending.length);
-                                    });
-                                  },
+                                  onPressed: () async {},
                                   style: ElevatedButton.styleFrom(
                                     elevation: 0,
                                     backgroundColor: Colors.transparent,
@@ -238,17 +187,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: ElevatedButton(
-                                  onPressed: () async {
-                                    rejectChallenge(index);
-                                    // Refresh the list of displayed items
-
-                                    setState(() {
-                                      // filteredQuizzes!.removeAt(index);
-                                      pending.removeAt(index);
-                                      pendingLength = pending.length;
-                                      print(pending.length);
-                                    });
-                                  },
+                                  onPressed: () async {},
                                   style: ElevatedButton.styleFrom(
                                     elevation: 0,
                                     backgroundColor: Colors.transparent,
@@ -282,7 +221,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: activeLength,
+              itemCount: active.length,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
@@ -349,7 +288,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: closedLength,
+              itemCount: closed.length,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
@@ -394,72 +333,6 @@ class ViewChallengesState extends State<ViewChallenges>
                                   ),
                                   child: Text(
                                     'Review',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      letterSpacing: 1.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: sentLength,
-              itemBuilder: (context, index) {
-                return SingleChildScrollView(
-                  child: SizedBox(
-                    height: 100.0,
-                    child: Card(
-                      margin: const EdgeInsets.fromLTRB(10.0, 16.0, 16.0, 0),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color.fromARGB(255, 45, 64, 96),
-                              Color.fromARGB(255, 45, 64, 96),
-                            ],
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [Colors.orange, Colors.deepOrange],
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: () async {},
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    backgroundColor: Colors.transparent,
-                                    padding: const EdgeInsets.all(12.0),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          12), // <-- Radius
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Sent',
                                     style: TextStyle(
                                       fontSize: 15.0,
                                       letterSpacing: 1.0,

@@ -30,28 +30,27 @@ class _RegisterState extends State<Register> {
   String lastNameInput = '';
   String userNameInput = '';
   List<UserData>? users;
-
+   
   //Initialises the page
-  @override
+   @override
   void initState() {
     super.initState();
     loadData().then((value) {
       setState(() {});
     });
   }
-
   //This function loads all the users that are stored in the database
   Future<void> loadData() async {
     users = await service.getAllUsers(); //user.uid
   }
 
   //This function is a linear search that checks whether or not a user already exists in the database by checking usernames
-  bool searchUserName(List<UserData> arr, String key) {
+  bool searchUserName(List<UserData> arr, String key){
     int n = arr.length;
     bool found = false;
 
-    for (int i = 0; i < n; i++) {
-      if (arr.elementAt(i).userName == key) {
+    for(int i =0; i < n; i++){
+      if(arr.elementAt(i).userName == key){
         found = true;
       }
     }
@@ -79,11 +78,9 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-            body: Container(
-                //This container houses the body of the page
+            body: Container( //This container houses the body of the page
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    // This is what gives the background a gradient effect
+                  gradient: LinearGradient( // This is what gives the background a gradient effect
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
@@ -94,8 +91,7 @@ class _RegisterState extends State<Register> {
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
                 child: Form(
-                    key:
-                        _formkey, //This formkey ensures that the user enters valid data
+                    key: _formkey, //This formkey ensures that the user enters valid data
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 20.0),
@@ -126,9 +122,8 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-                          validator: (val) => val!.isEmpty
-                              ? 'Enter a first name'
-                              : null, //Checks if a first name was entered
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a first name' : null, //Checks if a first name was entered
                           onChanged: (val) {
                             firstNameInput = val;
                           },
@@ -161,9 +156,8 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-                          validator: (val) => val!.isEmpty
-                              ? 'Enter a last name'
-                              : null, //Checks if a last name was entered
+                          validator: (val) =>
+                              val!.isEmpty ? 'Enter a last name' : null, //Checks if a last name was entered
                           onChanged: (val) {
                             lastNameInput = val;
                           },
@@ -197,12 +191,8 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              //Checks if a username was entered. It aslo checks if that username is unique
-                              val!.isEmpty
-                                  ? 'Enter a username'
-                                  : searchUserName(users!, val)
-                                      ? 'Username already exists'
-                                      : null,
+                            //Checks if a username was entered. It aslo checks if that username is unique
+                              val!.isEmpty ? 'Enter a username' : searchUserName(users!, val) ? 'Username already exists' : null, 
                           onChanged: (val) {
                             userNameInput = val;
                           },
@@ -236,7 +226,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           validator: (val) =>
-                              //Checks if an email address was entered
+                            //Checks if an email address was entered
                               val!.isEmpty ? 'Enter an email' : null,
                           onChanged: (val) {
                             email = val;
@@ -327,33 +317,31 @@ class _RegisterState extends State<Register> {
                                           totalQuizzes: 0,
                                           bookmarkedQuizzes: [],
                                           pastAttemptQuizzes: [],
-                                          ratings: [],
-                                          friends: []);
+                                          ratings: []);
 
                                       if (_formkey.currentState!.validate()) {
                                         setState(() {
-                                          loading =
-                                              true; //Calls the loading class
+                                          loading = true; //Calls the loading class
                                         });
                                         //Checks if the user was sucesfully added to the database
                                         dynamic result =
                                             await _auth.RegisterWithEandP(
                                                 email, password, user);
                                         //Checks if user entered a unique email
-                                        if (result == "InUse") {
+                                         if (result == "InUse" ) {
                                           setState(() {
                                             loading = false;
-                                            error =
-                                                'This email is already in use';
+                                            error = 'This email is already in use';
                                           });
                                         }
-                                        //Check if the email is valid
+                                      //Check if the email is valid
                                         if (result == null) {
                                           setState(() {
                                             loading = false;
                                             error = 'Please supply valid email';
                                           });
                                         }
+
 
                                         // this fixed it by commenting it out
                                         // else {
@@ -406,24 +394,25 @@ class _RegisterState extends State<Register> {
                                       ),
                                     ),
                                   ),
+                                  
                                 ),
-                                SizedBox(height: 20.0),
-                                Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
+                                 SizedBox(height: 20.0),
+                                 Center(
+                                   child: Container(                                                   
+                                    decoration: BoxDecoration(                                  
                                       borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
+                                    ),child: Text(
                                       error,
-                                      style: TextStyle(
-                                          color: Colors.red, fontSize: 10.0),
+                                      style: TextStyle(color: Colors.red, fontSize: 10.0),
                                     ),
-                                  ),
-                                ),
+                                                                 ),
+                                 ),
+                                
                               ],
                             ),
                           ),
                         ),
+                        
                       ],
                     ))),
           );

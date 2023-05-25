@@ -79,8 +79,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
       totalQuizzes: 0,
       bookmarkedQuizzes: [],
       pastAttemptQuizzes: [],
-      ratings: [],
-      friends: []);
+      ratings: []);
 
   TextEditingController textControllerTitle = TextEditingController();
   TextEditingController textControllerCat = TextEditingController();

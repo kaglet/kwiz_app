@@ -7,7 +7,6 @@ import 'package:kwiz_v2/models/user.dart';
 import '../models/questions.dart';
 import '../models/quizzes.dart';
 import '../models/rating.dart';
-import '../models/friend.dart';
 
 class DatabaseService {
   //Quiz Collection Name
@@ -193,7 +192,6 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
-          friends: [],
           uID: docSnapshot.id);
 
       users.add(user);
@@ -265,41 +263,6 @@ class DatabaseService {
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
-  //get all Quiz and Questions
-  //This method gets the selected quiz from the Quiz Collection and its subcollection of questions and retruns a quiz object with a list of ordered questions
-  Future<Challenge?> getChallengeForReview({String? challengeID}) async {
-    late List<Question> questions = [];
-
-    try {
-      DocumentSnapshot docSnapshot =
-          await quizCollection.doc(challengeID).get();
-      Challenge challenge = Challenge(
-        dateCompleted: docSnapshot['DateCompleted'],
-        dateSent: docSnapshot['DateSent'],
-        receiverID: docSnapshot['ReceiverID'],
-        receiverMark: docSnapshot['ReceiverMark'],
-        senderID: docSnapshot['SenderID'],
-        senderMark: docSnapshot['SenderMark'],
-        quizID: docSnapshot['QuizID'],
-        challengeID: docSnapshot.id,
-        senderName: docSnapshot['SenderName'],
-        quizName: docSnapshot['QuizName'],
-        challengeStatus: docSnapshot['Status'],
-      );
-
-      return challenge;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error!!!!! - $e");
-      }
-    }
-    return null;
-  }
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
-
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
-
   //get Quiz based on category
   //This method gets quizzes from the Quiz Collection based on its category
   Future<List<Quiz>?> getQuizByCategory({String? category}) async {
@@ -360,7 +323,6 @@ class DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
-    late List<Friend> friends = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -374,7 +336,6 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
-          friends: friends,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -419,7 +380,6 @@ class DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
-    late List<Friend> friends = [];
 
     try {
       DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
@@ -433,7 +393,6 @@ class DatabaseService {
           bookmarkedQuizzes: bookmarks,
           pastAttemptQuizzes: pastAttempts,
           ratings: ratings,
-          friends: friends,
           uID: docSnapshot.id);
 
       QuerySnapshot collectionSnapshot =
@@ -563,8 +522,7 @@ class DatabaseService {
         totalQuizzes: docSnapshot['TotalQuizzes'],
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: [],
-        ratings: [],
-        friends: []);
+        ratings: []);
 
     return user;
   }
@@ -604,14 +562,6 @@ class DatabaseService {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------
   Future<void> rejectChallengeRequest({String? challengeID}) async {
-    await challengeCollection.doc(challengeID).update({
-      'Status': 'Rejected',
-    });
-  }
-
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------------------------------------------
-  Future<void> closeChallenge({String? challengeID}) async {
     await challengeCollection.doc(challengeID).update({
       'Status': 'Closed',
     });
@@ -682,185 +632,5 @@ class DatabaseService {
       });
     }
   }
-
-  //--------------------------------------------------------------------------------
-  Future<UserData?> getUserAndFriends({String? userID}) async {
-    //Past aatempt cpuld change to user
-    late List<PastAttempt> pastAttempts = [];
-    late List<Bookmarks> bookmarks = [];
-    late List<Rating> ratings = [];
-    late List<Friend> friends = [];
-
-    try {
-      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
-      UserData user = UserData(
-          //uid: docSnapshot['QuizName'],
-          userName: docSnapshot['Username'],
-          firstName: docSnapshot['FirstName'],
-          lastName: docSnapshot['LastName'],
-          totalScore: docSnapshot['TotalScore'],
-          totalQuizzes: docSnapshot['TotalQuizzes'],
-          bookmarkedQuizzes: bookmarks,
-          pastAttemptQuizzes: pastAttempts,
-          ratings: ratings,
-          friends: friends,
-          uID: docSnapshot.id);
-
-      QuerySnapshot collectionSnapshot =
-          await userCollection.doc(userID).collection('Friends').get();
-      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
-        var docSnapshot = collectionSnapshot.docs[i];
-
-        Friend friend = Friend(
-            userID: userID,
-            friendID: docSnapshot.id,
-            sender: docSnapshot['Sender'],
-            status: docSnapshot['Status'],
-            friendName: docSnapshot['FriendName']);
-
-        friends.add(friend);
-      }
-
-      // user.pastAttemptQuizzes
-      //     .sort((a, b) => a.pastAttemptQuizDatesAttempted[].compareTo(b.questionNumber));
-
-      return user;
-    } catch (e) {
-      if (kDebugMode) {
-        print("Error!!!!! - $e");
-      }
-    }
-    return null;
-  }
-
-  Future<bool> userExists(String? username) async {
-    QuerySnapshot querySnapshot =
-        await userCollection.where('Username', isEqualTo: username).get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      return true;
-    }
-
-    return false;
-  }
-
-  Future<String?> getMyUsername(String? myUserID) async {
-    DocumentSnapshot docSnapshot = await userCollection.doc(myUserID).get();
-    return docSnapshot['Username'];
-  }
-
-  Future<void> addFriend(
-      String? username, String? myUserID, String? myUsername) async {
-    QuerySnapshot querySnapshot =
-        await userCollection.where('Username', isEqualTo: username).get();
-
-    DocumentSnapshot docSnapshot = querySnapshot.docs.first;
-    String friendID = docSnapshot.id;
-
-    await userCollection
-        .doc(myUserID)
-        .collection('Friends')
-        .doc(friendID)
-        .set({'Status': 'pending', 'FriendName': username, 'Sender': myUserID});
-
-    await userCollection.doc(friendID).collection('Friends').doc(myUserID).set(
-        {'Status': 'pending', 'FriendName': myUsername, 'Sender': myUserID});
-  }
-
-  Future<bool> alreadyFriends(String? username, String? myUserID) async {
-    QuerySnapshot querySnapshot =
-        await userCollection.where('Username', isEqualTo: username).get();
-
-    DocumentSnapshot docSnapshot = querySnapshot.docs.first;
-    String friendID = docSnapshot.id;
-
-    DocumentSnapshot friendDocSnaphot = await userCollection
-        .doc(myUserID)
-        .collection('Friends')
-        .doc(friendID)
-        .get();
-
-    return friendDocSnaphot.exists;
-  }
-
-  Future<UserData?> getUserAndFriendRequests({String? userID}) async {
-    List<PastAttempt> pastAttempts = [];
-    List<Bookmarks> bookmarks = [];
-    List<Rating> ratings = [];
-    List<Friend> friends = [];
-
-    try {
-      DocumentSnapshot docSnapshot = await userCollection.doc(userID).get();
-      UserData user = UserData(
-        userName: docSnapshot['Username'],
-        firstName: docSnapshot['FirstName'],
-        lastName: docSnapshot['LastName'],
-        totalScore: docSnapshot['TotalScore'],
-        totalQuizzes: docSnapshot['TotalQuizzes'],
-        bookmarkedQuizzes: bookmarks,
-        pastAttemptQuizzes: pastAttempts,
-        ratings: ratings,
-        friends: friends,
-        uID: docSnapshot.id,
-      );
-
-      QuerySnapshot collectionSnapshot =
-          await userCollection.doc(userID).collection('Friends').get();
-      for (int i = 0; i < collectionSnapshot.docs.length; i++) {
-        DocumentSnapshot docFriendSnapshot = collectionSnapshot.docs[i];
-
-        if (docFriendSnapshot.id == userID) {
-          String friendName = docFriendSnapshot['FriendName'];
-
-          QuerySnapshot querySnapshot = await userCollection
-              .where('Username', isEqualTo: friendName)
-              .get();
-
-          if (querySnapshot.docs.isNotEmpty) {
-            DocumentSnapshot docSnapshot = querySnapshot.docs.first;
-            String friendID = docSnapshot.id;
-
-            Friend friend = Friend(
-              sender: friendID,
-              userID: userID,
-              friendID: friendID,
-              status: docSnapshot['Status'],
-              friendName: docSnapshot['FriendName'],
-            );
-
-            friends.add(friend);
-          }
-        }
-      }
-
-      return user;
-    } catch (e, stackTrace) {
-      if (kDebugMode) {
-        print("Error: $e");
-        print(stackTrace);
-      }
-    }
-    return null;
-  }
-
-  Future<void> acceptFriendRequest(
-      String? username, String? myUserID, String? myUsername) async {
-    QuerySnapshot querySnapshot =
-        await userCollection.where('Username', isEqualTo: username).get();
-
-    DocumentSnapshot docSnapshot = querySnapshot.docs.first;
-    String friendID = docSnapshot.id;
-
-    await userCollection
-        .doc(myUserID)
-        .collection('Friends')
-        .doc(friendID)
-        .update({'Status': 'accepted'});
-
-    await userCollection
-        .doc(friendID)
-        .collection('Friends')
-        .doc(myUserID)
-        .update({'Status': 'accepted'});
-  }
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
