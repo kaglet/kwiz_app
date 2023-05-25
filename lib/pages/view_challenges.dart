@@ -63,15 +63,27 @@ class ViewChallengesState extends State<ViewChallenges>
       print('Pending challenge ' + element.senderName);
     });
 
+    active.forEach((element) {
+      print('Active challenge ' + element.senderName);
+    });
+
+    closed.forEach((element) {
+      print('Closed challenge ' + element.senderName);
+    });
+
+    challenges.forEach((element) {
+      print('Sent challenge' + element.senderName);
+    });
+
     for (var i = 0; i < challenges.length; i++) {
       print(closed.elementAt(i).dateSent);
       // service.acceptChallengeRequest(
       //     challengeID: closed!.elementAt(i).challengeID);
     }
 
-    // pendingLength = pending.length;
-    // closedLength = closed.length;
-    // activeLength = active.length;
+    pendingLength = pending.length;
+    closedLength = closed.length;
+    activeLength = active.length;
 
     setState(() {
       _isLoading = false;
@@ -148,7 +160,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: pending.length,
+              itemCount: pendingLength,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
@@ -189,6 +201,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                       active.insert(
                                           0, pending.elementAt(index));
                                       pending.removeAt(index);
+                                      pendingLength = pending.length;
                                       print(pending.length);
                                     });
                                   },
@@ -230,7 +243,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                     setState(() {
                                       // filteredQuizzes!.removeAt(index);
                                       pending.removeAt(index);
-
+                                      pendingLength = pending.length;
                                       print(pending.length);
                                     });
                                   },
@@ -267,7 +280,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: active.length,
+              itemCount: activeLength,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
@@ -334,7 +347,7 @@ class ViewChallengesState extends State<ViewChallenges>
             flex: 1,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: closed.length,
+              itemCount: closedLength,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: SizedBox(
