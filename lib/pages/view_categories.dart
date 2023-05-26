@@ -85,7 +85,7 @@ class ViewCategoriesState extends State<ViewCategories> {
                 'Catalogue',
                 style: TextStyle(
                     fontFamily: 'TitanOne',
-                    fontSize: 45,
+                    fontSize: 30,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
