@@ -177,7 +177,7 @@ class DatabaseService {
       'ReceiverMark': newChallenge.receiverMark,
       'SenderID': newChallenge.senderID,
       'SenderMark': newChallenge.senderMark,
-      'SenderName': newChallenge.dateCompleted,
+      'SenderName': newChallenge.senderName,
       'Status': newChallenge.challengeStatus
     });
   }

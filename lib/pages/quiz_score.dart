@@ -45,7 +45,7 @@ class QuizScoreState extends State<QuizScore> {
   List<dynamic>? _displayedItems = [];
   int fillLength = 0;
 
-  String username = '';
+  late String username = '';
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
@@ -112,8 +112,6 @@ class QuizScoreState extends State<QuizScore> {
               senderName: username, 
               quizName: widget.chosenQuiz!.quizName, 
               challengeStatus: 'Pending');
-
-
 
 
     DatabaseService service = DatabaseService();
@@ -544,7 +542,7 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        print(_displayedItems?[0].friendName);
+                                         print(username);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -569,6 +567,8 @@ class QuizScoreState extends State<QuizScore> {
                                                               onPressed: () {
                                                                
                                                                 addChallenge(_displayedItems?[index].friendID);
+                                                            
+                                                               
                                                               },
                                                               child: Text('Challenge'),
                                                             ),
