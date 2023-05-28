@@ -166,7 +166,7 @@ class DatabaseService {
     return challenges;
   }
 
-
+//Random comment
   Future<void> addChallenge(Challenge newChallenge) async {
     await challengeCollection.add({
       'DateCompleted': newChallenge.dateCompleted,

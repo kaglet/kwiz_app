@@ -17,28 +17,28 @@ class ViewChallenges extends StatefulWidget {
 class ViewChallengesState extends State<ViewChallenges>
 with SingleTickerProviderStateMixin<ViewChallenges>{
   late TabController _tabController;
-  List<Challenge> challenges = [];
-  List<Challenge> pending = [];
+  List? challenges = [];
+  List? pending = [];
   int pendingLength = 0;
   int activeLength = 0;
   int closedLength = 0;
   int sentLength = 0;
-  List<Challenge> active = [];
-  List<Challenge> closed = [];
-  List<Challenge> sent = [];
+  List? active = [];
+  List? closed = [];
+  List? sent = [];
   late bool _isLoading;
 
 
   Future<void> rejectChallenge(int index) async {
     DatabaseService service = DatabaseService();
     await service.rejectChallengeRequest(
-        challengeID: pending.elementAt(index).challengeID);
+        challengeID: pending!.elementAt(index).challengeID);
   }
 
   Future<void> acceptChallenge(int index) async {
     DatabaseService service = DatabaseService();
     await service.acceptChallengeRequest(
-        challengeID: pending.elementAt(index).challengeID);
+        challengeID: pending!.elementAt(index).challengeID);
   }
 
   Future<void> loaddata() async {
@@ -47,13 +47,13 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
     });
     DatabaseService service = DatabaseService();
     challenges = (await service.getAllChallenges())!;
-    pending = challenges
+    pending = challenges!
         .where((challenge) => challenge.challengeStatus == 'Pending')
         .toList();
-    active = challenges
+    active = challenges!
         .where((challenge) => challenge.challengeStatus == 'Active')
         .toList();
-    closed = challenges
+    closed = challenges!
         .where((challenge) => challenge.challengeStatus == 'Closed')
         .toList();
 
@@ -99,10 +99,10 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
     super.initState();
     loaddata().then((value) {
       setState(() {
-    pendingLength = pending.length;
-    closedLength = closed.length;
-    activeLength = active.length;
-    sentLength = challenges.length;
+    pendingLength = pending!.length;
+    closedLength = closed!.length;
+    activeLength = active!.length;
+    sentLength = challenges!.length;
     print('Sent length: ${sentLength}');
         
       });
@@ -110,10 +110,10 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
     _tabController = TabController(length: 4, vsync: this);
     _tabController.animateTo(0);
     _tabController.addListener(() { setState(() {
-    pendingLength = pending.length;
-    closedLength = closed.length;
-    activeLength = active.length;
-    sentLength = challenges.length;
+    pendingLength = pending!.length;
+    closedLength = closed!.length;
+    activeLength = active!.length;
+    sentLength = challenges!.length;
     print('Sent length: ${sentLength}');
     });});
   }
@@ -205,7 +205,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          Text('${pending[index].senderName} challenges you to the ${pending[index].quizName} quiz!',
+                          Text('${pending![index].senderName} challenges you to the ${pending![index].quizName} quiz!',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
@@ -226,11 +226,11 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                   // Refresh the list of displayed items
           
                                   setState(() {
-                                    active.insert(
-                                        0, pending.elementAt(index));
-                                    pending.removeAt(index);
-                                    pendingLength = pending.length;
-                                    print(pending.length);
+                                    active!.insert(
+                                        0, pending!.elementAt(index));
+                                    pending!.removeAt(index);
+                                    pendingLength = pending!.length;
+                                    print(pending!.length);
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -267,9 +267,9 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
           
                                   setState(() {
                                     // filteredQuizzes!.removeAt(index);
-                                    pending.removeAt(index);
-                                    pendingLength = pending.length;
-                                    print(pending.length);
+                                    pending!.removeAt(index);
+                                    pendingLength = pending!.length;
+                                    print(pending!.length);
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -323,7 +323,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                           Text('${active[index].quizName} quiz challenge vs ${active[index].senderName}!',
+                           Text('${active![index].quizName} quiz challenge vs ${active![index].senderName}!',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
@@ -390,7 +390,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: [
-                          Text('Completed ${closed[index].quizName} quiz challenge vs ${closed[index].senderName}!',
+                          Text('Completed ${closed![index].quizName} quiz challenge vs ${closed![index].senderName}!',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
@@ -407,9 +407,9 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                               child: ElevatedButton(
                                 onPressed: () async {
                                 String result = '';
-                                if(closed[index].receiverMark! > closed[index].senderMark!){
+                                if(closed![index].receiverMark! > closed![index].senderMark!){
                                   result = 'Victory';
-                                }else if(closed[index].receiverMark == closed[index].senderMark){
+                                }else if(closed![index].receiverMark == closed![index].senderMark){
                                   result = 'Draw';
                                 }else{
                                   result = 'Defeat';
@@ -459,7 +459,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                                     const SizedBox(
                                                         height: 15.0),
                                                     Text(
-                                                      'Challenge: ${closed[index].quizName} quiz',
+                                                      'Challenge: ${closed![index].quizName} quiz',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 13.0,
@@ -472,7 +472,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                                     const SizedBox(
                                                         height: 15.0),
                                                     Text(
-                                                      'Your mark: ${closed[index].receiverMark}',
+                                                      'Your mark: ${closed![index].receiverMark}',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 13.0,
@@ -485,7 +485,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                                     const SizedBox(
                                                         height: 15.0),
                                                      Text(
-                                                      'Challengers mark: ${closed[index].senderMark}',
+                                                      'Challengers mark: ${closed![index].senderMark}',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 13.0,
@@ -498,7 +498,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                                     const SizedBox(
                                                         height: 15.0),
                                                     Text(
-                                                      'Date Sent: ${closed[index].dateSent}',
+                                                      'Date Sent: ${closed![index].dateSent}',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 13.0,
@@ -511,7 +511,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                                                     const SizedBox(
                                                         height: 15.0),
                                                     Text(
-                                                      'Date Completed: ${closed[index].dateCompleted}',
+                                                      'Date Completed: ${closed![index].dateCompleted}',
                                                       style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 13.0,
@@ -645,15 +645,15 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Text('${challenges[index].quizName} quiz challenge sent.',
+                            Text('${challenges![index].quizName} quiz challenge sent.',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
-                             Text('Date sent: ${challenges[index].dateSent}',
+                             Text('Date sent: ${challenges![index].dateSent}',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
-                            Text('Challenge status: ${challenges[index].challengeStatus}',
+                            Text('Challenge status: ${challenges![index].challengeStatus}',
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Nunito')),
