@@ -166,6 +166,25 @@ class DatabaseService {
     return challenges;
   }
 
+<<<<<<< HEAD
+=======
+//Random comment
+  Future<void> addChallenge(Challenge newChallenge) async {
+    await challengeCollection.add({
+      'DateCompleted': newChallenge.dateCompleted,
+      'DateSent': newChallenge.dateSent,
+      'QuizID': newChallenge.quizID,
+      'QuizName': newChallenge.quizName,
+      'ReceiverID': newChallenge.receiverID,
+      'ReceiverMark': newChallenge.receiverMark,
+      'SenderID': newChallenge.senderID,
+      'SenderMark': newChallenge.senderMark,
+      'SenderName': newChallenge.senderName,
+      'Status': newChallenge.challengeStatus
+    });
+  }
+
+>>>>>>> fa9ec43f360c465b3ef2dbe664c1e1a6f9929b5a
   //--------------------------
   //
   ////-----------------------------------------------------------------------------------------------------------------------------------------------------
