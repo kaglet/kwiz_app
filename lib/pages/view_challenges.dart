@@ -56,6 +56,8 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
     closed = challenges
         .where((challenge) => challenge.challengeStatus == 'Closed')
         .toList();
+
+    
     // not just the rejected but the all the challenges the current sender has sent
 
     // print(widget.user.uid);
