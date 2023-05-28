@@ -2,6 +2,7 @@
 // coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/classes/rating_ui.dart';
+import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/shared/loading.dart';
