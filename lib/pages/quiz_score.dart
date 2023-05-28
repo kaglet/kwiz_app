@@ -35,6 +35,16 @@ class QuizScoreState extends State<QuizScore> {
   late int _rating;
   //---------------------------------------
   late UserData userData;
+  late OurUser user = widget.user!;
+  late UserData userFriends;
+  List<dynamic>? friendsList = [];
+  int friendsListLength = 0;
+  List<dynamic>? friends = [];
+  int friendsLength = 0;
+  List<dynamic>? _displayedItems = [];
+  int fillLength = 0;
+
+  late String username = '';
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
@@ -70,6 +80,31 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  Future<void> addChallenge(String friendID) async {
+    Challenge newChallenge = Challenge(
+        quizID: quizID,
+        dateSent: DateTime.now().toString().substring(0, 16),
+        dateCompleted: "",
+        receiverID: friendID,
+        senderID: userID,
+        receiverMark: 0,
+        senderMark: score,
+        challengeID: null,
+        senderName: username,
+        quizName: widget.chosenQuiz!.quizName,
+        challengeStatus: 'Pending');
+
+    DatabaseService service = DatabaseService();
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    await service.addChallenge(newChallenge);
+    // setState(() {
+    //   _isLoading = false;
+    // });
+  }
+
+  /// This function adds the user's rating to the global rating of a quiz in a database.
   Future<void> addToGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -437,6 +472,103 @@ class QuizScoreState extends State<QuizScore> {
                                     }),
                                   ),
                                 ),
+
+                                //challenge a friend button
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color.fromARGB(255, 60, 44, 167),
+                                          Colors.deepOrange
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: Colors.transparent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        textStyle: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.normal),
+                                      ),
+                                      //This event takes us to the take_quiz screen
+                                      onPressed: () {
+                                        print(username);
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text('Friend List'),
+                                              content: Container(
+                                                width: double.maxFinite,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        itemCount: fillLength,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          //final String name = friends![index];
+                                                          return ListTile(
+                                                            title: Text(
+                                                              _displayedItems?[
+                                                                      index]
+                                                                  .friendName,
+                                                            ),
+                                                            trailing:
+                                                                ElevatedButton(
+                                                              onPressed: () {
+                                                                addChallenge(
+                                                                    _displayedItems?[
+                                                                            index]
+                                                                        .friendID);
+                                                              },
+                                                              child: Text(
+                                                                  'Challenge'),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+
+                                      child: const Text(
+                                        'Challenge a friend!',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Nunito',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                //to add spaces between the two buttons
+
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                //Finish review button
                                 SizedBox(
                                   width: double.infinity,
                                   height: 50,

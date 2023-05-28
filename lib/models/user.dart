@@ -6,7 +6,7 @@ import '../models/friend.dart';
 class OurUser {
   final String? uid;
 
-  OurUser({required this.uid});
+  OurUser({required this.uid});   //random comment
 }
 
 class UserData {
