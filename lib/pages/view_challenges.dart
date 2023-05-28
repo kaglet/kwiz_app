@@ -13,7 +13,7 @@ class ViewChallenges extends StatefulWidget {
 }
 
 class ViewChallengesState extends State<ViewChallenges>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   List<Challenge> challenges = [];
   List<Challenge> pending = [];
@@ -60,7 +60,17 @@ class ViewChallengesState extends State<ViewChallenges>
     super.initState();
     loaddata();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      setState(() {});
+    });
     _tabController.animateTo(0);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+
+    super.dispose();
   }
 
   @override
