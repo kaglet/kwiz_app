@@ -35,6 +35,14 @@ class QuizScoreState extends State<QuizScore> {
   late int _rating;
   //---------------------------------------
   late UserData userData;
+  late UserData userFriends;
+  List<dynamic>? friendsList = [];
+  int friendsListLength = 0;
+  List<dynamic>? friends = [];
+  int friendsLength = 0;
+  List<dynamic>? _displayedItems = [];
+  int fillLength = 0;
+
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
@@ -51,22 +59,22 @@ class QuizScoreState extends State<QuizScore> {
   late int numQuestions;
 
 
-    final List<String> names = [
-    'John',
-    'Jane',
-    'Alice',
-    'Bob',
-    'Eve',
-    'Michael',
-    'Sarah',
-        'a',
-    'c',
-    's',
-    'd',
-    'f',
-    'g',
-    'p',
-  ];
+  //   final List<String> names = [
+  //   'John',
+  //   'Jane',
+  //   'Alice',
+  //   'Bob',
+  //   'Eve',
+  //   'Michael',
+  //   'Sarah',
+  //       'a',
+  //   'c',
+  //   's',
+  //   'd',
+  //   'f',
+  //   'g',
+  //   'p',
+  // ];
 
   Future<void> createRating() async {
     setState(() {
@@ -217,6 +225,19 @@ class QuizScoreState extends State<QuizScore> {
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    userFriends = (await service.getUserAndFriends(userID: widget.user.uid))!;
+    friendsList = userFriends.friends;
+    friendsListLength = friendsList!.length;
+    for (int i = 0; i < friendsListLength; i++) {
+      if (friendsList![i].status != 'pending') {
+        friends!.add(friendsList?[i]);
+      }
+    }
+    friendsLength = friends!.length;
+    _displayedItems = friends;
+    fillLength = _displayedItems!.length;
+    print(friends);
+
     userID = userData.uID!;
     _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
@@ -239,6 +260,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   void initState() {
     super.initState();
+    _displayedItems = friends;
     // do database stuff here and pass into loaddata function to populate page
     //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
@@ -490,6 +512,7 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
+                                        print(_displayedItems?[0].friendName);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
@@ -503,15 +526,17 @@ class QuizScoreState extends State<QuizScore> {
                                                       ListView.builder(
                                                         shrinkWrap: true,
                                                         physics: NeverScrollableScrollPhysics(),
-                                                        itemCount: names.length,
+                                                        itemCount: fillLength,
                                                         itemBuilder: (context, index) {
-                                                          final String name = names[index];
+                                                          //final String name = friends![index];
                                                           return ListTile(
-                                                            title: Text(name),
+                                                            title: Text(
+                                                              _displayedItems?[index].friendName,
+                                                            ),
                                                             trailing: ElevatedButton(
                                                               onPressed: () {
                                                                 // Perform action on button press
-                                                                print('Button pressed for $name');
+                                                                //print('Button pressed for $name');
                                                                 //Navigator.pop(context);
                                                               },
                                                               child: Text('Challenge'),

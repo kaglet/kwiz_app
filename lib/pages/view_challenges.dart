@@ -1,5 +1,5 @@
 // coverage:ignore-start
-import 'dart:js_util';
+//import 'dart:js_util';
 
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/challenges.dart';
