@@ -103,10 +103,10 @@ class QuizScoreState extends State<QuizScore> {
      Challenge newChallenge = Challenge(
               quizID: quizID, 
               dateSent:  DateTime.now().toString().substring(0, 16), 
-              dateCompleted: null, 
+              dateCompleted: "", 
               receiverID: friendID, 
               senderID: userID, 
-              receiverMark: null, 
+              receiverMark: 0, 
               senderMark: score, 
               challengeID: null, 
               senderName: username, 
