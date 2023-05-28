@@ -90,7 +90,7 @@ class QuizScoreState extends State<QuizScore> {
         senderID: userID,
         receiverMark: 0,
         senderMark: score,
-        challengeID: null,
+        challengeID: "",
         senderName: username,
         quizName: widget.chosenQuiz!.quizName,
         challengeStatus: 'Pending');

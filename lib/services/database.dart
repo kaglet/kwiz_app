@@ -166,8 +166,6 @@ class DatabaseService {
     return challenges;
   }
 
-<<<<<<< HEAD
-=======
 //Random comment
   Future<void> addChallenge(Challenge newChallenge) async {
     await challengeCollection.add({
@@ -184,7 +182,6 @@ class DatabaseService {
     });
   }
 
->>>>>>> fa9ec43f360c465b3ef2dbe664c1e1a6f9929b5a
   //--------------------------
   //
   ////-----------------------------------------------------------------------------------------------------------------------------------------------------
