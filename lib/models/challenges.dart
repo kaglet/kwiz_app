@@ -5,9 +5,9 @@ class Challenge {
   final String dateCompleted;
   final String receiverID;
   final String senderID;
-  final int receiverMark;
+  final int? receiverMark;
   final int senderMark;
-  final String challengeID;
+  final String? challengeID;
   final String senderName;
   final String quizName;
   final String challengeStatus;

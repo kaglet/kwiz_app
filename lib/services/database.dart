@@ -139,7 +139,7 @@ class DatabaseService {
   //--------------------------
   //
 
-  //get all Quizzes
+  //get all Challenges
   //This method gets all the challenges from the Challenges Collection and retruns them as a list of Challenge objects
   Future<List<Challenge>?> getAllChallenges() async {
     List<Challenge> challenges = [];
@@ -164,6 +164,22 @@ class DatabaseService {
       challenges.add(challenge);
     }
     return challenges;
+  }
+
+
+  Future<void> addChallenge(Challenge newChallenge) async {
+    await challengeCollection.add({
+      'DateCompleted': newChallenge.dateCompleted,
+      'DateSent': newChallenge.dateSent,
+      'QuizID': newChallenge.quizID,
+      'QuizName': newChallenge.quizName,
+      'ReceiverID': newChallenge.receiverID,
+      'ReceiverMark': newChallenge.receiverMark,
+      'SenderID': newChallenge.senderID,
+      'SenderMark': newChallenge.senderMark,
+      'SenderName': newChallenge.dateCompleted,
+      'Status': newChallenge.challengeStatus
+    });
   }
 
   //--------------------------

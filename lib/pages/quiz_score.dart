@@ -2,6 +2,7 @@
 // coverage:ignore-start
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/classes/rating_ui.dart';
+import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/pastAttempt.dart';
 import 'package:kwiz_v2/pages/home.dart';
 import 'package:kwiz_v2/shared/loading.dart';
@@ -86,6 +87,33 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = false;
     });
     //Navigator.popUntil(context, (route) => route.isFirst);
+  }
+
+  Future<void> addChallenge(Challenge newChallenge) async {
+     Challenge newChallenge = Challenge(
+              quizID: quizID, 
+              dateSent:  DateTime.now().toString().substring(0, 16), 
+              dateCompleted: null, 
+              receiverID: receiverID, 
+              senderID: userID, 
+              receiverMark: null, 
+              senderMark: score, 
+              challengeID: null, 
+              senderName: userData.userName, 
+              quizName: widget.chosenQuiz!.quizName, 
+              challengeStatus: 'Pending')
+
+
+
+
+    DatabaseService service = DatabaseService();
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    await service.addChallenge(newChallenge);
+    // setState(() {
+    //   _isLoading = false;
+    // });
   }
 
 /// This function adds the user's rating to the global rating of a quiz in a database.
@@ -510,9 +538,8 @@ class QuizScoreState extends State<QuizScore> {
                                                             title: Text(name),
                                                             trailing: ElevatedButton(
                                                               onPressed: () {
-                                                                // Perform action on button press
-                                                                print('Button pressed for $name');
-                                                                //Navigator.pop(context);
+                                                               
+                                                                addChallenge(newChallenge);
                                                               },
                                                               child: Text('Challenge'),
                                                             ),
