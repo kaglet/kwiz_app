@@ -36,6 +36,7 @@ class QuizScoreState extends State<QuizScore> {
   late int _rating;
   //---------------------------------------
   late UserData userData;
+  late OurUser user = widget.user!;
   late UserData userFriends;
   List<dynamic>? friendsList = [];
   int friendsListLength = 0;
@@ -44,6 +45,7 @@ class QuizScoreState extends State<QuizScore> {
   List<dynamic>? _displayedItems = [];
   int fillLength = 0;
 
+  String username = '';
   late String quizID = widget.chosenQuiz!.quizID;
   bool isfirstAttempt = true;
   late int score = widget.score;
@@ -97,19 +99,19 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  Future<void> addChallenge(Challenge newChallenge) async {
+  Future<void> addChallenge(String friendID) async {
      Challenge newChallenge = Challenge(
               quizID: quizID, 
               dateSent:  DateTime.now().toString().substring(0, 16), 
               dateCompleted: null, 
-              receiverID: receiverID, 
+              receiverID: friendID, 
               senderID: userID, 
               receiverMark: null, 
               senderMark: score, 
               challengeID: null, 
-              senderName: userData.userName, 
+              senderName: username, 
               quizName: widget.chosenQuiz!.quizName, 
-              challengeStatus: 'Pending')
+              challengeStatus: 'Pending');
 
 
 
@@ -254,6 +256,8 @@ class QuizScoreState extends State<QuizScore> {
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
     userFriends = (await service.getUserAndFriends(userID: widget.user.uid))!;
+    username = (await service.getMyUsername(widget.user.uid))!;
+    print(username);
     friendsList = userFriends.friends;
     friendsListLength = friendsList!.length;
     for (int i = 0; i < friendsListLength; i++) {
@@ -564,7 +568,7 @@ class QuizScoreState extends State<QuizScore> {
                                                             trailing: ElevatedButton(
                                                               onPressed: () {
                                                                
-                                                                addChallenge(newChallenge);
+                                                                addChallenge(_displayedItems?[index].friendID);
                                                               },
                                                               child: Text('Challenge'),
                                                             ),

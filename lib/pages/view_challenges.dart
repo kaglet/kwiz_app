@@ -405,7 +405,7 @@ with SingleTickerProviderStateMixin<ViewChallenges>{
                               child: ElevatedButton(
                                 onPressed: () async {
                                 String result = '';
-                                if(closed[index].receiverMark > closed[index].senderMark){
+                                if(closed[index].receiverMark! > closed[index].senderMark!){
                                   result = 'Victory';
                                 }else if(closed[index].receiverMark == closed[index].senderMark){
                                   result = 'Draw';
