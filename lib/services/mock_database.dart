@@ -12,6 +12,7 @@ import '../models/bookmarks.dart';
 import '../models/pastAttempt.dart';
 import '../models/quizzes.dart';
 import '../models/user.dart';
+import '../models/friend.dart';
 
 const CategoryCollection = 'categories';
 const UserCollection = 'users';
@@ -254,6 +255,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(userID).set({
       'FirstName': "Test",
@@ -292,6 +294,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     QuerySnapshot collectionSnapshot = await firestore
@@ -329,6 +332,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(userID).set({
       'FirstName': "Test",
@@ -364,6 +368,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     QuerySnapshot collectionSnapshot = await firestore
@@ -394,6 +399,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(userID).set({
       'FirstName': "Test",
@@ -430,6 +436,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     QuerySnapshot collectionSnapshot = await firestore
@@ -460,6 +467,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(userID).set({
       'FirstName': "Test",
@@ -506,6 +514,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     QuerySnapshot collectionSnapshot = await firestore
@@ -536,6 +545,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(uid).set({
       'FirstName': "Test",
@@ -557,6 +567,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     return user;
@@ -569,6 +580,7 @@ class MockDataService extends Mock implements DatabaseService {
     late List<PastAttempt> pastAttempts = [];
     late List<Bookmarks> bookmarks = [];
     late List<Rating> ratings = [];
+    late List<Friend> friends = [];
 
     await firestore.collection(UserCollection).doc(ourUserInstance.uid).set({
       'FirstName': userInstance.firstName,
@@ -592,6 +604,7 @@ class MockDataService extends Mock implements DatabaseService {
         bookmarkedQuizzes: bookmarks,
         pastAttemptQuizzes: pastAttempts,
         ratings: ratings,
+        friends: friends,
         uID: docSnapshot.id);
 
     return user;

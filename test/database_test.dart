@@ -127,8 +127,7 @@ void main() {
         totalQuizzes: 0,
         bookmarkedQuizzes: [],
         pastAttemptQuizzes: [],
-        ratings: [],
-        friends: []);
+        ratings: []);
 
     final UserData? userData = await service.addUser(userDataIn, ourUser);
 
