@@ -85,18 +85,19 @@ class QuizScoreState extends State<QuizScore> {
   }
 
   Future<void> addChallenge(String friendID) async {
-    Challenge newChallenge = Challenge(
-        quizID: quizID,
-        dateSent: DateTime.now().toString().substring(0, 16),
-        dateCompleted: "",
-        receiverID: friendID,
-        senderID: userID,
-        receiverMark: 0,
-        senderMark: score,
-        challengeID: "",
-        senderName: username,
-        quizName: widget.chosenQuiz!.quizName,
-        challengeStatus: 'Pending');
+     Challenge newChallenge = Challenge(
+              quizID: quizID, 
+              dateSent:  DateTime.now().toString().substring(0, 16), 
+              dateCompleted: "", 
+              receiverID: friendID, 
+              senderID: userID, 
+              receiverMark: 0, 
+              senderMark: score, 
+              challengeID: "", 
+              senderName: username, 
+              quizName: widget.chosenQuiz!.quizName, 
+              challengeStatus: 'Pending');
+
 
     DatabaseService service = DatabaseService();
     // setState(() {
@@ -144,6 +145,7 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+/// This function updates the global rating of a quiz in a database.
   Future<void> updateGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -255,6 +257,21 @@ class QuizScoreState extends State<QuizScore> {
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    userFriends = (await service.getUserAndFriends(userID: widget.user.uid))!;
+    username = (await service.getMyUsername(widget.user.uid))!;
+    print(username);
+    friendsList = userFriends.friends;
+    friendsListLength = friendsList!.length;
+    for (int i = 0; i < friendsListLength; i++) {
+      if (friendsList![i].status != 'pending') {
+        friends!.add(friendsList?[i]);
+      }
+    }
+    friendsLength = friends!.length;
+    _displayedItems = friends;
+    fillLength = _displayedItems!.length;
+    print(friends);
+
     userID = userData.uID!;
     _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
@@ -277,6 +294,7 @@ class QuizScoreState extends State<QuizScore> {
   @override
   void initState() {
     super.initState();
+    _displayedItems = friends;
     // do database stuff here and pass into loaddata function to populate page
     //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
@@ -399,6 +417,7 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ]),
                                 ),
+                                
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -527,47 +546,67 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        print(username);
+                                         print(username);
+                                         print(_displayedItems?[0].friendName);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Friend List'),
-                                              content: Container(
-                                                width: double.maxFinite,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: [
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            NeverScrollableScrollPhysics(),
-                                                        itemCount: fillLength,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          //final String name = friends![index];
-                                                          return ListTile(
-                                                            title: Text(
-                                                              _displayedItems?[
-                                                                      index]
-                                                                  .friendName,
-                                                            ),
-                                                            trailing:
-                                                                ElevatedButton(
-                                                              onPressed: () {
-                                                                addChallenge(
-                                                                    _displayedItems?[
-                                                                            index]
-                                                                        .friendID);
-                                                              },
-                                                              child: Text(
-                                                                  'Challenge'),
-                                                            ),
-                                                          );
-                                                        },
+                                            return Dialog(
+                                              backgroundColor: Color.fromARGB(255, 14, 52, 113),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.all(16),
+                                                      child: Text(
+                                                        'Friend List',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.amber,
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        children: [
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            physics: NeverScrollableScrollPhysics(),
+                                                            itemCount: fillLength,
+                                                            itemBuilder: (context, index) {
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  _displayedItems?[index].friendName,
+                                                                  style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
+                                                                trailing: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    addChallenge(_displayedItems?[index].friendID);
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    primary: Colors.deepOrange,
+                                                                    onPrimary: Colors.white,
+                                                                  ),
+                                                                  child: Text('Challenge'),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             );

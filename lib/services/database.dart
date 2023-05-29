@@ -139,7 +139,7 @@ class DatabaseService {
   //--------------------------
   //
 
-  //get all Quizzes
+  //get all Challenges
   //This method gets all the challenges from the Challenges Collection and retruns them as a list of Challenge objects
   Future<List<Challenge>?> getAllChallenges() async {
     List<Challenge> challenges = [];
@@ -166,7 +166,7 @@ class DatabaseService {
     return challenges;
   }
 
-//Random comment
+
   Future<void> addChallenge(Challenge newChallenge) async {
     await challengeCollection.add({
       'DateCompleted': newChallenge.dateCompleted,
