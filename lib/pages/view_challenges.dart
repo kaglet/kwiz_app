@@ -6,6 +6,8 @@ import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/database.dart';
 
+import 'start_quiz.dart';
+
 class ViewChallenges extends StatefulWidget {
   final OurUser user;
 
@@ -336,7 +338,18 @@ class ViewChallengesState extends State<ViewChallenges>
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: ElevatedButton(
-                                onPressed: () async {},
+                                onPressed: () async {
+                                   Navigator.push(context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => StartQuiz(
+                                                      user:
+                                                          widget.user,
+                                                      chosenQuiz: active![index].quizID, challID: active![index].challengeID ),
+                                                ),
+                                              );
+
+
+                                },
                                 style: ElevatedButton.styleFrom(
                                   elevation: 0,
                                   backgroundColor: Colors.transparent,

@@ -182,6 +182,15 @@ class DatabaseService {
     });
   }
 
+    Future<void> updateChallenge(Challenge updateChallenge) async {
+    await challengeCollection.doc(updateChallenge.challengeID).update({
+      'DateCompleted': updateChallenge.dateCompleted,
+      'ReceiverMark': updateChallenge.receiverMark,
+      'Status': updateChallenge.challengeStatus
+
+    });
+  }
+
   //--------------------------
   //
   ////-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +294,7 @@ class DatabaseService {
   //get all Quiz and Questions
   //This method gets the selected quiz from the Quiz Collection and its subcollection of questions and retruns a quiz object with a list of ordered questions
   Future<Challenge?> getChallengeForReview({String? challengeID}) async {
-    late List<Question> questions = [];
+    // late List<Question> questions = [];
 
     try {
       DocumentSnapshot docSnapshot =

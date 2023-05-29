@@ -17,6 +17,7 @@ class QuizScore extends StatefulWidget {
   final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
+  final String challID;
   final List answers;
   const QuizScore(
       {super.key,
@@ -24,6 +25,7 @@ class QuizScore extends StatefulWidget {
       required this.score,
       required this.userAnswers,
       required this.answers,
+      required this.challID,
       required this.user});
   @override
   QuizScoreState createState() => QuizScoreState();
@@ -34,6 +36,7 @@ class QuizScoreState extends State<QuizScore> {
   late int? oldRating;
   late bool _ratingAlreadyExists;
   late int _rating;
+  late String challID = widget.challID;
   //---------------------------------------
   late UserData userData;
   late OurUser user = widget.user!;
@@ -103,6 +106,19 @@ class QuizScoreState extends State<QuizScore> {
     // setState(() {
     //   _isLoading = false;
     // });
+  }
+
+  Future<void> updateChallenge(String challID) async {
+     DatabaseService service = DatabaseService();
+    Challenge? currChallenge = await service.getChallengeForReview(challengeID: challID);
+    currChallenge?.dateCompleted = DateTime.now().toString().substring(0, 16);
+    currChallenge?.receiverMark = score;
+    currChallenge?.challengeStatus = "Closed";
+
+    await service.updateChallenge(currChallenge!);
+    
+    
+    
   }
 
   /// This function adds the user's rating to the global rating of a quiz in a database.
@@ -260,6 +276,11 @@ class QuizScoreState extends State<QuizScore> {
     loaddata().then((value) {
       setState(() {});
     });
+
+    if (challID != "None"){
+      updateChallenge(challID);
+    }
+
   }
 
 //Used to control the Circular Progress indicator
