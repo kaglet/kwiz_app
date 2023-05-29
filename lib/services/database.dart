@@ -879,4 +879,26 @@ class DatabaseService {
         .doc(myUserID)
         .update({'Status': 'accepted'});
   }
+
+  Future<void> removeFriend(String? friendUsername, String? myUserID) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: friendUsername).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+      String friendID = docSnapshot.id;
+
+      await userCollection
+          .doc(myUserID)
+          .collection('Friends')
+          .doc(friendID)
+          .delete();
+
+      await userCollection
+          .doc(friendID)
+          .collection('Friends')
+          .doc(myUserID)
+          .delete();
+    }
+  }
 }
