@@ -11,7 +11,8 @@ class StartQuiz extends StatefulWidget {
   //This global variable will be passed onto the take_quiz screen
   final OurUser user;
   final String chosenQuiz;
-  const StartQuiz({super.key, required this.chosenQuiz, required this.user});
+  final String challID;
+  const StartQuiz({super.key, required this.chosenQuiz,required this.challID, required this.user});
   @override
   StartQuizState createState() => StartQuizState();
 }
