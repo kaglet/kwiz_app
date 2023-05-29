@@ -109,16 +109,22 @@ class QuizScoreState extends State<QuizScore> {
   }
 
   Future<void> updateChallenge(String challID) async {
-     DatabaseService service = DatabaseService();
-    Challenge? currChallenge = await service.getChallengeForReview(challengeID: challID);
+    setState(() {
+      _isLoading = true;
+    });
+    DatabaseService service = DatabaseService();
+    Challenge? currChallenge =
+        await service.getChallengeForReview(challengeID: challID);
+    print(currChallenge?.challengeStatus);
+
     currChallenge?.dateCompleted = DateTime.now().toString().substring(0, 16);
     currChallenge?.receiverMark = score;
     currChallenge?.challengeStatus = "Closed";
 
     await service.updateChallenge(currChallenge!);
-    
-    
-    
+     setState(() {
+      _isLoading = false;
+    });
   }
 
   /// This function adds the user's rating to the global rating of a quiz in a database.
@@ -276,11 +282,6 @@ class QuizScoreState extends State<QuizScore> {
     loaddata().then((value) {
       setState(() {});
     });
-
-    if (challID != "None"){
-      updateChallenge(challID);
-    }
-
   }
 
 //Used to control the Circular Progress indicator
@@ -621,6 +622,10 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
+                                        if (challID != "None") {
+                                          updateChallenge(challID);
+                                        }
+
                                         if (userData
                                             .pastAttemptQuizzes.isEmpty) {
                                           isfirstAttempt = true;

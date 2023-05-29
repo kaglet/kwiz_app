@@ -298,7 +298,7 @@ class DatabaseService {
 
     try {
       DocumentSnapshot docSnapshot =
-          await quizCollection.doc(challengeID).get();
+          await challengeCollection.doc(challengeID).get();
       Challenge challenge = Challenge(
         dateCompleted: docSnapshot['DateCompleted'],
         dateSent: docSnapshot['DateSent'],
