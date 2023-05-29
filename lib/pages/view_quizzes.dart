@@ -431,7 +431,7 @@ class _ViewQuizzesState extends State<ViewQuizzes> {
                                                               filteredQuizzes!
                                                                   .elementAt(
                                                                       index)
-                                                                  .quizID, challID: "None"
+                                                                  .quizID, challID: 'None'
                                                         ),
                                                       ),
                                                     );

@@ -17,6 +17,7 @@ class QuizScore extends StatefulWidget {
   final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
+  final String challID;
   final List answers;
   const QuizScore(
       {super.key,
@@ -24,6 +25,7 @@ class QuizScore extends StatefulWidget {
       required this.score,
       required this.userAnswers,
       required this.answers,
+      required this.challID,
       required this.user});
   @override
   QuizScoreState createState() => QuizScoreState();
@@ -34,6 +36,7 @@ class QuizScoreState extends State<QuizScore> {
   late int? oldRating;
   late bool _ratingAlreadyExists;
   late int _rating;
+  late String challID = widget.challID;
   //---------------------------------------
   late UserData userData;
   late OurUser user = widget.user!;
@@ -60,24 +63,6 @@ class QuizScoreState extends State<QuizScore> {
   late int totalQuizzes;
   late double totalScore;
   late int numQuestions;
-
-
-  //   final List<String> names = [
-  //   'John',
-  //   'Jane',
-  //   'Alice',
-  //   'Bob',
-  //   'Eve',
-  //   'Michael',
-  //   'Sarah',
-  //       'a',
-  //   'c',
-  //   's',
-  //   'd',
-  //   'f',
-  //   'g',
-  //   'p',
-  // ];
 
   Future<void> createRating() async {
     setState(() {
@@ -124,7 +109,18 @@ class QuizScoreState extends State<QuizScore> {
     // });
   }
 
-/// This function adds the user's rating to the global rating of a quiz in a database.
+  Future<void> updateChallenge(String challID) async {
+     DatabaseService service = DatabaseService();
+    Challenge? currChallenge = await service.getChallengeForReview(challengeID: challID);
+    currChallenge?.dateCompleted = DateTime.now().toString().substring(0, 16);
+    currChallenge?.receiverMark = score;
+    currChallenge?.challengeStatus = "Closed";
+
+    await service.updateChallenge(currChallenge!);
+    
+  }
+
+  /// This function adds the user's rating to the global rating of a quiz in a database.
   Future<void> addToGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -296,6 +292,11 @@ class QuizScoreState extends State<QuizScore> {
     loaddata().then((value) {
       setState(() {});
     });
+
+    if (challID != "None"){
+      updateChallenge(challID);
+    }
+
   }
 
 //Used to control the Circular Progress indicator
@@ -543,40 +544,66 @@ class QuizScoreState extends State<QuizScore> {
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
                                          print(username);
+                                         print(_displayedItems?[0].friendName);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Friend List'),
-                                              content: Container(
-                                                width: double.maxFinite,
-                                                child: SingleChildScrollView(   //random comment
-                                                  child: Column(
-                                                    children: [
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics: NeverScrollableScrollPhysics(),
-                                                        itemCount: fillLength,
-                                                        itemBuilder: (context, index) {
-                                                          //final String name = friends![index];
-                                                          return ListTile(
-                                                            title: Text(
-                                                              _displayedItems?[index].friendName,
-                                                            ),
-                                                            trailing: ElevatedButton(
-                                                              onPressed: () {
-                                                               
-                                                                addChallenge(_displayedItems?[index].friendID);
-                                                            
-                                                               
-                                                              },
-                                                              child: Text('Challenge'),
-                                                            ),
-                                                          );
-                                                        },
+                                            return Dialog(
+                                              backgroundColor: Color.fromARGB(255, 14, 52, 113),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.all(16),
+                                                      child: Text(
+                                                        'Friend List',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.amber,
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        children: [
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            physics: NeverScrollableScrollPhysics(),
+                                                            itemCount: fillLength,
+                                                            itemBuilder: (context, index) {
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  _displayedItems?[index].friendName,
+                                                                  style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
+                                                                trailing: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    addChallenge(_displayedItems?[index].friendID);
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    primary: Colors.deepOrange,
+                                                                    onPrimary: Colors.white,
+                                                                  ),
+                                                                  child: Text('Challenge'),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             );

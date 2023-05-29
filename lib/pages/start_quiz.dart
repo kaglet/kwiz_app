@@ -12,7 +12,11 @@ class StartQuiz extends StatefulWidget {
   final OurUser user;
   final String chosenQuiz;
   final String challID;
-  const StartQuiz({super.key, required this.chosenQuiz,required this.challID, required this.user});
+  const StartQuiz(
+      {super.key,
+      required this.chosenQuiz,
+      required this.challID,
+      required this.user});
   @override
   StartQuizState createState() => StartQuizState();
 }
@@ -24,6 +28,7 @@ class StartQuizState extends State<StartQuiz> {
   late String dateCreated = '';
   String date = '';
   late String quizID = widget.chosenQuiz;
+  late String challID = widget.challID;
   bool _isLoading = true;
 
 //Depending on the quiz chosen by the user on the previous page, this loads the quiz's information namely its title and description
@@ -104,6 +109,29 @@ class StartQuizState extends State<StartQuiz> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
+                        Visibility(
+                          visible: challID != "None",
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.blue,
+                            ),
+                            padding: const EdgeInsets.all(15),
+                            child: Center(
+                              child: Text(
+                                'This is a challenge quiz. Good Luck!',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+
                         Center(
                           child: Image.asset(
                               //This loads the gif repsective to the quiz's category
@@ -186,6 +214,7 @@ class StartQuizState extends State<StartQuiz> {
                                               builder: (context) => QuizScreen(
                                                     quizID,
                                                     user: widget.user,
+                                                    challID: challID,
                                                   )),
                                         );
                                       },

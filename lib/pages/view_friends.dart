@@ -1,5 +1,7 @@
 // coverage:ignore-start
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/pages/home.dart';
@@ -45,6 +47,21 @@ class _ViewFriendsState extends State<ViewFriends> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> removeFriend(String? friendUsername) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await service.removeFriend(friendUsername, widget.user.uid);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewFriends(user: widget.user),
+      ),
+    );
   }
 
   Future<void> loaddata() async {
@@ -358,22 +375,22 @@ class _ViewFriendsState extends State<ViewFriends> {
                                     ),
                                   ),
                                   textColor: Colors.white,
-                                  subtitle: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '${_displayedItems?[index].status} |',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                      ],
-                                    ),
-                                  ),
+                                  // subtitle: SingleChildScrollView(
+                                  //   scrollDirection: Axis.horizontal,
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         '${_displayedItems?[index].status} |',
+                                  //         style: TextStyle(
+                                  //           fontWeight: FontWeight.normal,
+                                  //           color: Colors.white,
+                                  //           fontFamily: 'Nunito',
+                                  //         ),
+                                  //       ),
+                                  //       SizedBox(width: 8),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                   trailing: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -389,16 +406,8 @@ class _ViewFriendsState extends State<ViewFriends> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QuizAttempts(
-                                                      user: widget.user,
-                                                      chosenQuiz:
-                                                          _displayedItems?[
-                                                              index]),
-                                            ));
+                                        removeFriend(
+                                            _displayedItems?[index].friendName);
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors

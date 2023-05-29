@@ -339,15 +339,14 @@ class ViewChallengesState extends State<ViewChallenges>
                               ),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                   Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        StartQuiz(
-                                                            user: widget.user,
-                                                            chosenQuiz:
-                                                                active![index].quizID, challID: active![index].challengeID
-                                                  )));
+                                   Navigator.push(context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => StartQuiz(
+                                                      user:
+                                                          widget.user,
+                                                      chosenQuiz: active![index].quizID, challID: active![index].challengeID ),
+                                                ),
+                                              );
 
 
                                 },

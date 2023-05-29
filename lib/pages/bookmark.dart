@@ -371,7 +371,7 @@ class _BookmarkState extends State<Bookmark> {
                                                                 filteredQuizzes!
                                                                     .elementAt(
                                                                         index)
-                                                                    .quizID, challID: "None"),
+                                                                    .quizID, challID: 'None' ),
                                                   ));
                                             },
                                             style: ElevatedButton.styleFrom(

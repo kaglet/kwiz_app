@@ -182,6 +182,15 @@ class DatabaseService {
     });
   }
 
+    Future<void> updateChallenge(Challenge updateChallenge) async {
+    await challengeCollection.doc(updateChallenge.challengeID).update({
+      'DateCompleted': updateChallenge.dateCompleted,
+      'ReceiverMark': updateChallenge.receiverMark,
+      'Status': updateChallenge.challengeStatus
+
+    });
+  }
+
   //--------------------------
   //
   ////-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +294,7 @@ class DatabaseService {
   //get all Quiz and Questions
   //This method gets the selected quiz from the Quiz Collection and its subcollection of questions and retruns a quiz object with a list of ordered questions
   Future<Challenge?> getChallengeForReview({String? challengeID}) async {
-    late List<Question> questions = [];
+    // late List<Question> questions = [];
 
     try {
       DocumentSnapshot docSnapshot =
@@ -878,5 +887,27 @@ class DatabaseService {
         .collection('Friends')
         .doc(myUserID)
         .update({'Status': 'accepted'});
+  }
+
+  Future<void> removeFriend(String? friendUsername, String? myUserID) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: friendUsername).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+      String friendID = docSnapshot.id;
+
+      await userCollection
+          .doc(myUserID)
+          .collection('Friends')
+          .doc(friendID)
+          .delete();
+
+      await userCollection
+          .doc(friendID)
+          .collection('Friends')
+          .doc(myUserID)
+          .delete();
+    }
   }
 }

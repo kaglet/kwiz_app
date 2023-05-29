@@ -498,7 +498,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                                                         builder: (context) => StartQuiz(
                                                                             user:
                                                                                 widget.user,
-                                                                            chosenQuiz: quizzes!.elementAt(randNum).quizID,challID: "None"),
+                                                                            chosenQuiz: quizzes!.elementAt(randNum).quizID,challID: 'None'),
                                                                       ),
                                                                     );
                                                                   },
