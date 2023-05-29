@@ -114,15 +114,7 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     DatabaseService service = DatabaseService();
-    Challenge? currChallenge =
-        await service.getChallengeForReview(challengeID: challID);
-    print(currChallenge?.challengeStatus);
-
-    currChallenge?.dateCompleted = DateTime.now().toString().substring(0, 16);
-    currChallenge?.receiverMark = score;
-    currChallenge?.challengeStatus = "Closed";
-
-    await service.updateChallenge(currChallenge!);
+    await service.updateChallenge(challID: challID, date: DateTime.now().toString().substring(0, 16), mark: score, status: "Closed");
      setState(() {
       _isLoading = false;
     });

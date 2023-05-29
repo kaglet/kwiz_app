@@ -2,7 +2,7 @@ class Challenge {
 //Used so you can naviagte to the quiz from viewing bookmarks
   final String quizID;
   final String dateSent;
-  late final String dateCompleted;
+ late final String dateCompleted;
   final String receiverID;
   final String senderID;
   late final int receiverMark;

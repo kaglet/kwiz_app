@@ -182,14 +182,15 @@ class DatabaseService {
     });
   }
 
-    Future<void> updateChallenge(Challenge updateChallenge) async {
-    await challengeCollection.doc(updateChallenge.challengeID).update({
-      'DateCompleted': updateChallenge.dateCompleted,
-      'ReceiverMark': updateChallenge.receiverMark,
-      'Status': updateChallenge.challengeStatus
+    Future<void> updateChallenge( {String? challID, String? date, int? mark, String? status}) async {
+    await challengeCollection.doc(challID).update({
+      'DateCompleted': date,
+      'ReceiverMark': mark,
+      'Status': status
 
     });
   }
+
 
   //--------------------------
   //
