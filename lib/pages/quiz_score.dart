@@ -1,5 +1,8 @@
 //import 'dart:ffi';
 // coverage:ignore-start
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/classes/rating_ui.dart';
 import 'package:kwiz_v2/models/challenges.dart';
@@ -63,6 +66,10 @@ class QuizScoreState extends State<QuizScore> {
   late int totalQuizzes;
   late double totalScore;
   late int numQuestions;
+
+  //confetti controller
+  // final confController = ConfettiController();
+  // bool isPlaying = false;
 
   Future<void> createRating() async {
     setState(() {
@@ -282,16 +289,29 @@ class QuizScoreState extends State<QuizScore> {
     });
   }
 
+  late ConfettiController confController;
+
 //This ensures that the quiz information and category image/gif have loaded
   @override
   void initState() {
     super.initState();
     _displayedItems = friends;
+    confController = ConfettiController(duration: Duration(seconds: 5));  //plays confetti upon finishing quiz
+    if (score >= (userAnswers.length)){
+      confController.play();
+    }
+
     // do database stuff here and pass into loaddata function to populate page
     //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    confController.dispose();
+    super.dispose();
   }
 
 //Used to control the Circular Progress indicator
@@ -351,6 +371,26 @@ class QuizScoreState extends State<QuizScore> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: ConfettiWidget(
+                            confettiController: confController,
+                            colors: [
+                              Color.fromARGB(186, 15, 145, 205),
+                              Color.fromARGB(254, 228, 87, 44),
+                              Color.fromARGB(255, 246, 209, 98),
+                              Color.fromARGB(189, 76, 175, 79),
+                              Colors.purple
+                            ],
+                            blastDirectionality: BlastDirectionality.explosive,
+                            blastDirection: pi/2,
+                            emissionFrequency: 0.07,
+                            numberOfParticles: 20,
+                            gravity: 0.1,
+
+                            ),
+                        ),
+                        
                         //This container displays the selected quiz's information and the start button
                         Container(
                           width: MediaQuery.of(context).size.width,
