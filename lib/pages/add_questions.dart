@@ -377,8 +377,7 @@ class _AddQuestionsState extends State<AddQuestions> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    Expanded(
-                                                      flex: 1,
+                                                    Center(
                                                       child: TextButton(
                                                         onPressed: () {
                                                           Navigator.of(context)
