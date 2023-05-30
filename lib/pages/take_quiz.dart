@@ -12,7 +12,8 @@ import 'dart:math';
 class QuizScreen extends StatefulWidget {
   final OurUser user;
   final String qID;
-  const QuizScreen(this.qID, {super.key, required this.user});
+  final String challID;
+  const QuizScreen(this.qID, {super.key,required this.challID, required this.user});
   @override
   QuizScreenState createState() => QuizScreenState();
 }
@@ -21,6 +22,7 @@ class QuizScreenState extends State<QuizScreen> {
   //final String qID = widget.qID;
   // Get the questions from firebase
   late bool _isLoading = true;
+  late String challID = widget.challID;
   int quizLength = 0;
   Quiz? quiz;
 
@@ -957,7 +959,7 @@ class QuizScreenState extends State<QuizScreen> {
                                                                     answers:
                                                                         answers,
                                                                     userAnswers:
-                                                                        userAnswers)),
+                                                                        userAnswers, challID: challID)),
                                                           );
                                                         },
                                                         child: Container(

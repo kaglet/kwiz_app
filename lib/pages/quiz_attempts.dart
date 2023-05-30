@@ -137,7 +137,7 @@ class _QuizAttemptsState extends State<QuizAttempts> {
                       MaterialPageRoute(
                           builder: (context) => StartQuiz(
                                 user: widget.user,
-                                chosenQuiz: pastAttempt.quizID,
+                                chosenQuiz: pastAttempt.quizID, challID: 'None',
                               )),
                     );
                   },

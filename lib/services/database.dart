@@ -139,7 +139,7 @@ class DatabaseService {
   //--------------------------
   //
 
-  //get all Quizzes
+  //get all Challenges
   //This method gets all the challenges from the Challenges Collection and retruns them as a list of Challenge objects
   Future<List<Challenge>?> getAllChallenges() async {
     List<Challenge> challenges = [];
@@ -166,7 +166,7 @@ class DatabaseService {
     return challenges;
   }
 
-//Random comment
+
   Future<void> addChallenge(Challenge newChallenge) async {
     await challengeCollection.add({
       'DateCompleted': newChallenge.dateCompleted,
@@ -181,6 +181,16 @@ class DatabaseService {
       'Status': newChallenge.challengeStatus
     });
   }
+
+    Future<void> updateChallenge( {String? challID, String? date, int? mark, String? status}) async {
+    await challengeCollection.doc(challID).update({
+      'DateCompleted': date,
+      'ReceiverMark': mark,
+      'Status': status
+
+    });
+  }
+
 
   //--------------------------
   //
@@ -285,11 +295,11 @@ class DatabaseService {
   //get all Quiz and Questions
   //This method gets the selected quiz from the Quiz Collection and its subcollection of questions and retruns a quiz object with a list of ordered questions
   Future<Challenge?> getChallengeForReview({String? challengeID}) async {
-    late List<Question> questions = [];
+    // late List<Question> questions = [];
 
     try {
       DocumentSnapshot docSnapshot =
-          await quizCollection.doc(challengeID).get();
+          await challengeCollection.doc(challengeID).get();
       Challenge challenge = Challenge(
         dateCompleted: docSnapshot['DateCompleted'],
         dateSent: docSnapshot['DateSent'],
@@ -878,5 +888,27 @@ class DatabaseService {
         .collection('Friends')
         .doc(myUserID)
         .update({'Status': 'accepted'});
+  }
+
+  Future<void> removeFriend(String? friendUsername, String? myUserID) async {
+    QuerySnapshot querySnapshot =
+        await userCollection.where('Username', isEqualTo: friendUsername).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot docSnapshot = querySnapshot.docs.first;
+      String friendID = docSnapshot.id;
+
+      await userCollection
+          .doc(myUserID)
+          .collection('Friends')
+          .doc(friendID)
+          .delete();
+
+      await userCollection
+          .doc(friendID)
+          .collection('Friends')
+          .doc(myUserID)
+          .delete();
+    }
   }
 }

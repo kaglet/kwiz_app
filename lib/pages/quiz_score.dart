@@ -1,5 +1,8 @@
 //import 'dart:ffi';
 // coverage:ignore-start
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:kwiz_v2/classes/rating_ui.dart';
 import 'package:kwiz_v2/models/challenges.dart';
@@ -17,6 +20,7 @@ class QuizScore extends StatefulWidget {
   final Quiz? chosenQuiz;
   final int score;
   final List userAnswers;
+  final String challID;
   final List answers;
   const QuizScore(
       {super.key,
@@ -24,6 +28,7 @@ class QuizScore extends StatefulWidget {
       required this.score,
       required this.userAnswers,
       required this.answers,
+      required this.challID,
       required this.user});
   @override
   QuizScoreState createState() => QuizScoreState();
@@ -34,6 +39,7 @@ class QuizScoreState extends State<QuizScore> {
   late int? oldRating;
   late bool _ratingAlreadyExists;
   late int _rating;
+  late String challID = widget.challID;
   //---------------------------------------
   late UserData userData;
   late OurUser user = widget.user!;
@@ -61,6 +67,10 @@ class QuizScoreState extends State<QuizScore> {
   late double totalScore;
   late int numQuestions;
 
+  //confetti controller
+  // final confController = ConfettiController();
+  // bool isPlaying = false;
+
   Future<void> createRating() async {
     setState(() {
       _isLoading = true;
@@ -82,18 +92,19 @@ class QuizScoreState extends State<QuizScore> {
   }
 
   Future<void> addChallenge(String friendID) async {
-    Challenge newChallenge = Challenge(
-        quizID: quizID,
-        dateSent: DateTime.now().toString().substring(0, 16),
-        dateCompleted: "",
-        receiverID: friendID,
-        senderID: userID,
-        receiverMark: 0,
-        senderMark: score,
-        challengeID: "",
-        senderName: username,
-        quizName: widget.chosenQuiz!.quizName,
-        challengeStatus: 'Pending');
+     Challenge newChallenge = Challenge(
+              quizID: quizID, 
+              dateSent:  DateTime.now().toString().substring(0, 16), 
+              dateCompleted: "", 
+              receiverID: friendID, 
+              senderID: userID, 
+              receiverMark: 0, 
+              senderMark: score, 
+              challengeID: "", 
+              senderName: username, 
+              quizName: widget.chosenQuiz!.quizName, 
+              challengeStatus: 'Pending');
+
 
     DatabaseService service = DatabaseService();
     // setState(() {
@@ -103,6 +114,17 @@ class QuizScoreState extends State<QuizScore> {
     // setState(() {
     //   _isLoading = false;
     // });
+  }
+
+  Future<void> updateChallenge(String challID) async {
+    setState(() {
+      _isLoading = true;
+    });
+    DatabaseService service = DatabaseService();
+    await service.updateChallenge(challID: challID, date: DateTime.now().toString().substring(0, 16), mark: score, status: "Closed");
+     setState(() {
+      _isLoading = false;
+    });
   }
 
   /// This function adds the user's rating to the global rating of a quiz in a database.
@@ -122,6 +144,7 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+/// This function updates the global rating of a quiz in a database.
   Future<void> updateGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -233,6 +256,21 @@ class QuizScoreState extends State<QuizScore> {
     details = await service.getQuizAndQuestions(quizID: quizID);
     title = details!.quizName;
     userData = (await service.getUserAndPastAttempts(userID: widget.user.uid))!;
+    userFriends = (await service.getUserAndFriends(userID: widget.user.uid))!;
+    username = (await service.getMyUsername(widget.user.uid))!;
+    print(username);
+    friendsList = userFriends.friends;
+    friendsListLength = friendsList!.length;
+    for (int i = 0; i < friendsListLength; i++) {
+      if (friendsList![i].status != 'pending') {
+        friends!.add(friendsList?[i]);
+      }
+    }
+    friendsLength = friends!.length;
+    _displayedItems = friends;
+    fillLength = _displayedItems!.length;
+    print(friends);
+
     userID = userData.uID!;
     _ratingAlreadyExists = await service.ratingAlreadyExists(
         userID: widget.user.uid, quizID: widget.chosenQuiz?.quizID);
@@ -251,15 +289,29 @@ class QuizScoreState extends State<QuizScore> {
     });
   }
 
+  late ConfettiController confController;
+
 //This ensures that the quiz information and category image/gif have loaded
   @override
   void initState() {
     super.initState();
+    _displayedItems = friends;
+    confController = ConfettiController(duration: Duration(seconds: 5));  //plays confetti upon finishing quiz
+    if (score >= (userAnswers.length)){
+      confController.play();
+    }
+
     // do database stuff here and pass into loaddata function to populate page
     //_startLoading(); Michael flag: Implementing this caused errors probably because _isLoading is set to false then the widget skipped loading, keeping commented here in case
     loaddata().then((value) {
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    confController.dispose();
+    super.dispose();
   }
 
 //Used to control the Circular Progress indicator
@@ -319,6 +371,26 @@ class QuizScoreState extends State<QuizScore> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: ConfettiWidget(
+                            confettiController: confController,
+                            colors: [
+                              Color.fromARGB(186, 15, 145, 205),
+                              Color.fromARGB(254, 228, 87, 44),
+                              Color.fromARGB(255, 246, 209, 98),
+                              Color.fromARGB(189, 76, 175, 79),
+                              Colors.purple
+                            ],
+                            blastDirectionality: BlastDirectionality.explosive,
+                            blastDirection: pi/2,
+                            emissionFrequency: 0.07,
+                            numberOfParticles: 20,
+                            gravity: 0.1,
+
+                            ),
+                        ),
+                        
                         //This container displays the selected quiz's information and the start button
                         Container(
                           width: MediaQuery.of(context).size.width,
@@ -377,6 +449,7 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ]),
                                 ),
+                                
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -505,47 +578,67 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                        print(username);
+                                         print(username);
+                                         print(_displayedItems?[0].friendName);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Friend List'),
-                                              content: Container(
-                                                width: double.maxFinite,
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: [
-                                                      ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            NeverScrollableScrollPhysics(),
-                                                        itemCount: fillLength,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          //final String name = friends![index];
-                                                          return ListTile(
-                                                            title: Text(
-                                                              _displayedItems?[
-                                                                      index]
-                                                                  .friendName,
-                                                            ),
-                                                            trailing:
-                                                                ElevatedButton(
-                                                              onPressed: () {
-                                                                addChallenge(
-                                                                    _displayedItems?[
-                                                                            index]
-                                                                        .friendID);
-                                                              },
-                                                              child: Text(
-                                                                  'Challenge'),
-                                                            ),
-                                                          );
-                                                        },
+                                            return Dialog(
+                                              backgroundColor: Color.fromARGB(255, 14, 52, 113),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsets.all(16),
+                                                      child: Text(
+                                                        'Friend List',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.amber,
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        children: [
+                                                          ListView.builder(
+                                                            shrinkWrap: true,
+                                                            physics: NeverScrollableScrollPhysics(),
+                                                            itemCount: fillLength,
+                                                            itemBuilder: (context, index) {
+                                                              return ListTile(
+                                                                title: Text(
+                                                                  _displayedItems?[index].friendName,
+                                                                  style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
+                                                                trailing: ElevatedButton(
+                                                                  onPressed: () {
+                                                                    addChallenge(_displayedItems?[index].friendID);
+                                                                  },
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    primary: Colors.deepOrange,
+                                                                    onPrimary: Colors.white,
+                                                                  ),
+                                                                  child: Text('Challenge'),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             );
@@ -600,6 +693,10 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
+                                        if (challID != "None") {
+                                          updateChallenge(challID);
+                                        }
+
                                         if (userData
                                             .pastAttemptQuizzes.isEmpty) {
                                           isfirstAttempt = true;

@@ -81,6 +81,38 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
     });
   }
 
+  Future<void> declineFriendRequest(String? friendUsername) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await service.removeFriend(friendUsername, widget.user.uid);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewFriendRequests(user: widget.user),
+      ),
+    );
+  }
+
+  Future<void> acceptFriendRequest(String? friendUsername) async {
+    setState(() {
+      _isLoading = true;
+    });
+    await service.acceptFriendRequest(
+        friendUsername, widget.user.uid, userData!.userName);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewFriends(
+                  user: widget.user,
+                  //chosenQuiz:
+                  //_displayedItems?[
+                  //    index]),
+                )));
+  }
+
   @override
   Widget build(BuildContext contetx) {
     return Scaffold(
@@ -210,78 +242,116 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                                     ),
                                   ),
                                   textColor: Colors.white,
-                                  subtitle: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          '${_displayedItems?[index].status} |',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          '${_displayedItems?[index].friendName}',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.white,
-                                            fontFamily: 'Nunito',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  trailing: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          color1,
-                                          const Color.fromARGB(
-                                              255, 59, 98, 172),
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                      ),
-                                    ),
-                                    child: ElevatedButton(
-                                      onPressed: () async {
-                                        service.acceptFriendRequest(
-                                            _displayedItems?[index].friendName,
-                                            widget.user.uid,
-                                            userData!.userName);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ViewFriends(
-                                                      user: widget.user,
-                                                      //chosenQuiz:
-                                                      //_displayedItems?[
-                                                      //    index]),
-                                                    )));
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors
-                                            .transparent, // remove button background color
-                                        elevation: 0, // remove button shadow
-                                        shape: RoundedRectangleBorder(
+                                  // subtitle: SingleChildScrollView(
+                                  //   scrollDirection: Axis.horizontal,
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Text(
+                                  //         '${_displayedItems?[index].status} |',
+                                  //         style: TextStyle(
+                                  //           fontWeight: FontWeight.normal,
+                                  //           color: Colors.white,
+                                  //           fontFamily: 'Nunito',
+                                  //         ),
+                                  //       ),
+                                  //       SizedBox(width: 8),
+                                  //       Text(
+                                  //         '${_displayedItems?[index].friendName}',
+                                  //         style: TextStyle(
+                                  //           fontWeight: FontWeight.normal,
+                                  //           color: Colors.white,
+                                  //           fontFamily: 'Nunito',
+                                  //         ),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(20),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              color1,
+                                              const Color.fromARGB(
+                                                  255, 59, 98, 172),
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            acceptFriendRequest(
+                                                _displayedItems?[index]
+                                                    .friendName);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors
+                                                .transparent, // remove button background color
+                                            elevation:
+                                                0, // remove button shadow
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Accept',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Accept Friend Request',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.white,
-                                          fontFamily: 'Nunito',
+                                      Padding(
+                                          padding: const EdgeInsets.all(5.0)),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              color1,
+                                              const Color.fromARGB(
+                                                  255, 59, 98, 172),
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                        ),
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            declineFriendRequest(
+                                                _displayedItems?[index]
+                                                    .friendName);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors
+                                                .transparent, // remove button background color
+                                            elevation:
+                                                0, // remove button shadow
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: const Text(
+                                            'Decline',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.white,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -290,7 +360,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
