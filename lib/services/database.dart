@@ -160,12 +160,12 @@ class DatabaseService {
         senderName: docSnapshot['SenderName'],
         quizName: docSnapshot['QuizName'],
         challengeStatus: docSnapshot['Status'],
+        receiverName: docSnapshot['ReceiverName'],
       );
       challenges.add(challenge);
     }
     return challenges;
   }
-
 
   Future<void> addChallenge(Challenge newChallenge) async {
     await challengeCollection.add({
@@ -178,19 +178,16 @@ class DatabaseService {
       'SenderID': newChallenge.senderID,
       'SenderMark': newChallenge.senderMark,
       'SenderName': newChallenge.senderName,
-      'Status': newChallenge.challengeStatus
+      'Status': newChallenge.challengeStatus,
+      'ReceiverName': newChallenge.receiverName
     });
   }
 
-    Future<void> updateChallenge( {String? challID, String? date, int? mark, String? status}) async {
-    await challengeCollection.doc(challID).update({
-      'DateCompleted': date,
-      'ReceiverMark': mark,
-      'Status': status
-
-    });
+  Future<void> updateChallenge(
+      {String? challID, String? date, int? mark, String? status}) async {
+    await challengeCollection.doc(challID).update(
+        {'DateCompleted': date, 'ReceiverMark': mark, 'Status': status});
   }
-
 
   //--------------------------
   //
@@ -312,6 +309,7 @@ class DatabaseService {
         senderName: docSnapshot['SenderName'],
         quizName: docSnapshot['QuizName'],
         challengeStatus: docSnapshot['Status'],
+        receiverName: docSnapshot['ReceiverName'],
       );
 
       return challenge;

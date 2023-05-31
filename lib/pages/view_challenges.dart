@@ -48,35 +48,33 @@ class ViewChallengesState extends State<ViewChallenges>
     });
     DatabaseService service = DatabaseService();
     challenges = (await service.getAllChallenges())!;
-    print(challenges!.length);
+    // pending tab is from perspective where I am the receiver, challenge receiver is me
+    // active and closed tabs are from perspective where I am the receiver or the sender (we'll switch display based on exact perspective later)
+    // sent tab is from perspective where challenge sender is me
     pending = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Pending')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Pending' &&
+            challenge.receiverID == widget.user.uid)
         .toList();
     active = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Active')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Active' &&
+            (challenge.receiverID == widget.user.uid ||
+                challenge.senderID == widget.user.uid))
         .toList();
     closed = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Closed')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Closed' &&
+            (challenge.receiverID == widget.user.uid ||
+                challenge.senderID == widget.user.uid))
         .toList();
 
     // not just the rejected but the all the challenges the current sender has sent
-    print(widget.user.uid);
 
     // print(widget.user.uid);
-    // why is the equality true
     sent = challenges!
-        .where((challenge) =>
-            challenge.senderID.toString() == widget.user.uid.toString())
+        .where((challenge) => challenge.senderID == widget.user.uid)
         .toList();
-
-    // for (var i = 0; i < challenges!.length; i++) {
-    //   if (challenges!.elementAt(i).senderID == widget.user.uid.toString()) {
-    //     print('true');
-    //   }
-    //   // print(sent!.elementAt(i).senderID);
-    //   // service.acceptChallengeRequest(
-    //   //     challengeID: closed!.elementAt(i).challengeID);
-    // }
 
     // pending.forEach((element) {
     //   print('Pending challenge ' + element.senderName);
@@ -94,11 +92,11 @@ class ViewChallengesState extends State<ViewChallenges>
     //   print('Sent challenge' + element.senderName);
     // });
 
-    for (var i = 0; i < challenges!.length; i++) {
-      print(sent!.elementAt(i).senderID);
-      // service.acceptChallengeRequest(
-      //     challengeID: closed!.elementAt(i).challengeID);
-    }
+    // for (var i = 0; i < challenges.length; i++) {
+    //   print(closed.elementAt(i).dateSent);
+    //   // service.acceptChallengeRequest(
+    //   //     challengeID: closed!.elementAt(i).challengeID);
+    // }
 
     setState(() {
       _isLoading = false;
@@ -113,7 +111,7 @@ class ViewChallengesState extends State<ViewChallenges>
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
-        sentLength = sent!.length;
+        sentLength = challenges!.length;
         print('Sent length: ${sentLength}');
       });
     });
@@ -124,7 +122,7 @@ class ViewChallengesState extends State<ViewChallenges>
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
-        sentLength = sent!.length;
+        sentLength = challenges!.length;
         print('Sent length: ${sentLength}');
       });
     });
@@ -415,7 +413,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                         widget.user.uid) ...[
                                       TextSpan(
                                         text:
-                                            '${active![index].quizName} quiz challenge VS receiver user!',
+                                            '${active![index].quizName} quiz challenge VS ${active![index].receiverName}!',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
@@ -838,16 +836,16 @@ class ViewChallengesState extends State<ViewChallenges>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                                '${sent![index].quizName} quiz challenge sent.',
+                                '${challenges![index].quizName} quiz challenge sent.',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),
-                            Text('Date sent: ${sent![index].dateSent}',
+                            Text('Date sent: ${challenges![index].dateSent}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),
                             Text(
-                                'Challenge status: ${sent![index].challengeStatus}',
+                                'Challenge status: ${challenges![index].challengeStatus}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),
