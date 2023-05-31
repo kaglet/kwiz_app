@@ -625,6 +625,28 @@ class QuizScoreState extends State<QuizScore> {
                                                                 trailing: ElevatedButton(
                                                                   onPressed: () {
                                                                     addChallenge(_displayedItems?[index].friendID);
+                                                                    showDialog(
+                                                                      context: context,
+                                                                      builder: (BuildContext context) {
+                                                                        return AlertDialog(
+                                                                          backgroundColor: Color.fromARGB(255, 26, 76, 117),
+                                                                          title: Text('Challenge Sent'),
+                                                                          content: Text('Your challenge has been sent.', 
+                                                                                    style: TextStyle(color: Colors.white),),
+                                                                          actions: [
+                                                                            ElevatedButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(context).pop();
+                                                                              },
+                                                                              style: ElevatedButton.styleFrom(
+                                                                                primary: Colors.deepOrange,
+                                                                              ),
+                                                                              child: Text('OK'),
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      },
+                                                                    );
                                                                   },
                                                                   style: ElevatedButton.styleFrom(
                                                                     primary: Colors.deepOrange,
