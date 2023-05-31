@@ -92,19 +92,19 @@ class QuizScoreState extends State<QuizScore> {
   }
 
   Future<void> addChallenge(String friendID) async {
-     Challenge newChallenge = Challenge(
-              quizID: quizID, 
-              dateSent:  DateTime.now().toString().substring(0, 16), 
-              dateCompleted: "", 
-              receiverID: friendID, 
-              senderID: userID, 
-              receiverMark: 0, 
-              senderMark: score, 
-              challengeID: "", 
-              senderName: username, 
-              quizName: widget.chosenQuiz!.quizName, 
-              challengeStatus: 'Pending');
-
+    Challenge newChallenge = Challenge(
+        quizID: quizID,
+        dateSent: DateTime.now().toString().substring(0, 16),
+        dateCompleted: "",
+        receiverID: friendID,
+        senderID: userID,
+        receiverMark: 0,
+        senderMark: score,
+        challengeID: "",
+        senderName: username,
+        quizName: widget.chosenQuiz!.quizName,
+        challengeStatus: 'Pending',
+        receiverName: 'Field not yet added');
 
     DatabaseService service = DatabaseService();
     // setState(() {
@@ -121,8 +121,12 @@ class QuizScoreState extends State<QuizScore> {
       _isLoading = true;
     });
     DatabaseService service = DatabaseService();
-    await service.updateChallenge(challID: challID, date: DateTime.now().toString().substring(0, 16), mark: score, status: "Closed");
-     setState(() {
+    await service.updateChallenge(
+        challID: challID,
+        date: DateTime.now().toString().substring(0, 16),
+        mark: score,
+        status: "Closed");
+    setState(() {
       _isLoading = false;
     });
   }
@@ -144,7 +148,7 @@ class QuizScoreState extends State<QuizScore> {
     //Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-/// This function updates the global rating of a quiz in a database.
+  /// This function updates the global rating of a quiz in a database.
   Future<void> updateGlobalRating() async {
     setState(() {
       _isLoading = true;
@@ -296,8 +300,9 @@ class QuizScoreState extends State<QuizScore> {
   void initState() {
     super.initState();
     _displayedItems = friends;
-    confController = ConfettiController(duration: Duration(seconds: 5));  //plays confetti upon finishing quiz
-    if (score >= (userAnswers.length)){
+    confController = ConfettiController(
+        duration: Duration(seconds: 5)); //plays confetti upon finishing quiz
+    if (score >= (userAnswers.length)) {
       confController.play();
     }
 
@@ -383,14 +388,13 @@ class QuizScoreState extends State<QuizScore> {
                               Colors.purple
                             ],
                             blastDirectionality: BlastDirectionality.explosive,
-                            blastDirection: pi/2,
+                            blastDirection: pi / 2,
                             emissionFrequency: 0.07,
                             numberOfParticles: 20,
                             gravity: 0.1,
-
-                            ),
+                          ),
                         ),
-                        
+
                         //This container displays the selected quiz's information and the start button
                         Container(
                           width: MediaQuery.of(context).size.width,
@@ -449,7 +453,7 @@ class QuizScoreState extends State<QuizScore> {
                                     ),
                                   ]),
                                 ),
-                                
+
                                 Padding(
                                   padding:
                                       const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -578,30 +582,36 @@ class QuizScoreState extends State<QuizScore> {
                                       ),
                                       //This event takes us to the take_quiz screen
                                       onPressed: () {
-                                         print(username);
-                                         print(_displayedItems?[0].friendName);
+                                        print(username);
+                                        print(_displayedItems?[0].friendName);
                                         showDialog(
                                           context: context,
                                           builder: (context) {
                                             return Dialog(
-                                              backgroundColor: Color.fromARGB(255, 14, 52, 113),
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 14, 52, 113),
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(10),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
                                                 ),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Padding(
-                                                      padding: EdgeInsets.all(16),
+                                                      padding:
+                                                          EdgeInsets.all(16),
                                                       child: Text(
                                                         'Friend List',
                                                         style: TextStyle(
                                                           fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           color: Colors.amber,
                                                         ),
                                                       ),
@@ -611,28 +621,54 @@ class QuizScoreState extends State<QuizScore> {
                                                         children: [
                                                           ListView.builder(
                                                             shrinkWrap: true,
-                                                            physics: NeverScrollableScrollPhysics(),
-                                                            itemCount: fillLength,
-                                                            itemBuilder: (context, index) {
+                                                            physics:
+                                                                NeverScrollableScrollPhysics(),
+                                                            itemCount:
+                                                                fillLength,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
                                                               return ListTile(
                                                                 title: Text(
-                                                                  _displayedItems?[index].friendName,
-                                                                  style: TextStyle(
-                                                                    color: Colors.white,
-                                                                    fontWeight: FontWeight.bold,
+                                                                  _displayedItems?[
+                                                                          index]
+                                                                      .friendName,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
                                                                   ),
                                                                 ),
-                                                                trailing: ElevatedButton(
-                                                                  onPressed: () {
-                                                                    addChallenge(_displayedItems?[index].friendID);
+                                                                trailing:
+                                                                    ElevatedButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    addChallenge(
+                                                                        _displayedItems?[index]
+                                                                            .friendID);
                                                                     showDialog(
-                                                                      context: context,
-                                                                      builder: (BuildContext context) {
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
                                                                         return AlertDialog(
-                                                                          backgroundColor: Color.fromARGB(255, 26, 76, 117),
-                                                                          title: Text('Challenge Sent'),
-                                                                          content: Text('Your challenge has been sent.', 
-                                                                                    style: TextStyle(color: Colors.white),),
+                                                                          backgroundColor: Color.fromARGB(
+                                                                              255,
+                                                                              26,
+                                                                              76,
+                                                                              117),
+                                                                          title:
+                                                                              Text('Challenge Sent'),
+                                                                          content:
+                                                                              Text(
+                                                                            'Your challenge has been sent.',
+                                                                            style:
+                                                                                TextStyle(color: Colors.white),
+                                                                          ),
                                                                           actions: [
                                                                             ElevatedButton(
                                                                               onPressed: () {
@@ -648,11 +684,16 @@ class QuizScoreState extends State<QuizScore> {
                                                                       },
                                                                     );
                                                                   },
-                                                                  style: ElevatedButton.styleFrom(
-                                                                    primary: Colors.deepOrange,
-                                                                    onPrimary: Colors.white,
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    primary: Colors
+                                                                        .deepOrange,
+                                                                    onPrimary:
+                                                                        Colors
+                                                                            .white,
                                                                   ),
-                                                                  child: Text('Challenge'),
+                                                                  child: Text(
+                                                                      'Challenge'),
                                                                 ),
                                                               );
                                                             },

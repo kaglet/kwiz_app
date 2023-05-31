@@ -48,14 +48,25 @@ class ViewChallengesState extends State<ViewChallenges>
     });
     DatabaseService service = DatabaseService();
     challenges = (await service.getAllChallenges())!;
+    // pending tab is from perspective where I am the receiver, challenge receiver is me
+    // active and closed tabs are from perspective where I am the receiver or the sender (we'll switch display based on exact perspective later)
+    // sent tab is from perspective where challenge sender is me
     pending = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Pending')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Pending' &&
+            challenge.receiverID == widget.user.uid)
         .toList();
     active = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Active')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Active' &&
+            (challenge.receiverID == widget.user.uid ||
+                challenge.senderID == widget.user.uid))
         .toList();
     closed = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Closed')
+        .where((challenge) =>
+            challenge.challengeStatus == 'Closed' &&
+            (challenge.receiverID == widget.user.uid ||
+                challenge.senderID == widget.user.uid))
         .toList();
 
     // not just the rejected but the all the challenges the current sender has sent
@@ -402,7 +413,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                         widget.user.uid) ...[
                                       TextSpan(
                                         text:
-                                            '${active![index].quizName} quiz challenge VS receiver user!',
+                                            '${active![index].quizName} quiz challenge VS ${active![index].receiverName}!',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
