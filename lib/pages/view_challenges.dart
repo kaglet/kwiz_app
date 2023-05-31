@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/database.dart';
+import 'package:kwiz_v2/shared/loading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'start_quiz.dart';
 
@@ -41,6 +43,12 @@ class ViewChallengesState extends State<ViewChallenges>
     await service.acceptChallengeRequest(
         challengeID: pending!.elementAt(index).challengeID);
   }
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   Future<void> loaddata() async {
     setState(() {
@@ -49,13 +57,13 @@ class ViewChallengesState extends State<ViewChallenges>
     DatabaseService service = DatabaseService();
     challenges = (await service.getAllChallenges())!;
     pending = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Pending')
+        .where((challenge) => challenge.challengeStatus == 'Pending' /*&& challenge.receiverID == widget.user.uid*/)
         .toList();
     active = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Active')
+        .where((challenge) => challenge.challengeStatus == 'Active' /*&& challenge.receiverID == widget.user.uid*/)
         .toList();
     closed = challenges!
-        .where((challenge) => challenge.challengeStatus == 'Closed')
+        .where((challenge) => challenge.challengeStatus == 'Closed' /*&& challenge.receiverID == widget.user.uid*/)
         .toList();
 
     // not just the rejected but the all the challenges the current sender has sent
@@ -95,24 +103,27 @@ class ViewChallengesState extends State<ViewChallenges>
   @override
   void initState() {
     super.initState();
+    _startLoading();
     loaddata().then((value) {
       setState(() {
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
         sentLength = challenges!.length;
-        print('Sent length: ${sentLength}');
       });
     });
     _tabController = TabController(length: 4, vsync: this);
     _tabController.animateTo(0);
     _tabController.addListener(() {
       setState(() {
+        // setState(() {
+        //   _isLoading = true;
+        // });
+        // _startLoading();
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
         sentLength = challenges!.length;
-        print('Sent length: ${sentLength}');
       });
     });
   }
@@ -168,7 +179,9 @@ class ViewChallengesState extends State<ViewChallenges>
           },
         ),
       ),
-      body: Container(
+      body: _isLoading
+          ? Loading():
+        Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -181,7 +194,8 @@ class ViewChallengesState extends State<ViewChallenges>
         ),
         child: TabBarView(controller: _tabController, children: [
           //Pending widgets ----------------------------------------------------------------------------------------------------------------------
-          ListView.builder(
+          _isLoading
+          ? Loading(): ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: pendingLength,
             itemBuilder: (context, index) {
@@ -264,8 +278,31 @@ class ViewChallengesState extends State<ViewChallenges>
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           acceptChallenge(index);
+                                        //   ScaffoldMessenger.of(context).showSnackBar(
+                                        //           SnackBar(
+                                        // content: Text('Challenge Accepted11111!'),
+                                          // action: SnackBarAction(
+                                          //           onPressed: (){ 
+          
+                                          //           },
+                                          // label: "DISMISS",
+                                          // //           ),
+                                          //         )
+                                          //       );
+                                          Fluttertoast.showToast(
+                                              msg: "Challenge Accepted!",
+                                              toastLength: Toast.LENGTH_SHORT, 
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1, 
+                                              backgroundColor: Colors.black54,
+                                              textColor: Colors.white, 
+                                              fontSize: 16.0, 
+                                            );
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          _startLoading();
                                           // Refresh the list of displayed items
-
                                           setState(() {
                                             active!.insert(
                                                 0, pending!.elementAt(index));
@@ -273,6 +310,8 @@ class ViewChallengesState extends State<ViewChallenges>
                                             pendingLength = pending!.length;
                                             print(pending!.length);
                                           });
+                                          
+
                                         },
                                         style: ElevatedButton.styleFrom(
                                           elevation: 0,
@@ -313,8 +352,20 @@ class ViewChallengesState extends State<ViewChallenges>
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           rejectChallenge(index);
+                                           Fluttertoast.showToast(
+                                              msg: "Challenge Rejected!",
+                                              toastLength: Toast.LENGTH_SHORT, 
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1, 
+                                              backgroundColor: Colors.black54,
+                                              textColor: Colors.white, 
+                                              fontSize: 16.0, 
+                                            );
+                                          setState(() {
+                                            _isLoading = true;
+                                          });
+                                          _startLoading();
                                           // Refresh the list of displayed items
-
                                           setState(() {
                                             // filteredQuizzes!.removeAt(index);
                                             pending!.removeAt(index);
@@ -352,7 +403,8 @@ class ViewChallengesState extends State<ViewChallenges>
             },
           ),
           // Active widgets --------------------------------------------------------------------------------------------------------------------
-          ListView.builder(
+          _isLoading
+          ? Loading():ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: activeLength,
             itemBuilder: (context, index) {
@@ -491,7 +543,8 @@ class ViewChallengesState extends State<ViewChallenges>
             },
           ),
           // Closed widgets --------------------------------------------------------------------------------------------------------------------
-          ListView.builder(
+          _isLoading
+          ? Loading():ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: closedLength,
             itemBuilder: (context, index) {
@@ -592,11 +645,9 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       end:
                                                           Alignment.bottomRight,
                                                       colors: [
-                                                        Color.fromARGB(
-                                                            255, 27, 57, 82),
-                                                        Color.fromARGB(
-                                                            255, 11, 26, 68),
-                                                      ],
+                                                        Color.fromARGB(255, 27, 57, 82),
+                                                        Color.fromARGB(255, 5, 12, 31),
+                                                             ],
                                                     ),
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -610,33 +661,19 @@ class ViewChallengesState extends State<ViewChallenges>
                                                         result,
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 20.0,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 25.0,
                                                           letterSpacing: 1.0,
-                                                          fontFamily: 'Nunito',
+                                                          fontFamily: 'TitanOne',
                                                         ),
                                                       ),
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Challenge: ${closed![index].quizName} quiz',
+                                                        '${closed![index].quizName}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          letterSpacing: 1.0,
-                                                          fontFamily: 'Nunito',
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                          height: 15.0),
-                                                      Text(
-                                                        'Your mark: ${closed![index].receiverMark}',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 18.0,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           letterSpacing: 1.0,
@@ -646,12 +683,11 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Challengers mark: ${closed![index].senderMark}',
+                                                        'My score: ${closed![index].receiverMark}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          fontSize: 15.0,
+                                                          fontWeight: FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -659,12 +695,12 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Date Sent: ${closed![index].dateSent}',
+                                                        'Challenger\'s score: ${closed![index].senderMark}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -672,12 +708,25 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Date Completed: ${closed![index].dateCompleted}',
+                                                        'Opened: ${closed![index].dateSent}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
+                                                          letterSpacing: 1.0,
+                                                          fontFamily: 'Nunito',
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 15.0),
+                                                      Text(
+                                                        'Closed: ${closed![index].dateCompleted}',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 15.0,
+                                                          fontWeight:
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -703,8 +752,8 @@ class ViewChallengesState extends State<ViewChallenges>
                                                                 gradient:
                                                                     const LinearGradient(
                                                                   colors: [
-                                                                    Colors.blue,
-                                                                    Colors.blue,
+                                                                    Colors.orange,
+                                                                    Colors.orange,
                                                                   ],
                                                                   begin: Alignment
                                                                       .centerLeft,
@@ -782,6 +831,7 @@ class ViewChallengesState extends State<ViewChallenges>
             },
           ),
           //Sent widgets --------------------------------------------------------------------------------------------------------------------
+          _isLoading ? Loading():
           ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: sentLength,
