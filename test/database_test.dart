@@ -317,4 +317,47 @@ void main() {
 
     expect(expectedRating, 6);
   });
+
+  test('getUserandFriends', () async {
+    final service = MockDataService();
+    String userID = 'userID';
+
+    UserData? user = await service.getUserAndFriends(userID: userID);
+
+    expect(user?.friends[0].friendID, "id");
+  });
+
+  test('userExists', () async {
+    final service = MockDataService();
+    String username = "TestUsername";
+    bool userExists = await service.userExists(username);
+    expect(userExists, true);
+  });
+
+  test('getMyUsername', () async {
+    final service = MockDataService();
+    String userID = "id";
+    String? username = await service.getMyUsername(userID);
+    expect(username, "Test Dummy");
+  });
+
+  test('addFriend', () async {
+    final service = MockDataService();
+    String? userID = "id";
+    String? friendID = "friendid";
+    String? frienUsername = "friendUsername";
+    String? username = await service.addFriends(
+        userID: userID, friendID: friendID, friendUsername: frienUsername);
+    expect(username, frienUsername);
+  });
+
+  test('alreadyFriends', () async {
+    final service = MockDataService();
+    String? userID = "id";
+    String? friendID = "friendid";
+    String? friendUsername = "friendUsername";
+    bool? alreadyFriends =
+        await service.alreadyFriendsTest(friendUsername, friendID, userID);
+    expect(alreadyFriends, true);
+  });
 }

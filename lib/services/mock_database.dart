@@ -1062,4 +1062,154 @@ class MockDataService extends Mock implements DatabaseService {
 
     return docSnapshot['QuizGlobalRating'];
   }
+
+  Future<UserData?> getUserAndFriends({String? userID}) async {
+    final firestore = FakeFirebaseFirestore();
+    late List<PastAttempt> pastAttempts = [];
+    late List<Bookmarks> bookmarks = [];
+    late List<Rating> ratings = [];
+    late List<Friend> friends = [];
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+      'TotalScore': " ",
+      'TotalQuizzes': 0,
+    });
+
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Friends')
+        .doc('id')
+        .set({
+      'FriendName': "Test Friend Name",
+      'Sender': userID,
+      'Status': "pending",
+    });
+
+    DocumentSnapshot docSnapshot =
+        await firestore.collection(UserCollection).doc(userID).get();
+
+    UserData user = UserData(
+        userName: docSnapshot['Username'],
+        firstName: docSnapshot['FirstName'],
+        lastName: docSnapshot['LastName'],
+        totalScore: docSnapshot['TotalScore'],
+        totalQuizzes: docSnapshot['TotalQuizzes'],
+        bookmarkedQuizzes: bookmarks,
+        pastAttemptQuizzes: pastAttempts,
+        ratings: ratings,
+        friends: friends,
+        uID: docSnapshot.id);
+
+    QuerySnapshot collectionSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Friends')
+        .get();
+
+    for (int i = 0; i < collectionSnapshot.docs.length; i++) {
+      var docSnapshot = collectionSnapshot.docs[i];
+      Friend friend = Friend(
+        userID: userID,
+        friendID: docSnapshot.id,
+        friendName: docSnapshot['FriendName'],
+        sender: docSnapshot['Sender'],
+        status: docSnapshot['Status'],
+      );
+
+      friends.add(friend);
+    }
+
+    return user;
+  }
+
+  Future<bool> userExists(String? username) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc("id").set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': username,
+    });
+
+    DocumentSnapshot docSnapshot =
+        await firestore.collection(UserCollection).doc("id").get();
+
+    return docSnapshot.exists;
+  }
+
+  @override
+  Future<String?> getMyUsername(String? myUserID) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(myUserID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "Test Dummy",
+    });
+
+    DocumentSnapshot docSnapshot =
+        await firestore.collection(UserCollection).doc(myUserID).get();
+    return docSnapshot['Username'];
+  }
+
+  @override
+  Future<String?> addFriends(
+      {String? userID, String? friendID, String? friendUsername}) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(userID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+
+    await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Friends')
+        .doc(friendID)
+        .set({'Friend Username': friendUsername});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(userID)
+        .collection('Friends')
+        .doc(friendID)
+        .get();
+
+    String? friendUsernameOut = docSnapshot['Friend Username'];
+
+    return friendUsernameOut;
+  }
+
+  Future<bool> alreadyFriendsTest(
+      String? username, String? friendID, String? myUserID) async {
+    final firestore = FakeFirebaseFirestore();
+
+    await firestore.collection(UserCollection).doc(myUserID).set({
+      'FirstName': "Test",
+      'LastName': "Dummy",
+      'Username': "TestDummy",
+    });
+
+    await firestore
+        .collection(UserCollection)
+        .doc(myUserID)
+        .collection('Friends')
+        .doc(friendID)
+        .set({'Friend Username': username});
+
+    DocumentSnapshot docSnapshot = await firestore
+        .collection(UserCollection)
+        .doc(myUserID)
+        .collection('Friends')
+        .doc(friendID)
+        .get();
+
+    return docSnapshot.exists;
+  }
 }
