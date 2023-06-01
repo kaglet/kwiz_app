@@ -18,6 +18,7 @@ Future<void> main() async {
     initialData: null,
     value: AuthService().user,
     child: MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           color: Color.fromARGB(255, 27, 57, 82),

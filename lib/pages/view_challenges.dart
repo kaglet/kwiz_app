@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:kwiz_v2/models/challenges.dart';
 import 'package:kwiz_v2/models/user.dart';
 import 'package:kwiz_v2/services/database.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kwiz_v2/shared/loading.dart';
 import 'start_quiz.dart';
 
 class ViewChallenges extends StatefulWidget {
@@ -106,6 +107,7 @@ class ViewChallengesState extends State<ViewChallenges>
   @override
   void initState() {
     super.initState();
+    _startLoading();
     loaddata().then((value) {
       setState(() {
         pendingLength = pending!.length;
@@ -128,6 +130,13 @@ class ViewChallengesState extends State<ViewChallenges>
     });
   }
 
+  void _startLoading() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -137,7 +146,9 @@ class ViewChallengesState extends State<ViewChallenges>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _isLoading
+          ? null:
+        AppBar(
         title: const Text(
           'Challenges',
           style: TextStyle(
@@ -179,7 +190,9 @@ class ViewChallengesState extends State<ViewChallenges>
           },
         ),
       ),
-      body: Container(
+      body: _isLoading
+          ? Loading():
+      Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -275,6 +288,15 @@ class ViewChallengesState extends State<ViewChallenges>
                                         onPressed: () async {
                                           acceptChallenge(index);
                                           // Refresh the list of displayed items
+                                          Fluttertoast.showToast(
+                                              msg: "Challenge Accepted!",
+                                              toastLength: Toast.LENGTH_SHORT, 
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1, 
+                                              backgroundColor: Colors.black54,
+                                              textColor: Colors.white, 
+                                              fontSize: 16.0, 
+                                            );
 
                                           setState(() {
                                             active!.insert(
@@ -323,6 +345,15 @@ class ViewChallengesState extends State<ViewChallenges>
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           rejectChallenge(index);
+                                          Fluttertoast.showToast(
+                                              msg: "Challenge Rejected!",
+                                              toastLength: Toast.LENGTH_SHORT, 
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1, 
+                                              backgroundColor: Colors.black54,
+                                              textColor: Colors.white, 
+                                              fontSize: 16.0, 
+                                            );
                                           // Refresh the list of displayed items
 
                                           setState(() {
