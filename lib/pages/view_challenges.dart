@@ -656,9 +656,9 @@ class ViewChallengesState extends State<ViewChallenges>
                                                           Alignment.bottomRight,
                                                       colors: [
                                                         Color.fromARGB(
-                                                            255, 30, 43, 66),
+                                                            255, 27, 57, 82),
                                                         Color.fromARGB(
-                                                            255, 30, 43, 66),
+                                                            255, 5, 12, 31),
                                                       ],
                                                     ),
                                                     borderRadius:
@@ -675,18 +675,19 @@ class ViewChallengesState extends State<ViewChallenges>
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 20.0,
+                                                          fontSize: 25.0,
                                                           letterSpacing: 1.0,
-                                                          fontFamily: 'Nunito',
+                                                          fontFamily:
+                                                              'TitanOne',
                                                         ),
                                                       ),
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Challenge: ${closed![index].quizName} quiz',
+                                                        '${closed![index].quizName}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 18.0,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           letterSpacing: 1.0,
@@ -696,12 +697,12 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Your mark: ${closed![index].receiverMark}',
+                                                        'My score: ${closed![index].receiverMark}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -709,12 +710,12 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Challengers mark: ${closed![index].senderMark}',
+                                                        'Challenger\'s score: ${closed![index].senderMark}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -722,12 +723,12 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Date Sent: ${closed![index].dateSent}',
+                                                        'Opened: ${closed![index].dateSent}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
@@ -735,12 +736,12 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Date Completed: ${closed![index].dateCompleted}',
+                                                        'Closed: ${closed![index].dateCompleted}',
                                                         style: TextStyle(
                                                           color: Colors.white,
-                                                          fontSize: 13.0,
+                                                          fontSize: 15.0,
                                                           fontWeight:
-                                                              FontWeight.bold,
+                                                              FontWeight.normal,
                                                           letterSpacing: 1.0,
                                                           fontFamily: 'Nunito',
                                                         ),
