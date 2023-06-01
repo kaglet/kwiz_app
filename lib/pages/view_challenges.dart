@@ -111,7 +111,7 @@ class ViewChallengesState extends State<ViewChallenges>
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
-        sentLength = challenges!.length;
+        sentLength = sent!.length;
         print('Sent length: ${sentLength}');
       });
     });
@@ -122,7 +122,7 @@ class ViewChallengesState extends State<ViewChallenges>
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
-        sentLength = challenges!.length;
+        sentLength = sent!.length;
         print('Sent length: ${sentLength}');
       });
     });
@@ -212,8 +212,7 @@ class ViewChallengesState extends State<ViewChallenges>
                         Colors.deepOrange
                       ],
                     ),
-                    borderRadius:
-                        BorderRadius.horizontal(left: Radius.elliptical(2, 3)),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -383,8 +382,7 @@ class ViewChallengesState extends State<ViewChallenges>
                         Colors.deepOrange
                       ],
                     ),
-                    borderRadius:
-                        BorderRadius.horizontal(left: Radius.elliptical(2, 3)),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -401,99 +399,130 @@ class ViewChallengesState extends State<ViewChallenges>
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    if (active![index].senderID ==
-                                        widget.user.uid) ...[
-                                      TextSpan(
-                                        text:
-                                            '${active![index].quizName} quiz challenge VS ${active![index].receiverName}!',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                    ] else ...[
-                                      TextSpan(
-                                        text:
-                                            '${active![index].quizName} quiz challenge VS ${active![index].senderName}!',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                          fontFamily: 'Nunito',
-                                        ),
-                                      ),
-                                    ],
-                                  ],
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        if (active![index].senderID ==
+                                            widget.user.uid.toString()) ...[
+                                          TextSpan(
+                                            text:
+                                                '${active![index].quizName} quiz challenge VS ${active![index].receiverName}!',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ] else ...[
+                                          TextSpan(
+                                            text:
+                                                '${active![index].quizName} quiz challenge VS ${active![index].senderName}!',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                              fontSize: 17,
+                                              fontFamily: 'Nunito',
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
                                 ),
+                                if (active![index].senderID !=
+                                    widget.user.uid.toString()) ...[
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color.fromARGB(
+                                                      255, 60, 44, 167),
+                                                  Colors.deepOrange
+                                                ],
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.vertical(
+                                                      top: Radius.elliptical(
+                                                          100, 100),
+                                                      bottom: Radius.elliptical(
+                                                          100, 100)),
+                                            ),
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                acceptChallenge(index);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        StartQuiz(
+                                                            user: widget.user,
+                                                            chosenQuiz:
+                                                                active![index]
+                                                                    .quizID,
+                                                            challID: active![
+                                                                    index]
+                                                                .challengeID),
+                                                  ),
+                                                );
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12), // <-- Radius
+                                                ),
+                                              ),
+                                              child: Text(
+                                                'Take Quiz',
+                                                style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ]),
+                                  )
+                                ],
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          if (active![index].senderID ==
+                              widget.user.uid.toString()) ...[
+                            Text(
+                              'Wait for ${active![index].receiverName} to complete this challenge!',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontFamily: 'Nunito',
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            Color.fromARGB(255, 60, 44, 167),
-                                            Colors.deepOrange
-                                          ],
-                                        ),
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.elliptical(100, 100),
-                                            bottom:
-                                                Radius.elliptical(100, 100)),
-                                      ),
-                                      child: ElevatedButton(
-                                        onPressed: () async {
-                                          acceptChallenge(index);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => StartQuiz(
-                                                  user: widget.user,
-                                                  chosenQuiz:
-                                                      active![index].quizID,
-                                                  challID: active![index]
-                                                      .challengeID),
-                                            ),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: Colors.transparent,
-                                          padding: const EdgeInsets.all(12.0),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                12), // <-- Radius
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Take Quiz',
-                                          style: TextStyle(
-                                            fontSize: 15.0,
-                                            letterSpacing: 1.0,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ]),
-                            ),
                           ],
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -522,8 +551,7 @@ class ViewChallengesState extends State<ViewChallenges>
                         Colors.deepOrange
                       ],
                     ),
-                    borderRadius:
-                        BorderRadius.horizontal(left: Radius.elliptical(2, 3)),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -544,12 +572,36 @@ class ViewChallengesState extends State<ViewChallenges>
                         children: [
                           Expanded(
                             flex: 2,
-                            child: Text(
-                                'Completed ${closed![index].quizName} quiz challenge vs ${closed![index].senderName}!',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Nunito',
-                                    fontSize: 17)),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  if (closed![index].senderID ==
+                                      widget.user.uid.toString()) ...[
+                                    TextSpan(
+                                      text:
+                                          '${closed![index].quizName} quiz challenge VS ${closed![index].receiverName}!',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    TextSpan(
+                                      text:
+                                          '${closed![index].quizName} quiz challenge VS ${closed![index].senderName}!',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontFamily: 'Nunito',
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
                           ),
                           Expanded(
                             flex: 1,
@@ -604,9 +656,9 @@ class ViewChallengesState extends State<ViewChallenges>
                                                           Alignment.bottomRight,
                                                       colors: [
                                                         Color.fromARGB(
-                                                            255, 27, 57, 82),
+                                                            255, 30, 43, 66),
                                                         Color.fromARGB(
-                                                            255, 11, 26, 68),
+                                                            255, 30, 43, 66),
                                                       ],
                                                     ),
                                                     borderRadius:
@@ -714,8 +766,13 @@ class ViewChallengesState extends State<ViewChallenges>
                                                                 gradient:
                                                                     const LinearGradient(
                                                                   colors: [
-                                                                    Colors.blue,
-                                                                    Colors.blue,
+                                                                    Color.fromARGB(
+                                                                        255,
+                                                                        60,
+                                                                        44,
+                                                                        167),
+                                                                    Colors
+                                                                        .deepOrange
                                                                   ],
                                                                   begin: Alignment
                                                                       .centerLeft,
@@ -813,8 +870,7 @@ class ViewChallengesState extends State<ViewChallenges>
                         Colors.deepOrange
                       ],
                     ),
-                    borderRadius:
-                        BorderRadius.horizontal(left: Radius.elliptical(2, 3)),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -836,16 +892,17 @@ class ViewChallengesState extends State<ViewChallenges>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                                '${challenges![index].quizName} quiz challenge sent.',
+                                '${sent![index].quizName} quiz challenge sent to ${sent![index].receiverName}.',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),
-                            Text('Date sent: ${challenges![index].dateSent}',
+                            Text('Date sent: ${sent![index].dateSent}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),
                             Text(
-                                'Challenge status: ${challenges![index].challengeStatus}',
+                                'Challenge status: ${sent![index].challengeStatus}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito')),

@@ -470,6 +470,7 @@ class _ProfileState extends State<Profile> {
                                     onTap: () {
                                       controller.reverse();
                                       showDialog(
+                                        barrierDismissible: false,
                                         context: context,
                                         builder: (BuildContext context) {
                                           return WillPopScope(

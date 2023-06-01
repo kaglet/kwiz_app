@@ -92,6 +92,9 @@ class QuizScoreState extends State<QuizScore> {
   }
 
   Future<void> addChallenge(String friendID) async {
+    DatabaseService service = DatabaseService();
+    List<UserData>? users = await service.getAllUsers();
+    UserData receiverUser = users!.firstWhere((user) => user.uID == friendID);
     Challenge newChallenge = Challenge(
         quizID: quizID,
         dateSent: DateTime.now().toString().substring(0, 16),
@@ -104,9 +107,7 @@ class QuizScoreState extends State<QuizScore> {
         senderName: username,
         quizName: widget.chosenQuiz!.quizName,
         challengeStatus: 'Pending',
-        receiverName: 'Field not yet added');
-
-    DatabaseService service = DatabaseService();
+        receiverName: receiverUser.userName);
     // setState(() {
     //   _isLoading = true;
     // });
