@@ -360,4 +360,37 @@ void main() {
         await service.alreadyFriendsTest(friendUsername, friendID, userID);
     expect(alreadyFriends, true);
   });
+
+  test('getUserandFriendRequests', () async {
+    final service = MockDataService();
+    String userID = 'userID';
+
+    UserData? user = await service.getUserAndFriendRequests(userID: userID);
+
+    expect(user?.friends[0].friendID, "id");
+  });
+
+  test('acceptFriendRequest', () async {
+    final service = MockDataService();
+    String? userID = "id";
+    String? friendID = "friendid";
+    String? friendUsername = "friendUsername";
+
+    String? accepted =
+        await service.acceptFriendRequest(friendUsername, friendID, userID);
+
+    expect(accepted, "accepted");
+  });
+
+  test('removeFriend', () async {
+    final service = MockDataService();
+    String? userID = "id";
+    String? friendID = "friendid";
+    String? friendUsername = "friendUsername";
+
+    bool friendStillInDatabase =
+        await service.removeFriendTest(friendUsername, friendID, userID);
+
+    expect(friendStillInDatabase, false);
+  });
 }

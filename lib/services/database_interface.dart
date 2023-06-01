@@ -36,4 +36,6 @@ abstract class DatabaseService {
   Future<int> getOldRating({String? quizID, String? userID});
   Future<int> updateQuizGlobalRating(
       {String? quizID, String? userID, int? rating, int? oldRating});
+  Future<String?> addFriend(
+      {String? userID, String? friendID, String? friendUsername});
 }
