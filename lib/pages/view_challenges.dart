@@ -19,24 +19,26 @@ class ViewChallenges extends StatefulWidget {
 
 class ViewChallengesState extends State<ViewChallenges>
     with SingleTickerProviderStateMixin<ViewChallenges> {
-  late TabController _tabController;
-  List? challenges = [];
-  List? pending = [];
+  late TabController _tabController; //Controls the tabsheet
+  List? challenges = []; //List that stores all challenges
+  List? pending = []; //List that stores all pending challenges
   int pendingLength = 0;
   int activeLength = 0;
   int closedLength = 0;
   int sentLength = 0;
-  List? active = [];
-  List? closed = [];
-  List? sent = [];
-  late bool _isLoading;
+  List? active = []; //List that stores all active challenges
+  List? closed = []; //List that stores all closed challenges
+  List? sent = []; //List that stores all sent challenges
+  late bool _isLoading; //Controls the loading
 
+  //Reject a challenge database service
   Future<void> rejectChallenge(int index) async {
     DatabaseService service = DatabaseService();
     await service.rejectChallengeRequest(
         challengeID: pending!.elementAt(index).challengeID);
   }
 
+  //Accept a challenge database service
   Future<void> acceptChallenge(int index) async {
     DatabaseService service = DatabaseService();
     await service.acceptChallengeRequest(
@@ -44,6 +46,7 @@ class ViewChallengesState extends State<ViewChallenges>
   }
 
   Future<void> loaddata() async {
+    //Begin the loading for the page
     setState(() {
       _isLoading = true;
     });
@@ -72,32 +75,9 @@ class ViewChallengesState extends State<ViewChallenges>
 
     // not just the rejected but the all the challenges the current sender has sent
 
-    // print(widget.user.uid);
     sent = challenges!
         .where((challenge) => challenge.senderID == widget.user.uid)
         .toList();
-
-    // pending.forEach((element) {
-    //   print('Pending challenge ' + element.senderName);
-    // });
-
-    // active.forEach((element) {
-    //   print('Active challenge ' + element.senderName);
-    // });
-
-    // closed.forEach((element) {
-    //   print('Closed challenge ' + element.senderName);
-    // });
-
-    // challenges.forEach((element) {
-    //   print('Sent challenge' + element.senderName);
-    // });
-
-    // for (var i = 0; i < challenges.length; i++) {
-    //   print(closed.elementAt(i).dateSent);
-    //   // service.acceptChallengeRequest(
-    //   //     challengeID: closed!.elementAt(i).challengeID);
-    // }
 
     setState(() {
       _isLoading = false;
@@ -107,36 +87,38 @@ class ViewChallengesState extends State<ViewChallenges>
   @override
   void initState() {
     super.initState();
+    //Start Loading for the screen
     _startLoading();
+    //Load data from the database
     loaddata().then((value) {
       setState(() {
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
         sentLength = sent!.length;
-        print('Sent length: ${sentLength}');
       });
     });
+    //Initialize the tab controller
     _tabController = TabController(length: 4, vsync: this);
     _tabController.animateTo(0);
+    //Check if anything changes on each tab sheet, and update the lists under each tab 
     _tabController.addListener(() {
       setState(() {
         pendingLength = pending!.length;
         closedLength = closed!.length;
         activeLength = active!.length;
         sentLength = sent!.length;
-        print('Sent length: ${sentLength}');
       });
     });
   }
-
+  //Start loading for the page
   void _startLoading() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     setState(() {
       _isLoading = false;
     });
   }
-
+  //Reset the tab controller
   @override
   void dispose() {
     _tabController.dispose();
@@ -146,7 +128,7 @@ class ViewChallengesState extends State<ViewChallenges>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _isLoading
+      appBar: _isLoading //This boolean controlls the loading 
           ? null:
         AppBar(
         title: const Text(
@@ -162,23 +144,20 @@ class ViewChallengesState extends State<ViewChallenges>
             controller: _tabController,
             indicatorColor: Color.fromARGB(255, 60, 44, 167),
             indicatorWeight: 7,
-            // indicator: BoxDecoration(
-            // borderRadius: BorderRadius.circular(50), // Creates border
-            // color: Colors.orange),
             labelStyle: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Nunito'),
             tabs: [
               Tab(
-                text: 'Pending',
+                text: 'Pending', //Pending Tab Heading
               ),
-              Tab(text: 'Active'),
+              Tab(text: 'Active'), //Active Tab Heading
               Tab(
-                text: 'Closed',
+                text: 'Closed', //Closed Tab Heading
               ),
               Tab(
-                text: 'Sent',
+                text: 'Sent', //Sent Tab Heading
               )
             ]),
         backgroundColor: const Color.fromARGB(255, 27, 57, 82),
@@ -204,11 +183,11 @@ class ViewChallengesState extends State<ViewChallenges>
           ),
         ),
         child: TabBarView(controller: _tabController, children: [
-          //Pending widgets ----------------------------------------------------------------------------------------------------------------------
+          //Pending widgets #################################################################################################################################
           ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: pendingLength,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index) { //Builds a list of pending widgets
               return SizedBox(
                 height: 160.0,
                 child: Container(
@@ -220,7 +199,7 @@ class ViewChallengesState extends State<ViewChallenges>
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
+                      colors: [        //Adds Gradient Colour Effect
                         Color.fromARGB(255, 60, 44, 167),
                         Colors.deepOrange
                       ],
@@ -236,7 +215,7 @@ class ViewChallengesState extends State<ViewChallenges>
                     ],
                   ),
                   child: Card(
-                    color: Color.fromARGB(239, 30, 43, 66),
+                    color: Color.fromARGB(239, 30, 43, 66), //Colour of Card
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -250,7 +229,7 @@ class ViewChallengesState extends State<ViewChallenges>
                               child: RichText(
                                 text: TextSpan(
                                   children: [
-                                    TextSpan(
+                                    TextSpan( //Card Text
                                       text:
                                           '${pending![index].senderName} challenges you to the ${pending![index].quizName} quiz!',
                                       style: TextStyle(
@@ -287,7 +266,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           acceptChallenge(index);
-                                          // Refresh the list of displayed items
+                                         //Let's the user know that the challenge was accepted
                                           Fluttertoast.showToast(
                                               msg: "Challenge Accepted!",
                                               toastLength: Toast.LENGTH_SHORT, 
@@ -297,7 +276,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                               textColor: Colors.white, 
                                               fontSize: 16.0, 
                                             );
-
+                                           // Refresh the list of displayed items
                                           setState(() {
                                             active!.insert(
                                                 0, pending!.elementAt(index));
@@ -345,6 +324,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           rejectChallenge(index);
+                                          //Let's a user know that a challenge was rejected
                                           Fluttertoast.showToast(
                                               msg: "Challenge Rejected!",
                                               toastLength: Toast.LENGTH_SHORT, 
@@ -355,9 +335,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                               fontSize: 16.0, 
                                             );
                                           // Refresh the list of displayed items
-
                                           setState(() {
-                                            // filteredQuizzes!.removeAt(index);
                                             pending!.removeAt(index);
                                             pendingLength = pending!.length;
                                             print(pending!.length);
@@ -392,11 +370,11 @@ class ViewChallengesState extends State<ViewChallenges>
               );
             },
           ),
-          // Active widgets --------------------------------------------------------------------------------------------------------------------
+          // Active widgets #################################################################################################################################
           ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: activeLength,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index) { //List of all Active widgets
               return SizedBox(
                 height: 160.0,
                 child: Container(
@@ -409,7 +387,7 @@ class ViewChallengesState extends State<ViewChallenges>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.fromARGB(255, 60, 44, 167),
+                        Color.fromARGB(255, 60, 44, 167), //Gradient Colour effect surrounding each tile
                         Colors.deepOrange
                       ],
                     ),
@@ -442,7 +420,9 @@ class ViewChallengesState extends State<ViewChallenges>
                                       children: [
                                         if (active![index].senderID ==
                                             widget.user.uid.toString()) ...[
+                                            //This is displayed on the receivers perspective
                                           TextSpan(
+                                            //Title of each card
                                             text:
                                                 '${active![index].quizName} quiz challenge VS ${active![index].receiverName}!',
                                             style: TextStyle(
@@ -453,6 +433,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                             ),
                                           ),
                                         ] else ...[
+                                          //This is displayed on the senders perspective
                                           TextSpan(
                                             text:
                                                 '${active![index].quizName} quiz challenge VS ${active![index].senderName}!',
@@ -468,6 +449,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                     ),
                                   ),
                                 ),
+                                //This displays the current user's active widgets
                                 if (active![index].senderID !=
                                     widget.user.uid.toString()) ...[
                                   Expanded(
@@ -541,6 +523,7 @@ class ViewChallengesState extends State<ViewChallenges>
                           SizedBox(
                             height: 10,
                           ),
+                          //Displayed for the receivers perspective
                           if (active![index].senderID ==
                               widget.user.uid.toString()) ...[
                             Text(
@@ -561,11 +544,11 @@ class ViewChallengesState extends State<ViewChallenges>
               );
             },
           ),
-          // Closed widgets --------------------------------------------------------------------------------------------------------------------
+          // Closed widgets #################################################################################################################################
           ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: closedLength,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index) { //Creates a list of closed widgets
               return SizedBox(
                 height: 160.0,
                 child: Container(
@@ -578,7 +561,7 @@ class ViewChallengesState extends State<ViewChallenges>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.fromARGB(255, 60, 44, 167),
+                        Color.fromARGB(255, 60, 44, 167), //Gradient colour effect
                         Colors.deepOrange
                       ],
                     ),
@@ -606,6 +589,7 @@ class ViewChallengesState extends State<ViewChallenges>
                             child: RichText(
                               text: TextSpan(
                                 children: [
+                                  //Closed widgets for the sender are loaded and displayed
                                   if (closed![index].senderID ==
                                       widget.user.uid.toString()) ...[
                                     TextSpan(
@@ -655,6 +639,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () async {
+                                        //Result is used to display the outcome of the challenge. Whether the user won, lost or drew with their challenger
                                         String result = '';
                                         if (closed![index].receiverMark! >
                                             closed![index].senderMark!) {
@@ -666,6 +651,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                         } else {
                                           result = 'Defeat';
                                         }
+                                        //This dialog is used to display the user's review
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -741,7 +727,7 @@ class ViewChallengesState extends State<ViewChallenges>
                                                       const SizedBox(
                                                           height: 15.0),
                                                       Text(
-                                                        'Challenger\'s score: ${closed![index].senderMark}',
+                                                        '${closed![index].senderName}\'s score: ${closed![index].senderMark}',
                                                         style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 15.0,
@@ -881,11 +867,11 @@ class ViewChallengesState extends State<ViewChallenges>
               );
             },
           ),
-          //Sent widgets --------------------------------------------------------------------------------------------------------------------
+          //Sent widgets #################################################################################################################################
           ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: sentLength,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index) { //Displays all the challenges sent by the current user to other users
               return SizedBox(
                 height: 110.0,
                 child: Container(
@@ -898,7 +884,7 @@ class ViewChallengesState extends State<ViewChallenges>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color.fromARGB(255, 60, 44, 167),
+                        Color.fromARGB(255, 60, 44, 167), //Gives gradient colour effect
                         Colors.deepOrange
                       ],
                     ),
@@ -924,6 +910,7 @@ class ViewChallengesState extends State<ViewChallenges>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
+                              //Card Title
                                 '${sent![index].quizName} quiz challenge sent to ${sent![index].receiverName}.',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
