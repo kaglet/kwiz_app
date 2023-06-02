@@ -16,6 +16,7 @@ class ViewFriendRequests extends StatefulWidget {
 }
 
 class _ViewFriendRequestsState extends State<ViewFriendRequests> {
+  // Initiialising variables
   late String? myUsername;
   late String _username;
   DatabaseService service = DatabaseService();
@@ -52,7 +53,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
     userData = await service.getUserAndFriends(userID: widget.user.uid);
     friendsList = userData!.friends;
     friendsListLength = friendsList!.length;
-    //Extracting the List of distinct quiz names for each past attempt
+    // loading pending friend requests
     for (int i = 0; i < friendsListLength; i++) {
       if (friendsList![i].sender != widget.user.uid &&
           friendsList![i].status == 'pending') {
@@ -66,6 +67,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
 
   void _onSearchTextChanged(String text) {
     setState(() {
+      // searching for friend requets
       _displayedItems = friends!
           .where((item) =>
               item.friendName.toLowerCase().contains(text.toLowerCase()))
@@ -83,6 +85,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
 
   Future<void> declineFriendRequest(String? friendUsername) async {
     setState(() {
+      // declining friend
       _isLoading = true;
     });
 
@@ -100,6 +103,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
     setState(() {
       _isLoading = true;
     });
+    // adding friend to databse
     await service.acceptFriendRequest(
         friendUsername, widget.user.uid, userData!.userName);
     Navigator.push(
@@ -120,6 +124,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
           ? null
           : AppBar(
               title: const Text(
+                // viewing friend requests
                 'Friend Requests',
                 style: TextStyle(
                     fontFamily: 'TitanOne',
@@ -194,6 +199,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                           decoration: const BoxDecoration(),
                         ),
                         ListView.builder(
+                          // populating list with friend requests
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
@@ -241,31 +247,7 @@ class _ViewFriendRequestsState extends State<ViewFriendRequests> {
                                       fontFamily: 'Nunito',
                                     ),
                                   ),
-                                  textColor: Colors.white,
-                                  // subtitle: SingleChildScrollView(
-                                  //   scrollDirection: Axis.horizontal,
-                                  //   child: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //         '${_displayedItems?[index].status} |',
-                                  //         style: TextStyle(
-                                  //           fontWeight: FontWeight.normal,
-                                  //           color: Colors.white,
-                                  //           fontFamily: 'Nunito',
-                                  //         ),
-                                  //       ),
-                                  //       SizedBox(width: 8),
-                                  //       Text(
-                                  //         '${_displayedItems?[index].friendName}',
-                                  //         style: TextStyle(
-                                  //           fontWeight: FontWeight.normal,
-                                  //           color: Colors.white,
-                                  //           fontFamily: 'Nunito',
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
+                                  textColor: Colors.white,                                
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [

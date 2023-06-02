@@ -214,6 +214,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                         ),
                         const SizedBox(width: 50.0),
                         TextButton(
+                          // Peforming Validation on adding friends
                           onPressed: () async {
                             userExists = await service.userExists(_username);
 
@@ -226,219 +227,22 @@ class _ViewFriendsState extends State<ViewFriends> {
                                 setState(() {
                                   error =
                                       'Friend Request Already Sent/Already friends';
-                                });
-                                // showDialog(
-                                //   context: context,
-                                //   barrierDismissible: false,
-                                //   builder: (BuildContext context) {
-                                //     return AlertDialog(
-                                //       backgroundColor: Colors
-                                //           .transparent, // Set the background color to transparent
-                                //       contentPadding: EdgeInsets.zero,
-                                //       content: Container(
-                                //         padding: EdgeInsets.symmetric(
-                                //             vertical: 10.0, horizontal: 10.0),
-                                //         decoration: BoxDecoration(
-                                //           gradient: const LinearGradient(
-                                //             begin: Alignment.topLeft,
-                                //             end: Alignment.bottomRight,
-                                //             colors: [
-                                //               Color.fromARGB(255, 27, 57, 82),
-                                //               Color.fromARGB(255, 11, 26, 68),
-                                //             ],
-                                //           ),
-                                //           borderRadius:
-                                //               BorderRadius.circular(20.0),
-                                //         ),
-                                //         child: Column(
-                                //           mainAxisSize: MainAxisSize.min,
-                                //           children: [
-                                //             const Text(
-                                //               'Friend Request Already Sent/Already Friends',
-                                //               style: TextStyle(
-                                //                 color: Colors.white,
-                                //                 fontSize: 20.0,
-                                //                 letterSpacing: 1.0,
-                                //                 fontFamily: 'Nunito',
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       actions: <Widget>[
-                                //         TextButton(
-                                //           child: const Text('OK'),
-                                //           onPressed: () {
-                                //             Navigator.of(context).pop();
-                                //             Navigator.of(context).pop();
-                                //           },
-                                //         ),
-                                //       ],
-                                //     );
-                                //   },
-                                // );
+                                });                          
                               } else {
                                 await service.addFriend(_username,
                                     widget.user.uid, userData!.userName);
                                 setState(() {
                                   error = 'Your friend request has been sent.';
-                                });
-                                // showDialog(
-                                //   context: context,
-                                //   barrierDismissible: false,
-                                //   builder: (BuildContext context) {
-                                //     return AlertDialog(
-                                //       backgroundColor: Colors
-                                //           .transparent, // Set the background color to transparent
-                                //       contentPadding: EdgeInsets.zero,
-                                //       content: Container(
-                                //         padding: EdgeInsets.symmetric(
-                                //             vertical: 10.0, horizontal: 10.0),
-                                //         decoration: BoxDecoration(
-                                //           gradient: const LinearGradient(
-                                //             begin: Alignment.topLeft,
-                                //             end: Alignment.bottomRight,
-                                //             colors: [
-                                //               Color.fromARGB(255, 27, 57, 82),
-                                //               Color.fromARGB(255, 11, 26, 68),
-                                //             ],
-                                //           ),
-                                //           borderRadius:
-                                //               BorderRadius.circular(20.0),
-                                //         ),
-                                //         child: Column(
-                                //           mainAxisSize: MainAxisSize.min,
-                                //           children: [
-                                //             const Text(
-                                //               'Your friend request has been sent.',
-                                //               style: TextStyle(
-                                //                 color: Colors.white,
-                                //                 fontSize: 20.0,
-                                //                 letterSpacing: 1.0,
-                                //                 fontFamily: 'Nunito',
-                                //               ),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       ),
-                                //       actions: <Widget>[
-                                //         TextButton(
-                                //           child: const Text('OK'),
-                                //           onPressed: () {
-                                //             Navigator.of(context).pop();
-                                //             Navigator.of(context).pop();
-                                //           },
-                                //         ),
-                                //       ],
-                                //     );
-                                //   },
-                                // );
+                                });                            
                               }
                             } else if (_username == myUsername) {
                               setState(() {
                                 error = 'That is your username.';
-                              });
-                              // showDialog(
-                              //   context: context,
-                              //   barrierDismissible: false,
-                              //   builder: (BuildContext context) {
-                              //     return AlertDialog(
-                              //       backgroundColor: Colors
-                              //           .transparent, // Set the background color to transparent
-                              //       contentPadding: EdgeInsets.zero,
-                              //       content: Container(
-                              //         padding: EdgeInsets.symmetric(
-                              //             vertical: 10.0, horizontal: 10.0),
-                              //         decoration: BoxDecoration(
-                              //           gradient: const LinearGradient(
-                              //             begin: Alignment.topLeft,
-                              //             end: Alignment.bottomRight,
-                              //             colors: [
-                              //               Color.fromARGB(255, 27, 57, 82),
-                              //               Color.fromARGB(255, 11, 26, 68),
-                              //             ],
-                              //           ),
-                              //           borderRadius:
-                              //               BorderRadius.circular(20.0),
-                              //         ),
-                              //         child: Column(
-                              //           mainAxisSize: MainAxisSize.min,
-                              //           children: [
-                              //             const Text(
-                              //               'That is your username',
-                              //               style: TextStyle(
-                              //                 color: Colors.white,
-                              //                 fontSize: 20.0,
-                              //                 letterSpacing: 1.0,
-                              //                 fontFamily: 'Nunito',
-                              //               ),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //       actions: <Widget>[
-                              //         TextButton(
-                              //           child: const Text('OK'),
-                              //           onPressed: () {
-                              //             Navigator.of(context).pop();
-                              //           },
-                              //         ),
-                              //       ],
-                              //     );
-                              //   },
-                              // );
+                              });                              
                             } else {
                               setState(() {
                                 error = 'The entered username does not exist.';
-                              });
-                              // showDialog(
-                              //   context: context,
-                              //   barrierDismissible: false,
-                              //   builder: (BuildContext context) {
-                              //     return AlertDialog(
-                              //       backgroundColor: Colors
-                              //           .transparent, // Set the background color to transparent
-                              //       contentPadding: EdgeInsets.zero,
-                              //       content: Container(
-                              //         padding: EdgeInsets.symmetric(
-                              //             vertical: 10.0, horizontal: 10.0),
-                              //         decoration: BoxDecoration(
-                              //           gradient: const LinearGradient(
-                              //             begin: Alignment.topLeft,
-                              //             end: Alignment.bottomRight,
-                              //             colors: [
-                              //               Color.fromARGB(255, 27, 57, 82),
-                              //               Color.fromARGB(255, 11, 26, 68),
-                              //             ],
-                              //           ),
-                              //           borderRadius:
-                              //               BorderRadius.circular(20.0),
-                              //         ),
-                              //         child: Column(
-                              //           mainAxisSize: MainAxisSize.min,
-                              //           children: [
-                              //             const Text(
-                              //               'The entered username does not exist.',
-                              //               style: TextStyle(
-                              //                 color: Colors.white,
-                              //                 fontSize: 20.0,
-                              //                 letterSpacing: 1.0,
-                              //                 fontFamily: 'Nunito',
-                              //               ),
-                              //             ),
-                              //             TextButton(
-                              //               child: const Text('OK'),
-                              //               onPressed: () {
-                              //                 Navigator.of(context).pop();
-                              //               },
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //       actions: <Widget>[],
-                              //     );
-                              //   },
-                              // );
+                              });                              
                             }
                           },
                           child: Container(
@@ -466,129 +270,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                               ),
                             ),
                           ),
-                        ),
-                        // TextButton(
-                        //   child: const Text('Add'),
-                        //   onPressed: () async {
-                        //     userExists = await service.userExists(_username);
-
-                        //     if (userExists && _username != myUsername) {
-                        //       bool alreadyFriends = false;
-                        //       alreadyFriends = await service.alreadyFriends(
-                        //           _username, widget.user.uid);
-
-                        //       if (alreadyFriends) {
-                        //         showDialog(
-                        //           context: context,
-                        //           barrierDismissible: false,
-                        //           builder: (BuildContext context) {
-                        //             return AlertDialog(
-                        //               content: const Text(
-                        //                 'Friend Request Already Sent/Already Friends',
-                        //                 style: TextStyle(
-                        //                   color: Colors.white,
-                        //                   fontSize: 20.0,
-                        //                   letterSpacing: 1.0,
-                        //                   fontFamily: 'Nunito',
-                        //                 ),
-                        //               ),
-                        //               actions: <Widget>[
-                        //                 TextButton(
-                        //                   child: const Text('OK'),
-                        //                   onPressed: () {
-                        //                     Navigator.of(context).pop();
-                        //                     Navigator.of(context).pop();
-                        //                   },
-                        //                 ),
-                        //               ],
-                        //             );
-                        //           },
-                        //         );
-                        //       } else {
-                        //         await service.addFriend(_username,
-                        //             widget.user.uid, userData!.userName);
-                        //         showDialog(
-                        //           context: context,
-                        //           barrierDismissible: false,
-                        //           builder: (BuildContext context) {
-                        //             return AlertDialog(
-                        //               content: const Text(
-                        //                 'Your friend request has been sent.',
-                        //                 style: TextStyle(
-                        //                   color: Colors.white,
-                        //                   fontSize: 20.0,
-                        //                   letterSpacing: 1.0,
-                        //                   fontFamily: 'Nunito',
-                        //                 ),
-                        //               ),
-                        //               actions: <Widget>[
-                        //                 TextButton(
-                        //                   child: const Text('OK'),
-                        //                   onPressed: () {
-                        //                     Navigator.of(context).pop();
-                        //                     Navigator.of(context).pop();
-                        //                   },
-                        //                 ),
-                        //               ],
-                        //             );
-                        //           },
-                        //         );
-                        //       }
-                        //     } else if (_username == myUsername) {
-                        //       showDialog(
-                        //         context: context,
-                        //         barrierDismissible: false,
-                        //         builder: (BuildContext context) {
-                        //           return AlertDialog(
-                        //             content: const Text(
-                        //               'That is your username',
-                        //               style: TextStyle(
-                        //                 color: Colors.white,
-                        //                 fontSize: 20.0,
-                        //                 letterSpacing: 1.0,
-                        //                 fontFamily: 'Nunito',
-                        //               ),
-                        //             ),
-                        //             actions: <Widget>[
-                        //               TextButton(
-                        //                 child: const Text('OK'),
-                        //                 onPressed: () {
-                        //                   Navigator.of(context).pop();
-                        //                 },
-                        //               ),
-                        //             ],
-                        //           );
-                        //         },
-                        //       );
-                        //     } else {
-                        //       showDialog(
-                        //         context: context,
-                        //         barrierDismissible: false,
-                        //         builder: (BuildContext context) {
-                        //           return AlertDialog(
-                        //             content: const Text(
-                        //               'The entered username does not exist.',
-                        //               style: TextStyle(
-                        //                 color: Colors.white,
-                        //                 fontSize: 20.0,
-                        //                 letterSpacing: 1.0,
-                        //                 fontFamily: 'Nunito',
-                        //               ),
-                        //             ),
-                        //             actions: <Widget>[
-                        //               TextButton(
-                        //                 child: const Text('OK'),
-                        //                 onPressed: () {
-                        //                   Navigator.of(context).pop();
-                        //                 },
-                        //               ),
-                        //             ],
-                        //           );
-                        //         },
-                        //       );
-                        //     }
-                        //   },
-                        // ),
+                        ),                       
                       ],
                     )
                   ],
@@ -618,6 +300,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
               ),
+              // Navigation 
               backgroundColor: const Color.fromARGB(255, 27, 57, 82),
               leading: IconButton(
                 icon: const Icon(Icons.home),
@@ -644,6 +327,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
+                      // Search Friend option
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -690,6 +374,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                           decoration: const BoxDecoration(),
                         ),
                         ListView.builder(
+                          // populating friends list
                           itemCount: fillLength,
                           itemBuilder: (context, index) {
                             final List<Color> blueAndOrangeShades = [
@@ -737,23 +422,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                                       fontFamily: 'Nunito',
                                     ),
                                   ),
-                                  textColor: Colors.white,
-                                  // subtitle: SingleChildScrollView(
-                                  //   scrollDirection: Axis.horizontal,
-                                  //   child: Row(
-                                  //     children: [
-                                  //       Text(
-                                  //         '${_displayedItems?[index].status} |',
-                                  //         style: TextStyle(
-                                  //           fontWeight: FontWeight.normal,
-                                  //           color: Colors.white,
-                                  //           fontFamily: 'Nunito',
-                                  //         ),
-                                  //       ),
-                                  //       SizedBox(width: 8),
-                                  //     ],
-                                  //   ),
-                                  // ),
+                                  textColor: Colors.white,                             
                                   trailing: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
@@ -769,6 +438,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
+                                        // removing a friend options
                                         removeFriend(
                                             _displayedItems?[index].friendName);
                                       },
@@ -843,6 +513,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                     );
                   },
                   child: const Text(
+                    // View other page of friend request - navigates to it
                     'Friend Requests',
                     style: TextStyle(
                       fontSize: 20,
@@ -871,6 +542,7 @@ class _ViewFriendsState extends State<ViewFriends> {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    // Add friend pop up
                     _addFriendDialog();
                   },
                   child: const Text(
