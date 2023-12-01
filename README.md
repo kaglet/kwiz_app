@@ -1,4 +1,4 @@
-![image](https://github.com/kaglet/kwiz_app/assets/96872447/e4daac6b-5f2b-4fad-ad62-00b3995855b5)# Kwiz - A Mobile Quiz App Project (for Android and iOS)
+# Kwiz - A Mobile Quiz App Project (for Android and iOS)
 
 ## A fully functional mobile quiz creation and sharing platform made with Flutter and Firebase
 
