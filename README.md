@@ -33,7 +33,7 @@
 
 ## Installation
 
-Visit [this](https://github.com/kaglet/kwiz_app/actions/runs/7065320254) link and download the release-apk. 
+Visit [this](https://github.com/kaglet/kwiz_app/actions/runs/7065320254) link and download the release-apk under the section for it.  
 
 ## Screenshots
 
