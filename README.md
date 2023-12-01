@@ -130,5 +130,10 @@
 </p>
 
 ### Logout
-
+<p align="center">
+  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/2e748f2c-9803-444f-a2b8-18b54231ca04" width="350" title="hover text" style="margin: auto">
+</p>
+<p align="center">
+  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/84e80837-7425-4fc0-ba8e-50d0e1a1e5ac" width="350" title="hover text" style="margin: auto">
+</p>
 
