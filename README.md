@@ -37,7 +37,6 @@
 <p align="center">
   <img src="[your_relative_path_here](https://github.com/kaglet/kwiz_app/assets/96872447/6fa8e116-2136-47a1-ad05-cd6226592911)" width="350" title="hover text">
 </p>
-![image](https://github.com/kaglet/kwiz_app/assets/96872447/6779f8f3-f4ae-4bbe-a524-c2d0136fd3bb)
 
 ### Registration
 ![image](https://github.com/kaglet/kwiz_app/assets/96872447/6fa8e116-2136-47a1-ad05-cd6226592911)
