@@ -35,7 +35,7 @@
 
 ### Sign-up
 <p align="center">
-  <img src="[your_relative_path_here](https://github.com/kaglet/kwiz_app/assets/96872447/6fa8e116-2136-47a1-ad05-cd6226592911)" width="350" title="hover text">
+  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/6fa8e116-2136-47a1-ad05-cd6226592911" width="350" title="hover text">
 </p>
 
 ### Registration
