@@ -31,6 +31,10 @@
 * [Michael Kavai](https://github.com/mchlkavai)
 * [Aidan-Brickhill](https://github.com/Aidan-Brickhill)
 
+## Installation
+
+Visit [this](https://github.com/kaglet/kwiz_app/actions/runs/7065320254) link and download the release-apk. 
+
 ## Screenshots
 
 ### Sign-up
