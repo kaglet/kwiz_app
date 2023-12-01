@@ -1,4 +1,4 @@
-# Kwiz - A Mobile Quiz App Project (for Android and iOS)
+![image](https://github.com/kaglet/kwiz_app/assets/96872447/e4daac6b-5f2b-4fad-ad62-00b3995855b5)# Kwiz - A Mobile Quiz App Project (for Android and iOS)
 
 ## A fully functional mobile quiz creation and sharing platform made with Flutter and Firebase
 
@@ -53,7 +53,7 @@
 
 ### Leaderboard
 <p align="center">
-  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/cd7166ad-dd5d-4941-b2ee-59511b6f37d0" width="350" title="hover text" style="margin: auto">
+  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/d19fb12f-2fbb-4284-9d8e-86161e982872" width="350" title="hover text" style="margin: auto">
 </p>
 
 ### Quiz creation
@@ -106,12 +106,6 @@
   <img src="https://github.com/kaglet/kwiz_app/assets/96872447/3be9c166-d50a-4b31-b7b7-da73f9decde5" width="350" title="hover text" style="margin: auto">
 </p>
 <p align="center">
-  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/078c35ba-76fa-49e6-b3b7-28d6984ff6fc" width="350" title="hover text" style="margin: auto">
-</p>
-<p align="center">
-  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/4b8fb0f3-f7ee-49e1-8455-ede04d2086ac" width="350" title="hover text" style="margin: auto">
-</p>
-<p align="center">
   <img src="https://github.com/kaglet/kwiz_app/assets/96872447/83aec86a-d22f-4142-b1d5-b4e28a3947cd" width="350" title="hover text" style="margin: auto">
 </p>
 
@@ -132,7 +126,7 @@
   <img src="https://github.com/kaglet/kwiz_app/assets/96872447/8cf5b79d-1758-4b92-8b10-e31975e43f29" width="350" title="hover text" style="margin: auto">
 </p>
 <p align="center">
-  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/ad2dc92e-9d92-4c0b-aea4-dd34daf692fa" width="350" title="hover text" style="margin: auto">
+  <img src="https://github.com/kaglet/kwiz_app/assets/96872447/fdf540cc-2aea-4380-a3ce-964ff5aec11d" width="350" title="hover text" style="margin: auto">
 </p>
 
 ### Logout
